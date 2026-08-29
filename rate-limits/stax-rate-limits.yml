@@ -1,0 +1,55 @@
+generated: '2026-08-29'
+method: searched
+source: https://docs.staxpayments.com/reference/api-throttling
+docs:
+- https://docs.staxpayments.com/reference/api-throttling
+- https://docs.staxpayments.com/reference/overview
+note: 'Stax publishes TWO different global limits on two different reference pages and they do not agree: reference/api-throttling
+  says 200 requests/minute per IP, reference/overview says 100 requests/minute. Both are recorded below with their own source.
+  The throttling page also adds a FAILED-request limit and an hour-long block, which is the more consequential rule for an
+  agent: a retry storm against a 4xx is what actually gets an integration cut off.'
+limit_count: 4
+rate_limits:
+- scope: per-ip
+  surface: all Stax API routes
+  window: 1 minute
+  limit: 200
+  burst: null
+  on_exhaustion: blocked for one hour
+  source: https://docs.staxpayments.com/reference/api-throttling
+- scope: per-ip
+  surface: all Stax API routes — FAILED requests only
+  window: 1 minute
+  limit: 10
+  burst: null
+  on_exhaustion: blocked for one hour
+  source: https://docs.staxpayments.com/reference/api-throttling
+- scope: per-ip
+  surface: Stax.js .pay() and .tokenize() (Web Payments token routes)
+  window: 1 minute
+  limit: 10
+  burst: null
+  on_exhaustion: throttled
+  source: https://docs.staxpayments.com/reference/api-throttling
+- scope: global
+  surface: the API generally, as stated on the reference Overview page
+  window: 1 minute
+  limit: 100
+  burst: null
+  on_exhaustion: 429 Too Many Requests
+  source: https://docs.staxpayments.com/reference/overview
+response_headers:
+  documented:
+  - Retry-After
+  not_documented:
+  - X-RateLimit-Limit
+  - X-RateLimit-Remaining
+  - X-RateLimit-Reset
+  - RateLimit-Limit
+  - RateLimit-Remaining
+  - RateLimit-Reset
+  status_on_exhaustion: 429
+  note: Retry-After is the only runtime signal Stax documents, and it is documented on the Overview page against the 100/min
+    figure. No RateLimit-* or X-RateLimit-* headers are published, and 429 is declared on ZERO of the 133 operations in the
+    contract — so an agent has no in-band budget signal and learns its remaining quota only by being cut off.
+increase_path: Contact Stax support or partner support to have IP addresses allowlisted or limits raised.

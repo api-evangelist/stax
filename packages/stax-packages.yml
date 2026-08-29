@@ -1,0 +1,70 @@
+generated: '2026-08-29'
+method: searched
+source: https://github.com/fattmerchantorg + trunk.cocoapods.org + pypi.org + https://docs.staxpayments.com/docs/mobile-sdk
+note: Stax publishes its client libraries from the GitHub org github.com/fattmerchantorg (org display name 'Stax Payments',
+  website staxpayments.com) — the legacy Fattmerchant name, which Stax still uses for the SDK artifacts themselves. There
+  is no first-party Stax package on npm, Maven Central, NuGet, RubyGems, Packagist, crates.io or pkg.go.dev; searched 2026-08-29.
+packages:
+- name: Fattmerchant
+  registry: cocoapods
+  official: true
+  language: Swift
+  url: https://cocoapods.org/pods/Fattmerchant
+  repository: https://github.com/fattmerchantorg/Fattmerchant-iOS-SDK
+  version: 2.5.1
+  published: '2026-05-22'
+  note: iOS SDK for card-present / Tap to Pay on iPhone. 24 published pod versions since 2018-04-12. GitHub release 2.5.1
+    published 2026-05-21.
+- name: fattmerchant-android-sdk
+  registry: github-releases
+  official: true
+  language: Kotlin
+  url: https://github.com/fattmerchantorg/fattmerchant-android-sdk/releases
+  repository: https://github.com/fattmerchantorg/fattmerchant-android-sdk
+  version: 2.7.4
+  published: '2026-07-28'
+  note: Android card-present SDK. Distributed via GitHub releases only — searched Maven Central for 'fattmerchant' and 'stax'
+    on 2026-08-29 and found no coordinates, so there is no registry metadata endpoint for consumers to pin against.
+- name: fattmerchant
+  registry: pypi
+  official: true
+  language: Python
+  url: https://pypi.org/project/fattmerchant/
+  repository: https://github.com/fattmerchantorg/fattmerchant_python_client
+  version: 2.0.1
+  published: '2021-06-08'
+  note: 'Python client for the (then) Omni API. ABANDONMENT SIGNAL: last PyPI release 2021-06-08 and last repository push
+    2022-12-08, while the REST API it wraps has 133 operations documented and updated through 2026-08. Not referenced from
+    the current developer documentation.'
+- name: staxjs-captcha.js
+  registry: cdn
+  official: true
+  language: JavaScript
+  url: https://staxjs.staxpayments.com/staxjs-captcha.js
+  documentation: https://docs.staxpayments.com/docs/overview-of-staxjs
+  version: null
+  published: null
+  note: 'Browser tokenization library, loaded from Stax''s own CDN with an UNPINNED script tag (<script src="https://staxjs.staxpayments.com/staxjs-captcha.js">).
+    The URL carries no version segment and there is no jsDelivr/unpkg/npm mirror, so neither we nor an integrator can tell
+    which build they are executing. version: null means checked, nothing publishable to record.'
+samples:
+- name: stax-sdk-samples
+  repository: https://github.com/fattmerchantorg/stax-sdk-samples
+  language: Swift
+  note: UIKit + SwiftUI sample apps pinned to CocoaPods Fattmerchant 2.4.3 (Podfile.lock).
+- name: staxjs-expo-sample
+  repository: https://github.com/fattmerchantorg/staxjs-expo-sample
+  language: TypeScript
+third_party:
+- name: apimatic-stax-sdk
+  registry: npm
+  official: false
+  version: 0.0.2
+  published: '2026-02-23'
+  note: APIMatic-generated sample SDK, not published by Stax.
+- name: fattmerchant
+  registry: npm
+  official: false
+  version: 0.0.4
+  published: '2020-05-08'
+  note: Auto-generated Node bindings, not published by the fattmerchantorg GitHub org.

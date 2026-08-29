@@ -1,0 +1,61 @@
+generated: '2026-08-29'
+method: searched
+source: https://docs.staxpayments.com/changelog
+scheme: dated product changelog, no version numbers
+current_version: null
+note: 'Stax runs a dated product changelog on its docs host. It is PRODUCT news, not an API change log: none of the eight
+  published entries records an operation added, a field deprecated, or a breaking change to the contract, and none carries
+  a version number. The most recent entry is 2025-09-04 — nearly a year before this profile — while the reference pages themselves
+  were edited as recently as 2026-08-27, so contract changes are shipping without changelog entries.'
+entry_count: 8
+latest_entry: '2025-09-04'
+breaking_changes_marked: false
+entries:
+- date: '2025-09-04'
+  title: Payment Link Custom fields
+  url: https://docs.staxpayments.com/changelog/payment-link-custom-fields
+  breaking: false
+  additions: true
+  highlights: Dropdown custom fields on payment links; SSO documentation expanded; ENUMs added to partner webhook event names.
+- date: '2025-07-29'
+  title: PayPal, Pay Later and Venmo are Now Available
+  url: https://docs.staxpayments.com/changelog/paypal-pay-later-and-venmo-are-now-available
+  breaking: false
+  additions: true
+  highlights: PayPal, Pay Later and Venmo added as payment options for merchants and platforms.
+- date: '2025-06-17'
+  title: Transaction Exports
+  url: https://docs.staxpayments.com/changelog/transaction-exports
+  breaking: false
+  additions: true
+  highlights: Transaction exports for download and reconciliation.
+- date: '2024-07-16'
+  title: Statements in Command Center
+  url: https://docs.staxpayments.com/changelog/statements-in-command-center
+  breaking: false
+  additions: true
+  highlights: Statements surfaced in Command Center with access control and fee visibility.
+- date: '2024-04-11'
+  title: Enhanced Reporting for Merchants
+  url: https://docs.staxpayments.com/changelog/enhanced-reporting-for-merchants
+  breaking: false
+  additions: true
+  highlights: 'Fee-statement enhancements: monthly overview and detailed transaction analysis.'
+- date: '2024-04-09'
+  title: Processing Fee Visibility
+  url: https://docs.staxpayments.com/changelog/processing-fee-visibility
+  breaking: false
+  additions: true
+  highlights: Processing fee visibility in the merchant experience.
+- date: '2024-04-09'
+  title: Deposit Linking
+  url: https://docs.staxpayments.com/changelog/deposit-linking
+  breaking: false
+  additions: true
+  highlights: Deposit link on Payment Details in Stax Pay plus filtering by deposited payments.
+- date: '2023-12-21'
+  title: Enhanced Dispute Manager
+  url: https://docs.staxpayments.com/changelog/enhanced-dispute-manager
+  breaking: false
+  additions: true
+  highlights: Enhanced dispute manager for chargeback handling.

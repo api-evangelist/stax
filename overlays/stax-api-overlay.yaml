@@ -1,0 +1,51 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Stax API
+  version: 1.0.0
+extends: openapi/stax-api-openapi.json
+x-generated: '2026-08-29'
+x-method: generated
+x-source: derived from docs.staxpayments.com reference pages + guides; never applied to the harvested spec
+actions:
+- target: $.info
+  update:
+    description: 'The Stax REST API. Base URL https://apiprod.fattlabs.com — the same host for sandbox and live keys; a sandbox
+      key is bound to a test gateway. Authenticate with Authorization: Bearer <API key>. Content-Type must be application/json.
+      Documented throttling: 200 requests/minute per IP and 10 FAILED requests/minute per IP, with a one-hour block on breach
+      (reference/api-throttling); the reference Overview page separately states 100 requests/minute returning 429 with Retry-After.
+      Both figures are published by Stax and they disagree — treat 100/min as the safe planning number.'
+    contact:
+      name: Stax Support
+      url: https://staxpayments.com/contact/
+      email: support@staxpayments.com
+    termsOfService: https://staxpayments.com/terms-of-use/
+- target: $.servers
+  update:
+  - url: https://apiprod.fattlabs.com
+    description: Production host; also serves sandbox API keys against a test gateway
+- target: $.paths['/charge'].post
+  update:
+    x-idempotent: true
+    x-idempotency-parameter: idempotency_id
+    description: 'Charge a stored payment method. Supports an optional idempotency_id (string, up to 255 characters, UUID
+      recommended). A repeat request with the same idempotency_id returns the ORIGINAL transaction instead of creating a new
+      charge; a repeat with the same key but different parameters returns a validation error. Source: docs/idempotency.'
+- target: $.paths['/invoice/{id}/pay'].post
+  update:
+    x-idempotent: true
+    x-idempotency-parameter: idempotency_id
+    description: 'Pay an invoice. Accepts the same idempotency_id semantics as POST /charge. Source: docs/idempotency.'
+- target: $.paths['/transaction/{id}/void'].post
+  update:
+    x-reversal-of: charge-a-payment-method
+    x-reversal-window: before the transaction settles with the processor
+- target: $.paths['/transaction/{id}/refund'].post
+  update:
+    x-reversal-of: charge-a-payment-method
+    x-reversal-window: after settlement; no universal deadline published by Stax, but card-network matching rules apply and
+      Credit-Not-Processed chargebacks run 365-540 days from original settlement
+- target: $.components.securitySchemes.ApiKeyAuth
+  update:
+    x-header: Authorization
+    x-format: Bearer <api key>
+    x-sandbox: the same key format and the same base URL; a sandbox key is bound to a test gateway

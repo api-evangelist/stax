@@ -1,0 +1,134 @@
+generated: '2026-08-29'
+method: searched
+source: https://docs.staxpayments.com/reference/ach-error-codes
+note: Numeric error-code registry returned during ACH processing. Stax states these transactions must comply with NACHA regulations
+  and the registry includes NACHA SEC (Standard Entry Class) code errors, which is the domain-standard signature recorded
+  in conformance/stax-conformance.yml.
+error_code_count: 24
+error_codes:
+- code: '0'
+  message: Approved
+  description: The transaction was successfully approved and processed. No validation or processor errors occurred.
+  resolution: None required.
+- code: '96'
+  message: Error
+  description: The transaction failed due to an unhandled exception in the application. This can happen during validation,
+    routing, processor communication, or other processing logic.
+  resolution: Contact Support for assistance.
+- code: '29'
+  message: Unauthorized Transaction
+  description: Merchant's configuration does not include permission for standalone ACH transactions. Attempting a standalone
+    credit without authorization triggers this error.
+  resolution: Verify merchant provisioning includes permission for standalone ACH transactions. Contact Support to update
+    merchant permissions if needed.
+- code: '140'
+  message: Verification Error
+  description: The routing number provided failed validation during ACH verification.
+  resolution: Verify that the routing number is correct and valid for the customer's bank. The number must be a valid 9-digit
+    ABA routing number.
+- code: '1000'
+  message: Unknown User
+  description: The credentials, such as the `AccountID`, `Username`, or `Password` in the ServiceCredential section provided
+    in the API request, are invalid.
+  resolution: Confirm that valid credentials are used in both the ServiceCredential section and the Basic Auth header. Ensure
+    no fields are missing or set to null.
+- code: '190'
+  message: Null/Invalid AlphaNumeric First & Last Individual/Company Name
+  description: The transaction is missing the required First Name and Last Name values for the payer. This occurs when both
+    the `FirstName` and `LastName` fields are empty or contain invalid characters (non-alphanumeric).
+  resolution: Ensure that both `FirstName` and `LastName` fields contain valid alphanumeric values. For business transactions,
+    supply the company name in the appropriate field.
+- code: '209'
+  message: Invalid Transaction Code
+  description: The system receives an unrecognized or unsupported transaction type. Occurs when `TransactionType` is NotSet
+    or does not match supported cases (Sale, StandAloneCredit, Refund, ACHReturn, Void, etc.).
+  resolution: Ensure that the correct `TransactionType` is being set before calling the route.
+- code: '17'
+  message: Invalid Batch Number
+  description: The system was unable to locate a valid ACH settlement batch for the transaction.
+  resolution: Contact Support for batch resolution.
+- code: '96'
+  message: Error - Processor
+  description: The system attempted to process a transaction but found that the processor information was missing or not configured.
+    This typically occurs when the processor is not provisioned for the merchant account.
+  resolution: Verify that the processor is properly provisioned for the merchant account. Contact Support to provision or
+    activate the processor.
+- code: '814'
+  message: Provisioning Deactivated
+  description: The merchant's processor is inactive or disabled due to compliance issues, account suspension, or maintenance.
+  resolution: Confirm that the merchant account and processor provisioning are active. If deactivated, contact Support to
+    re-enable provisioning before resubmitting transactions.
+- code: '1007'
+  message: SEC Code Not Authorized
+  description: The submitted SEC (Standard Entry Class) code is not provisioned or authorized for the merchant.
+  resolution: Contact Support for assistance.
+- code: '701'
+  message: Invalid or Unroutable Routing Number
+  description: The routing number failed validation during ACH verification.
+  resolution: Verify that the routing number is correct and valid for the customer's bank. The number must be a valid 9-digit
+    ABA routing number.
+- code: '702'
+  message: Invalid Account Number
+  description: The bank account number is invalid, missing, formatted incorrectly, or fails validation checks (contains invalid
+    characters, wrong length, or checksum error).
+  resolution: Verify that the customer's bank account number is correct and formatted properly (numeric only, no spaces or
+    special characters). If issues persist, confirm account details directly with the customer's bank.
+- code: '703'
+  message: Invalid Account Type
+  description: The `AccountType` value is not recognized or unsupported. **Acceptable values:** `0` (Checking), `1` (Savings).
+  resolution: 'Verify that the request specifies a valid account type: `0` for Checking or `1` for Savings. Update the field
+    value and resubmit the transaction.'
+- code: '704'
+  message: Invalid Account Holder Type
+  description: The `AccountHolderType` is invalid or missing.         **Acceptable values:** `0` (Personal), `1` (Business).
+  resolution: 'Verify that the request specifies a valid account holder type: `0` for Personal or `1` for Business. Update
+    the value and resubmit the transaction.'
+- code: '706'
+  message: Invalid City
+  description: The `City` field is invalid or improperly formatted.    **Validation rules:** Must not exceed 50 characters;
+    may contain letters, spaces, hyphens (-), periods (.), or apostrophes (') only.
+  resolution: Ensure the `City` field contains a valid name (e.g., "New York", "St. Louis", "O'Fallon"). Remove any numbers,
+    symbols, or extra characters, then resubmit.
+- code: '705'
+  message: Invalid Zipcode
+  description: The `ZipCode` field is invalid or improperly formatted.     **Validation rules:** Must not exceed 10 characters;
+    may contain letters, numbers, spaces, or dashes (-) only.
+  resolution: Ensure the `ZipCode` field is properly formatted (e.g., "12345" or "12345-6789"). Remove any invalid characters
+    or extra spaces, then resubmit.
+- code: '801'
+  message: Original Transaction Not Found
+  description: The refund transaction references an `originalTransactionID` that cannot be found in the system.
+  resolution: Verify the original `TransactionID` is correct. Ensure the original transaction exists and is in a refundable
+    state. Correct the transaction ID and resubmit the refund.
+- code: '802'
+  message: Original Transaction Not Approved
+  description: The refund references an original transaction that was unsuccessful. Refunds can only be issued for successfully
+    processed transactions.
+  resolution: 'Verify the status of the original transaction. Refunds can only be created for approved transactions (`0`:
+    Approved). Ensure the original transaction was successfully processed before retrying the refund.'
+- code: '14'
+  message: Invalid Account
+  description: The bank account has been identified as closed or invalid due to risk or verification checks.
+  resolution: Verify the customer's bank account status with their financial institution. If the account has been closed,
+    request updated payment details before retrying the transaction.
+- code: '996'
+  message: Risk Decline
+  description: The risk engine flagged the transaction due to suspicious account activity or high-risk indicators. Triggered
+    when the account matches known fraud, closed, or suspicious activity lists.
+  resolution: Review the customer's history and account information. Contact the Support Team to determine if the transaction
+    can be retried with verified details. Avoid immediate retries until the risk flag is resolved.
+- code: '4001'
+  message: Risk Duplicate
+  description: The transaction is identified as a duplicate transaction by the risk management system.
+  resolution: Confirm the transaction has not already been processed. Check your Transaction History and avoid resubmitting
+    duplicate requests.
+- code: '4013'
+  message: Risk IP Block
+  description: The transaction was blocked because the originating IP address is on the system's risk exclusion list.
+  resolution: Review the IP address used in the API request. If the address is legitimate, contact Support to remove it from
+    the exclusion list. Ensure requests originate only from authorized, trusted IP addresses.
+- code: '4019'
+  message: Risk Sale Transaction Amount Limit
+  description: The ACH sale transaction amount exceeds the permitted range defined by the risk configuration.
+  resolution: Verify that the transaction amount is within the merchant's configured ACH sale limits. If higher limits are
+    required, contact Support to request an increase.

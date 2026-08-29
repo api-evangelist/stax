@@ -1,0 +1,333 @@
+generated: '2026-08-29'
+method: derived
+source: mcp/stax-mcp-tools.json + openapi/stax-api-openapi.json
+note: 'The Stax MCP server is a documentation/OpenAPI navigator over the same stax-api contract, not a per-resource tool set.
+  None of its six tools maps 1:1 to a single REST operationId: five are meta-tools over the spec and docs, and execute-request
+  is a generic passthrough that can reach ANY of the 133 operations. That is the honest crosswalk, and it is why rest_only
+  is the entire operation list rather than a short remainder.'
+surfaces:
+  openapi: openapi/stax-api-openapi.json
+  openapi_operations: 133
+  mcp_url: https://docs.staxpayments.com/mcp
+  mcp_gated: false
+  graphql: null
+  gating_note: tools/list answered anonymously; execute-request requires the caller to supply a Stax bearer API key as a header.
+crosswalk:
+- tool: list-endpoints
+  category: discovery
+  rest: []
+  binding: spec-meta
+  confidence: high
+  note: Enumerates paths+methods+summaries from the same OpenAPI document captured in openapi/. No backing REST operation.
+- tool: get-endpoint
+  category: discovery
+  rest: []
+  binding: spec-meta
+  confidence: high
+  note: Returns one operation's detail (security schemes + servers) from the spec. Input {path, method} selects any of the
+    133 operations.
+- tool: search-endpoints
+  category: discovery
+  rest: []
+  binding: spec-meta
+  confidence: high
+  note: Free-text search across paths, operations and parameters of the spec.
+- tool: search
+  category: documentation
+  rest: []
+  binding: docs
+  confidence: high
+  note: Searches docs.staxpayments.com pages, the same corpus indexed by llms/stax-llms.txt.
+- tool: fetch
+  category: documentation
+  rest: []
+  binding: docs
+  confidence: high
+  note: Fetches one documentation page; equivalent to GET <page>.md.
+- tool: execute-request
+  category: execution
+  rest:
+  - ach-rejections
+  - add-file-to-merchant-registration
+  - addupdate-team-settings
+  - capture-a-pre-auth-transaction
+  - card-processing
+  - charge
+  - charge-a-payment-method
+  - charge-queue
+  - check-if-e-mail-exists
+  - create-a-merchant
+  - create-a-new-api-key-for-merchant
+  - create-a-new-team-member
+  - create-a-payment-link
+  - create-a-payment-method
+  - create-a-payment-method-copy
+  - create-a-team
+  - create-a-user-account-self-registration
+  - create-an-invoice
+  - create-catalog-item
+  - create-customer
+  - create-new-webhook-for-all-of-my-users-merchants
+  - create-partner-level-webhook-for-your-brand
+  - createScheduledInvoice
+  - credit
+  - credit-a-payment-method
+  - daily-sales
+  - decrement-items-stock
+  - delete-a-catalog-item
+  - delete-a-customer
+  - delete-a-partner-level-webhook-for-your-brand
+  - delete-a-payment-link
+  - delete-a-payment-method
+  - delete-a-webhook
+  - delete-an-invoice
+  - delete-evidence-for-dispute
+  - delete-file-from-merchant-registration
+  - delete-invoice-schedule
+  - delete_file{id}
+  - disputes
+  - e-mail-transaction-receipt
+  - edit-your-merchant-teams-info
+  - editInvoiceSchedule
+  - enroll-a-merchant
+  - ephemeral-authentication-tokens-1
+  - find-all-customers
+  - find-the-merchant-teams-users
+  - get-a-customers-information
+  - get-a-payment-links-active-status
+  - get-a-payment-links-information
+  - get-a-payment-method-by-id
+  - get-a-related-transaction
+  - get-a-specific-partner-level-webhook-for-your-brand
+  - get-a-transactions-funding-instructions
+  - get-a-transactions-information
+  - get-all-devices
+  - get-all-invoices
+  - get-all-merchants
+  - get-all-partner-level-webhooks-for-your-brand
+  - get-all-payment-methods-for-a-customer
+  - get-all-payment-methods-for-a-merchant
+  - get-all-webhooks
+  - get-an-invoice
+  - get-detail-of-specific-deposit
+  - get-list-of-deposits
+  - get-merchant-by-id
+  - get-merchant-registration-data
+  - get-registration-documents
+  - get-self-and-teams-info
+  - get-team-members-information
+  - get-team-members-information-copy
+  - get-team-registration-data
+  - get-transaction-status
+  - get_file
+  - get_file{id}
+  - get_file{tag}
+  - get_terminalpromptChoice
+  - increment-items-stock
+  - initiate-password-reset
+  - link-existing-user-to-merchant
+  - list-and-filter-all-payment-links
+  - list-and-filter-all-transactions
+  - list-api-keys
+  - list-api-keys-for-merchant
+  - list-disputes
+  - list-disputes-copy
+  - mark-an-invoice-paid-in-cash-or-check
+  - pay-an-invoice
+  - post_file
+  - post_teamoptionadvanced_customizations
+  - print
+  - prompt-input
+  - prompt-signature
+  - put_file{id}
+  - refund
+  - refund-and-adjustments
+  - refund-transaction
+  - resend-verification-e-mail
+  - reset-password
+  - retrieve-all-catalog-items
+  - retrieve-all-item-codes
+  - retrieve-all-scheduled-invoices
+  - retrieve-an-item-by-id
+  - retrieve-terms-and-conditions
+  - review-a-transactions-surcharge-information
+  - send-an-invoice-via-email
+  - send-an-invoice-via-sms
+  - share-a-payment-method-with-a-third-party
+  - sms-transaction-receipt
+  - submit-dispute-evidence-files-for-review
+  - surcharging-1
+  - team-branding
+  - team-summary
+  - tokenize
+  - unlink-user-from-merchant
+  - update-a-payment-link
+  - update-a-payment-links-stats
+  - update-a-payment-method
+  - update-a-transactions-information
+  - update-an-invoice
+  - update-an-item
+  - update-customer-info
+  - update-merchant-registration-data
+  - update-team-registration-data
+  - update-your-user-info
+  - upload-evidence-for-dispute
+  - verify-a-payment-method
+  - verify-e-mail-token
+  - verify-password-reset-token
+  - void
+  - void-or-refund-transaction
+  - void-refund
+  - void-transaction
+  - volumes-by-card-type
+  binding: generic-passthrough
+  confidence: medium
+  note: 'Annotated readOnlyHint:false, destructiveHint:true, openWorldHint:true. It is a single generic tool bound to the
+    WHOLE REST surface rather than to one operationId, so an agent holding a live key can reach POST /charge, POST /credit,
+    POST /transaction/{id}/refund and DELETE operations through it. confidence: medium because the binding is by construction,
+    not by a declared per-operation mapping.'
+mcp_only:
+- tool: search
+  reason: Documentation search has no REST equivalent in the Stax API.
+- tool: fetch
+  reason: Documentation page retrieval has no REST equivalent in the Stax API.
+rest_only:
+- ach-rejections
+- add-file-to-merchant-registration
+- addupdate-team-settings
+- capture-a-pre-auth-transaction
+- card-processing
+- charge
+- charge-a-payment-method
+- charge-queue
+- check-if-e-mail-exists
+- create-a-merchant
+- create-a-new-api-key-for-merchant
+- create-a-new-team-member
+- create-a-payment-link
+- create-a-payment-method
+- create-a-payment-method-copy
+- create-a-team
+- create-a-user-account-self-registration
+- create-an-invoice
+- create-catalog-item
+- create-customer
+- create-new-webhook-for-all-of-my-users-merchants
+- create-partner-level-webhook-for-your-brand
+- createScheduledInvoice
+- credit
+- credit-a-payment-method
+- daily-sales
+- decrement-items-stock
+- delete-a-catalog-item
+- delete-a-customer
+- delete-a-partner-level-webhook-for-your-brand
+- delete-a-payment-link
+- delete-a-payment-method
+- delete-a-webhook
+- delete-an-invoice
+- delete-evidence-for-dispute
+- delete-file-from-merchant-registration
+- delete-invoice-schedule
+- delete_file{id}
+- disputes
+- e-mail-transaction-receipt
+- edit-your-merchant-teams-info
+- editInvoiceSchedule
+- enroll-a-merchant
+- ephemeral-authentication-tokens-1
+- find-all-customers
+- find-the-merchant-teams-users
+- get-a-customers-information
+- get-a-payment-links-active-status
+- get-a-payment-links-information
+- get-a-payment-method-by-id
+- get-a-related-transaction
+- get-a-specific-partner-level-webhook-for-your-brand
+- get-a-transactions-funding-instructions
+- get-a-transactions-information
+- get-all-devices
+- get-all-invoices
+- get-all-merchants
+- get-all-partner-level-webhooks-for-your-brand
+- get-all-payment-methods-for-a-customer
+- get-all-payment-methods-for-a-merchant
+- get-all-webhooks
+- get-an-invoice
+- get-detail-of-specific-deposit
+- get-list-of-deposits
+- get-merchant-by-id
+- get-merchant-registration-data
+- get-registration-documents
+- get-self-and-teams-info
+- get-team-members-information
+- get-team-members-information-copy
+- get-team-registration-data
+- get-transaction-status
+- get_file
+- get_file{id}
+- get_file{tag}
+- get_terminalpromptChoice
+- increment-items-stock
+- initiate-password-reset
+- link-existing-user-to-merchant
+- list-and-filter-all-payment-links
+- list-and-filter-all-transactions
+- list-api-keys
+- list-api-keys-for-merchant
+- list-disputes
+- list-disputes-copy
+- mark-an-invoice-paid-in-cash-or-check
+- pay-an-invoice
+- post_file
+- post_teamoptionadvanced_customizations
+- print
+- prompt-input
+- prompt-signature
+- put_file{id}
+- refund
+- refund-and-adjustments
+- refund-transaction
+- resend-verification-e-mail
+- reset-password
+- retrieve-all-catalog-items
+- retrieve-all-item-codes
+- retrieve-all-scheduled-invoices
+- retrieve-an-item-by-id
+- retrieve-terms-and-conditions
+- review-a-transactions-surcharge-information
+- send-an-invoice-via-email
+- send-an-invoice-via-sms
+- share-a-payment-method-with-a-third-party
+- sms-transaction-receipt
+- submit-dispute-evidence-files-for-review
+- surcharging-1
+- team-branding
+- team-summary
+- tokenize
+- unlink-user-from-merchant
+- update-a-payment-link
+- update-a-payment-links-stats
+- update-a-payment-method
+- update-a-transactions-information
+- update-an-invoice
+- update-an-item
+- update-customer-info
+- update-merchant-registration-data
+- update-team-registration-data
+- update-your-user-info
+- upload-evidence-for-dispute
+- verify-a-payment-method
+- verify-e-mail-token
+- verify-password-reset-token
+- void
+- void-or-refund-transaction
+- void-refund
+- void-transaction
+- volumes-by-card-type
+coverage:
+  mcp_tools: 6
+  mcp_tools_bound_to_rest: 1
+  rest_operations: 133
+  rest_operations_with_a_dedicated_tool: 0
+  note: Zero operations have a dedicated MCP tool; all 133 are reachable only through the generic execute-request tool.

@@ -1,0 +1,142 @@
+generated: '2026-08-29'
+method: searched
+source: https://docs.staxpayments.com/reference/overview + https://docs.staxpayments.com/docs/idempotency + openapi/stax-api-openapi.json
+auth:
+  style: bearer API key in the Authorization header
+  see: authentication/stax-authentication.yml
+content_type:
+  request: application/json (required)
+  response: application/json
+idempotency:
+  supported: true
+  mechanism: request-body parameter, not a header
+  parameter: idempotency_id
+  location: request body
+  max_length: 255
+  recommended_value: UUID
+  scope:
+  - charge-a-payment-method (POST /charge)
+  - pay-an-invoice (POST /invoice/{id}/pay)
+  - Stax.js .pay()
+  behaviour: A repeat request with the same idempotency_id returns the ORIGINAL transaction rather than creating a new charge.
+    A repeat with the same key but different parameters returns an error about the differing parameters. Results are stored
+    only if the request began executing without validation errors and was not concurrently running.
+  retention: null
+  retention_note: Stax does not publish how long an idempotency_id is remembered.
+  gap: 'Idempotency is NOT expressed in the contract: no Idempotency-Key header, and idempotency_id does not appear as a declared
+    parameter on POST /charge in the published OpenAPI. An agent has to read the guide to know the capability exists.'
+  docs: https://docs.staxpayments.com/docs/idempotency
+pagination:
+  style: page-number
+  request_params:
+  - page
+  - per_page
+  response_fields:
+  - total
+  - per_page
+  - current_page
+  - last_page
+  - next_page_url
+  - prev_page_url
+  - from
+  - to
+  - data
+  note: Laravel-style paginator envelope, observed in the published response examples for list operations such as find-all-customers.
+  default_sort: created_at DESC where a sort parameter is not supplied (find-all-customers)
+filtering:
+  style: query parameters per field, plus keywords[] for a broad cross-field search
+  sorting:
+  - sort
+  - order (ASC|DESC)
+  note: keywords[] searches most fields but Stax warns it is slower on large datasets.
+field_expansion:
+  supported: false
+  note: No expand/fields/sparse-fieldset parameter is documented.
+metadata:
+  supported: true
+  field: meta
+  note: Free-form meta object on charges (subtotal, tax) that surfaces on receipts and feeds Level 2 processing; also carries
+    webhook retry settings when creating a webhook.
+request_id_tracing:
+  supported: false
+  note: No request-id or correlation-id header is documented on requests or responses.
+versioning:
+  style: none-in-path
+  note: No version segment in the base URL or a version header. Some reporting routes carry an internal /v3/ segment (/query/statement/v3/...),
+    but the API as a whole is unversioned. See lifecycle/stax-lifecycle.yml.
+errors:
+  envelope: field-keyed validation object or bare string array; not RFC 9457
+  see: errors/stax-problem-types.yml
+rate_limit_signaling:
+  headers:
+  - Retry-After
+  status: 429
+  see: rate-limits/stax-rate-limits.yml
+dry_run_mode:
+  supported: false
+  grade: absent
+  note: No preview/dry-run/simulate parameter is documented on any write operation. The sandbox (a separate account on a test
+    gateway) is the only rehearsal surface.
+reversibility:
+  grade: verified
+  applicable: true
+  summary: 'Stax draws the reversal line at SETTLEMENT: a transaction that has not settled with the processor is VOIDED, one
+    that has settled is REFUNDED, and a single operation will pick the right one for you.'
+  surfaces:
+  - write_operation: charge-a-payment-method
+    write_path: POST /charge
+    reversal_operation: void-transaction
+    reversal_path: POST /transaction/{id}/void
+    window: Only until the transaction settles with the processor — 'Void will only appear until the transaction is processed'.
+      Full amount only; partial voids are not supported.
+    docs: https://docs.staxpayments.com/docs/voiding-and-refunding
+    grade: verified
+  - write_operation: charge-a-payment-method
+    write_path: POST /charge
+    reversal_operation: refund-transaction
+    reversal_path: POST /transaction/{id}/refund
+    window: 'After settlement. Stax states refunds have no universal processing deadline relative to the original transaction
+      date, but card-network rules apply: Visa and Discover require the refund be linked to the original transaction ID, Mastercard
+      credits cleared 5+ calendar days after the refund transaction date may face an authorization-related chargeback, and
+      ''Credit Not Processed'' chargebacks run 365-540 calendar days from original settlement or delivery. Partial refunds
+      are supported (you enter the amount).'
+    docs: https://docs.staxpayments.com/docs/refund-guidelines
+    grade: verified
+  - write_operation: charge-a-payment-method
+    write_path: POST /charge
+    reversal_operation: void-or-refund-transaction
+    reversal_path: POST /transaction/{id}/void-or-refund
+    window: Stax selects void or refund based on whether the transaction has settled — the safe single call for an agent that
+      does not know the settlement state.
+    docs: https://docs.staxpayments.com/docs/voiding-and-refunding
+    grade: verified
+  - write_operation: charge (card-present terminal)
+    write_path: POST /terminal/charge
+    reversal_operation: void / refund / void-refund
+    reversal_path: POST /terminal/void, POST /terminal/refund, POST /terminal/void-or-refund
+    window: Same settlement boundary as the card-not-present surface.
+    docs: https://docs.staxpayments.com/reference
+    grade: documented
+  - write_operation: capture-a-pre-auth-transaction
+    write_path: POST /transaction/{transactionid}/capture
+    reversal_operation: void-transaction
+    reversal_path: POST /transaction/{id}/void
+    window: Before capture the authorization can be voided; after capture the settlement rules above apply.
+    docs: https://docs.staxpayments.com/docs/voiding-and-refunding
+    grade: documented
+  - write_operation: create-an-invoice / create-customer / create-a-payment-method / create-catalog-item / create-a-payment-link
+    write_path: POST /invoice, POST /customer, POST /payment-method, POST /item, POST /query/payment-links
+    reversal_operation: delete-an-invoice / delete-a-customer / delete-a-payment-method / delete-a-catalog-item / delete-a-payment-link
+    reversal_path: DELETE on the matching resource
+    window: No window published. Deleted customers CAN be restored from the Stax Pay UI (docs/restoring-deleted-customers);
+      Stax publishes no API operation to restore one and no retention period.
+    docs: https://docs.staxpayments.com/docs/restoring-deleted-customers
+    grade: documented
+  surcharging_note: On a surcharging account the surcharge fee is refunded along with the base amount.
+  cost_note: Voids are not charged interchange (authorization fee only); refunds still incur interchange on the original sale
+    plus an authorization fee on the refund.
+related:
+- errors/stax-problem-types.yml
+- lifecycle/stax-lifecycle.yml
+- authentication/stax-authentication.yml
+- rate-limits/stax-rate-limits.yml

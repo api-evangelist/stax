@@ -1,0 +1,13 @@
+generated: '2026-08-29'
+method: probed
+source: https://trust.staxpayments.com/
+url: https://trust.staxpayments.com/
+status: 200
+platform: Laika (laika-app-prod.s3.amazonaws.com/static/trust-center)
+certifications_readable: false
+certifications: []
+note: 'A trust center exists on Stax''s own subdomain and returns 200 with <title>Trust Center</title>, but the response body
+  is an 814-byte single-page-app shell: the entire content loads from a Laika-hosted JavaScript bundle. No certification name,
+  attestation date or document list is present in the served HTML, so nothing machine-readable can be recorded here. The only
+  certification Stax states in readable form is PCI DSS Level 1 Service Provider, captured in conformance/stax-conformance.yml.'
+checked: '2026-08-29'

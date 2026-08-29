@@ -1,0 +1,23 @@
+generated: '2026-08-29'
+method: generated
+source: openapi/stax-api-openapi.json + docs.staxpayments.com guides + conventions/stax-conventions.yml
+note: Packaged agent skills for the four marquee Stax flows. Every operationId referenced was grepped out of openapi/stax-api-openapi.json;
+  no operation, parameter or test value here is invented.
+skills:
+- name: stax-charge-and-reverse
+  file: skills/stax-charge-and-reverse.md
+  description: Take a card or ACH payment with an idempotency key, then void or refund it on the right side of settlement.
+  operations: 9
+- name: stax-invoice-and-collect
+  file: skills/stax-invoice-and-collect.md
+  description: Create, send and collect on an invoice, including recurring schedules and payment links.
+  operations: 11
+- name: stax-onboard-a-merchant
+  file: skills/stax-onboard-a-merchant.md
+  description: 'Partner API flow: create and enroll a sub-merchant, supply registration data and documents, watch underwriting
+    to ACTIVE, issue its API key.'
+  operations: 13
+- name: stax-reconcile-deposits
+  file: skills/stax-reconcile-deposits.md
+  description: Match deposits to transactions, pull statement reports, handle ACH rejects and dispute evidence.
+  operations: 15

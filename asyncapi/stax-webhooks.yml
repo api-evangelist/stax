@@ -1,0 +1,147 @@
+generated: '2026-08-29'
+method: searched
+source: https://docs.staxpayments.com/docs/merchant-webhooks + https://docs.staxpayments.com/docs/partner-webhooks
+note: Stax publishes NO AsyncAPI document. It documents a real webhook surface with two levels — merchant webhooks scoped
+  to one account, and partner (brand) webhooks that fire for every sub-merchant under an ISV brand — plus REST operations
+  to manage them. This artifact is the webhook catalog, not a fabricated AsyncAPI.
+asyncapi_published: false
+delivery:
+  transport: HTTPS POST
+  content_type: application/json
+  event_name_header: stax-event-name
+  body: The object associated with the event (for example the transaction object for create_transaction) — generally the same
+    payload as the matching GET.
+  tls: Receiving endpoints must serve a valid public-CA certificate and negotiate TLS 1.2 or 1.3; self-signed certificates
+    are prohibited (reference/tls-security-standards).
+  signing: null
+  signing_note: Stax documents no HMAC signature or shared-secret verification for webhook payloads; verification is left
+    to the receiver.
+retries:
+  configurable: true
+  fields:
+  - field: meta.response_body
+    meaning: true enables one retry five minutes after a failure
+  - field: meta.webhook_retry_frequency
+    meaning: retry interval in minutes
+  - field: meta.webhook_retry_count
+    meaning: number of retries on failure
+management_operations:
+- create-new-webhook-for-all-of-my-users-merchants
+- get-all-webhooks
+- delete-a-webhook
+- create-partner-level-webhook-for-your-brand
+- get-all-partner-level-webhooks-for-your-brand
+- get-a-specific-partner-level-webhook-for-your-brand
+- delete-a-partner-level-webhook-for-your-brand
+merchant_event_count: 29
+merchant_events:
+- event: create_customer
+  description: A customer is created. Returns Customer object.
+- event: create_deposit
+  description: A settlement is processed. The payload of the webhook contains the settlement record. The `external_id` is
+    the connector between the deposit record and the deposit details. This webhook DOES fire in the sandbox, but in the sandbox
+    environment, the external\_id will not match the batch\_id - in the sandbox, you can use this webhook as a notification
+    and build your system to call out to the merchant's deposit APIs to get the latest deposit details.
+- event: create_dispute
+  description: A dispute is created. Returns dispute object. Dispute includes the associated transaction\_id.
+- event: create_invoice
+  description: An invoice is created, which includes invoices created by an invoice schedule. Returns invoice object.
+- event: create_item
+  description: An item is created.
+- event: create_scheduled_invoice
+  description: An invoice schedule is created. Returns Invoice Schedule.
+- event: create_transaction
+  description: A transaction is created, including those made with Stax.js. Returns transaction object.
+- event: create_user
+  description: A user is created.
+- event: create_webhook
+  description: A webhook is created.
+- event: delete_item
+  description: An item is deleted.
+- event: delete_scheduled_invoice
+  description: An invoice schedule is deleted.
+- event: delete_webhook
+  description: A webhook is deleted.
+- event: update_item
+  description: An item is updated.
+- event: send_invoice
+  description: An invoice is sent via email or text.
+- event: set_branding
+  description: Branding is set.
+- event: set_gateway
+  description: A gateway is set.
+- event: set_plan
+  description: A plan is set.
+- event: update_customer
+  description: A customer is updated.
+- event: update_dispute
+  description: A dispute is updated. Returns dispute object.
+- event: update_invoice
+  description: An invoice is updated.
+- event: update_scheduled_invoice
+  description: An invoice schedule is updated.
+- event: update_transaction
+  description: A transaction is updated. Returns transaction object.
+- event: update_user
+  description: A user is updated.
+- event: update_payment_method
+  description: A payment method is updated. With the auto updater, if a payment method is updated by Stax to reflect updated
+    information from the card brands.
+- event: update_transaction_settled
+  description: An ACH transaction has either settled or not settled. Returns the original transaction object. If the transaction
+    is settled, the `settled_at` date will be populated. If the transaction was clawed back, the transaction's `child_transactions`
+    array will include the associated void transaction.
+- event: fee_statement_ready
+  description: Receive a notification through the webhook indicating that my statement is ready
+- event: update_underwriting
+  description: Merchant registration's underwriting status(es) are updated.
+- event: update_merchant_status
+  description: Merchant status has changed.
+- event: update_electronic_signature
+  description: The merchant signer has signed their merchant application.
+partner_event_count: 15
+partner_events:
+- event: create_dispute
+  description: Triggered when a dispute is created. Returns the dispute object.
+- event: create_deposit
+  description: 'Triggered when a settlement (deposit) is processed. Returns the settlement record. The `external_id` in the
+    payload connects the deposit record to the deposit details. **Note**: This webhook fires in both production and sandbox
+    environments, but in sandbox, the `external_id` will not match the `batch_id`. Use this webhook as a notification and
+    then call the merchant''s deposit APIs to retrieve the latest deposit details.'
+- event: create_invoice
+  description: Triggered when a new invoice is created, including invoices created by an invoice schedule. Returns the invoice
+    object.
+- event: create_payment_method
+  description: Triggered when a new payment method is created. Returns the payment method object.
+- event: create_transaction
+  description: Triggered when a new transaction is created, including transactions created via Stax.js. Returns the transaction
+    object.
+- event: create_user
+  description: Triggered when a new user is created. Returns the user object.
+- event: update_dispute
+  description: Triggered when a dispute is updated, such as when the dispute status changes. Returns the updated dispute object.
+- event: update_payment_method
+  description: Triggered when a payment method is updated. Returns the updated payment method object. The update may originate
+    from an action by the merchant user or from Stax updating information via account updater services.
+- event: update_transaction
+  description: 'Triggered when a transaction is updated. Returns the updated transaction object. **Note**: This does not fire
+    when a transaction''s `settled_at` date is added. For ACH transactions, use the`update_transaction_settled`.'
+- event: update_transaction_settled
+  description: Triggered when an ACH transaction has settled or not settled. Returns the original transaction object. If the
+    transaction settled, the `settled_at` date will be populated. If the transaction was clawed back, the `child_transactions`
+    array will include the associated void transaction. For more details on ACH settlement, refer to our ACH documentation.
+- event: fee_statement_ready
+  description: Receive a notification through the webhook indicating that my statement is ready
+- event: create_merchant
+  description: Triggered when a new merchant is created under the partner brand. This is particularly useful for partners
+    utilizing the Stax Landing Page Enrollment option. Returns the merchant object.
+- event: update_underwriting
+  description: Triggered when a merchant registration's underwriting status changes, including `underwriting_status`, `underwriting_substatuses`,
+    or `underwriting_note`. Continue listening to this webhook until `registration.underwriting_status` is `APPROVED`. Returns
+    the merchant's registration object.
+- event: update_merchant_status
+  description: Triggered when a merchant's status changes. When `merchant.status` is set to `ACTIVE`, the merchant can begin
+    processing payments. Returns the merchant object.
+- event: update_electronic_signature
+  description: Triggered when a merchant signer has signed their merchant application. Returns the merchant's registration
+    object. Triggered by changes to the `registration.electronic_signature` value.

@@ -1,0 +1,6 @@
+Contact: mailto:security@staxpayments.com
+Expires: 2027-02-10T05:00:00Z
+Encryption: https://467991.fs1.hubspotusercontent-na1.net/hubfs/467991/Security%20PGP/StaxPaymentsSecurity_public.asc
+Preferred-Languages: EN
+Canonical: https://staxpayments.com/.well-known/security.txt
+Hiring: https://staxpayments.com/careers/

@@ -1,0 +1,1922 @@
+generated: '2026-08-29'
+method: derived
+source: openapi/stax-api-openapi.json
+note: Index of the request and response examples Stax publishes INSIDE its own contract — every operation page on docs.staxpayments.com
+  embeds an OpenAPI document whose responses carry named examples. This artifact indexes them (operation, status, media type,
+  example name, size); the example bodies themselves live verbatim in openapi/stax-api-openapi.json and are not duplicated
+  here.
+coverage:
+  operations: 133
+  operations_with_examples: 130
+  example_count: 252
+operations:
+- operationId: enroll-a-merchant
+  method: POST
+  path: /admin/enroll
+  example_count: 3
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 11760
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 1096
+  - kind: request
+    status: null
+    content_type: application/json
+    name: Example Request
+    bytes: 3094
+- operationId: charge-a-payment-method
+  method: POST
+  path: /charge
+  example_count: 10
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 4142
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Missing Fields
+    bytes: 242
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Invalid/Unauthorized
+    bytes: 81
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Redacted
+    bytes: 76
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Deleted
+    bytes: 75
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Missing Funding Field
+    bytes: 85
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Inactive Funding Account
+    bytes: 66
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Mismatch Sum
+    bytes: 95
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Invalid Transaction Meta
+    bytes: 216
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Inactive Account
+    bytes: 100
+- operationId: credit-a-payment-method
+  method: POST
+  path: /credit
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 3788
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 185
+- operationId: create-customer
+  method: POST
+  path: /customer
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 827
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 447
+- operationId: find-all-customers
+  method: GET
+  path: /customer
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1619
+- operationId: get-all-payment-methods-for-a-customer
+  method: GET
+  path: /customer/{customerId}/payment-method
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 3378
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Invalid ID
+    bytes: 51
+- operationId: delete-a-customer
+  method: DELETE
+  path: /customer/{id}
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 713
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 32
+- operationId: get-a-customers-information
+  method: GET
+  path: /customer/{id}
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 681
+  - kind: response
+    status: '404'
+    content_type: application/json
+    name: Result
+    bytes: 32
+- operationId: update-customer-info
+  method: PUT
+  path: /customer/{id}
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 696
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 447
+- operationId: ephemeral-authentication-tokens-1
+  method: GET
+  path: /ephemeral
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 38
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Invalid API Key
+    bytes: 67
+- operationId: post_file
+  method: POST
+  path: /file
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: OK
+    bytes: 535
+  - kind: request
+    status: null
+    content_type: multipart/form-data
+    name: New Example
+    bytes: 303
+- operationId: get_file
+  method: GET
+  path: /file
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: OK
+    bytes: 2186
+- operationId: upload-evidence-for-dispute
+  method: POST
+  path: /file/dispute
+  example_count: 2
+  examples:
+  - kind: response
+    status: '201'
+    content_type: application/json
+    name: Result
+    bytes: 599
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 113
+- operationId: delete-evidence-for-dispute
+  method: DELETE
+  path: /file/dispute/{evidenceFileId}
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 638
+- operationId: put_file{id}
+  method: PUT
+  path: /file/{id}
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: OK
+    bytes: 533
+- operationId: get_file{id}
+  method: GET
+  path: /file/{id}
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: OK
+    bytes: 533
+- operationId: get_file{tag}
+  method: GET
+  path: /file/{tag}
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: OK
+    bytes: 43
+- operationId: delete_file{id}
+  method: DELETE
+  path: /file{id}
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: OK
+    bytes: 550
+- operationId: initiate-password-reset
+  method: POST
+  path: /forgot
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 19
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 107
+- operationId: create-an-invoice
+  method: POST
+  path: /invoice
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 2683
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 328
+- operationId: get-all-invoices
+  method: GET
+  path: /invoice
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 15114
+- operationId: retrieve-all-scheduled-invoices
+  method: GET
+  path: /invoice/schedule
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 7020
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 2
+- operationId: delete-invoice-schedule
+  method: DELETE
+  path: /invoice/schedule/{id}
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: New Example
+    bytes: 2084
+- operationId: delete-an-invoice
+  method: DELETE
+  path: /invoice/{id}
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 2305
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 63
+- operationId: get-an-invoice
+  method: GET
+  path: /invoice/{id}
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 3444
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: New Example
+    bytes: 44
+- operationId: update-an-invoice
+  method: PUT
+  path: /invoice/{id}
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 2286
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Invalid ID
+    bytes: 51
+- operationId: pay-an-invoice
+  method: POST
+  path: /invoice/{id}/pay
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 7967
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 228
+- operationId: mark-an-invoice-paid-in-cash-or-check
+  method: POST
+  path: /invoice/{id}/pay/{method}
+  example_count: 3
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 6678
+  - kind: response
+    status: '404'
+    content_type: application/json
+    name: ID not found
+    bytes: 44
+  - kind: response
+    status: '422'
+    content_type: text/plain
+    name: Result
+    bytes: 43
+- operationId: send-an-invoice-via-email
+  method: PUT
+  path: /invoice/{id}/send/email
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 2878
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 50
+- operationId: send-an-invoice-via-sms
+  method: PUT
+  path: /invoice/{id}/send/sms
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 2878
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 215
+- operationId: create-catalog-item
+  method: POST
+  path: /item
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1200
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 181
+- operationId: retrieve-all-catalog-items
+  method: GET
+  path: /item
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 3544
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 181
+- operationId: retrieve-all-item-codes
+  method: GET
+  path: /item/code
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 0
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 2
+- operationId: delete-a-catalog-item
+  method: DELETE
+  path: /item/{id}
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 2
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 2
+- operationId: retrieve-an-item-by-id
+  method: GET
+  path: /item/{id}
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1159
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 47
+- operationId: update-an-item
+  method: PUT
+  path: /item/{id}
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1200
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 53
+- operationId: decrement-items-stock
+  method: PUT
+  path: /item/{id}/decrement
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1161
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 46
+- operationId: increment-items-stock
+  method: PUT
+  path: /item/{id}/increment
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1160
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 46
+- operationId: create-a-merchant
+  method: POST
+  path: /merchant
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1276
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 138
+- operationId: get-all-merchants
+  method: GET
+  path: /merchant
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 3326
+- operationId: create-a-new-api-key-for-merchant
+  method: POST
+  path: /merchant/{id}/apikey
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 2
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 2
+- operationId: list-api-keys-for-merchant
+  method: GET
+  path: /merchant/{id}/apikey
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1522
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 2
+- operationId: get-merchant-registration-data
+  method: GET
+  path: /merchant/{id}/registration
+  example_count: 3
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 0
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Response
+    bytes: 9665
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 92
+- operationId: update-merchant-registration-data
+  method: PUT
+  path: /merchant/{id}/registration
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 2658
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 92
+- operationId: add-file-to-merchant-registration
+  method: POST
+  path: /merchant/{id}/registration/file
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 3197
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 53
+- operationId: delete-file-from-merchant-registration
+  method: DELETE
+  path: /merchant/{id}/registration/file/{file_id}
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 4662
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 92
+- operationId: get-merchant-by-id
+  method: GET
+  path: /merchant/{merchant_id}
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 2546
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 2
+- operationId: link-existing-user-to-merchant
+  method: POST
+  path: /merchant/{merchant_id}/user/{user_id}
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 4330
+  - kind: response
+    status: '401'
+    content_type: application/json
+    name: Result
+    bytes: 30
+- operationId: unlink-user-from-merchant
+  method: DELETE
+  path: /merchant/{merchant_id}/user/{user_id}
+  example_count: 3
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 4460
+  - kind: response
+    status: '401'
+    content_type: application/json
+    name: Result
+    bytes: 30
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 128
+- operationId: create-a-payment-method-copy
+  method: POST
+  path: /payment-method
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 2
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 2
+- operationId: get-all-payment-methods-for-a-merchant
+  method: GET
+  path: /payment-method
+  example_count: 4
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 6399
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Unformatted Date
+    bytes: 105
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Invalid Account Updater Event
+    bytes: 73
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Invalid Status
+    bytes: 59
+- operationId: create-a-payment-method
+  method: POST
+  path: /payment-method/
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 2
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 2
+- operationId: delete-a-payment-method
+  method: DELETE
+  path: /payment-method/{id}
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1524
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Invalid Id
+    bytes: 51
+- operationId: get-a-payment-method-by-id
+  method: GET
+  path: /payment-method/{id}
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1797
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Invalid ID
+    bytes: 51
+- operationId: update-a-payment-method
+  method: PUT
+  path: /payment-method/{id}
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1505
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Invalid Id
+    bytes: 51
+- operationId: share-a-payment-method-with-a-third-party
+  method: POST
+  path: /payment_method/{payment_method_id}/external_vault
+  example_count: 2
+  examples:
+  - kind: response
+    status: '201'
+    content_type: application/json
+    name: Result
+    bytes: 3035
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: No Payment Method Found
+    bytes: 51
+- operationId: get-list-of-deposits
+  method: GET
+  path: /query/deposit
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 501
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 2
+- operationId: get-detail-of-specific-deposit
+  method: GET
+  path: /query/depositDetail
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1019
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 2
+- operationId: create-a-payment-link
+  method: POST
+  path: /query/payment-links
+  example_count: 3
+  examples:
+  - kind: response
+    status: '201'
+    content_type: application/json
+    name: Result
+    bytes: 312
+  - kind: response
+    status: '500'
+    content_type: application/json
+    name: Invalid funding id
+    bytes: 90
+  - kind: response
+    status: '500'
+    content_type: application/json
+    name: Missing link_meta
+    bytes: 85
+- operationId: list-and-filter-all-payment-links
+  method: GET
+  path: /query/payment-links
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: No results
+    bytes: 381
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Suscessful Results
+    bytes: 2296
+- operationId: delete-a-payment-link
+  method: DELETE
+  path: /query/payment-links/{id}
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 56
+- operationId: get-a-payment-links-information
+  method: GET
+  path: /query/payment-links/{id}
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 415
+- operationId: update-a-payment-link
+  method: PUT
+  path: /query/payment-links/{id}
+  example_count: 3
+  examples:
+  - kind: response
+    status: '201'
+    content_type: application/json
+    name: Result
+    bytes: 312
+  - kind: response
+    status: '500'
+    content_type: application/json
+    name: Invalid funding id
+    bytes: 90
+  - kind: response
+    status: '500'
+    content_type: application/json
+    name: Missing link_meta
+    bytes: 85
+- operationId: get-a-payment-links-active-status
+  method: GET
+  path: /query/payment-links/{id}/is-active
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 2
+- operationId: update-a-payment-links-stats
+  method: PUT
+  path: /query/payment-links/{id}/update-stats
+  example_count: 2
+  examples:
+  - kind: response
+    status: '201'
+    content_type: application/json
+    name: Result
+    bytes: 90
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 2
+- operationId: ach-rejections
+  method: GET
+  path: /query/statement/v3/ach-rejects
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1054
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 2
+- operationId: refund-and-adjustments
+  method: GET
+  path: /query/statement/v3/adjustments
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 794
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 2
+- operationId: daily-sales
+  method: GET
+  path: /query/statement/v3/daily-sales
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 737
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 2
+- operationId: disputes
+  method: GET
+  path: /query/statement/v3/disputes
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 263
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 2
+- operationId: surcharging-1
+  method: GET
+  path: /query/statement/v3/surcharges
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 580
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 2
+- operationId: card-processing
+  method: GET
+  path: /query/statement/v3/volumes/card-processing
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1055
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 2
+- operationId: volumes-by-card-type
+  method: GET
+  path: /query/statement/v3/volumes/card-type
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 2809
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 2
+- operationId: team-summary
+  method: GET
+  path: /query/statistics/teamSummary
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 205
+- operationId: reset-password
+  method: POST
+  path: /reset/{token}
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1487
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 2
+- operationId: verify-password-reset-token
+  method: GET
+  path: /reset/{token}
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 239
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 57
+- operationId: create-a-user-account-self-registration
+  method: POST
+  path: /self
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 817
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 170
+- operationId: get-self-and-teams-info
+  method: GET
+  path: /self
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 2762
+  - kind: response
+    status: '401'
+    content_type: application/json
+    name: Result
+    bytes: 30
+- operationId: update-your-user-info
+  method: PUT
+  path: /self
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 474
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 60
+- operationId: check-if-e-mail-exists
+  method: GET
+  path: /self/exists
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 10
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 51
+- operationId: resend-verification-e-mail
+  method: PUT
+  path: /self/verify/resend
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 475
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 24
+- operationId: verify-e-mail-token
+  method: GET
+  path: /self/verify/{token}
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 60
+  - kind: response
+    status: '404'
+    content_type: application/json
+    name: Result
+    bytes: 64
+- operationId: review-a-transactions-surcharge-information
+  method: GET
+  path: /surcharge/review
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 119
+- operationId: create-a-team
+  method: POST
+  path: /team
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 5185
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 138
+- operationId: edit-your-merchant-teams-info
+  method: PUT
+  path: /team
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 998
+- operationId: list-api-keys
+  method: GET
+  path: /team/apikey
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1521
+- operationId: post_teamoptionadvanced_customizations
+  method: PUT
+  path: /team/option/advanced_customizations
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: OK
+    bytes: 10287
+- operationId: team-branding
+  method: POST
+  path: /team/option/branding
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1645
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 55
+- operationId: addupdate-team-settings
+  method: PUT
+  path: /team/options
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1929
+- operationId: get-team-registration-data
+  method: GET
+  path: /team/registration
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 2355
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 2
+- operationId: update-team-registration-data
+  method: PUT
+  path: /team/registration
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 0
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 2
+- operationId: create-a-new-team-member
+  method: POST
+  path: /team/user
+  example_count: 3
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 443
+  - kind: response
+    status: '401'
+    content_type: application/json
+    name: Result
+    bytes: 22
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 165
+- operationId: find-the-merchant-teams-users
+  method: GET
+  path: /team/user
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1304
+- operationId: get-team-members-information-copy
+  method: PUT
+  path: /team/user/{id}
+  example_count: 3
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 443
+  - kind: response
+    status: '401'
+    content_type: application/json
+    name: Result
+    bytes: 22
+  - kind: response
+    status: '404'
+    content_type: application/json
+    name: Result
+    bytes: 22
+- operationId: get-team-members-information
+  method: GET
+  path: /team/user/{id}
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 443
+  - kind: response
+    status: '404'
+    content_type: application/json
+    name: Result
+    bytes: 22
+- operationId: charge
+  method: POST
+  path: /terminal/charge
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 3104
+- operationId: charge-queue
+  method: POST
+  path: /terminal/charge/queue
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 3104
+- operationId: credit
+  method: POST
+  path: /terminal/credit
+  example_count: 3
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 6548
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 144
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 90
+- operationId: print
+  method: POST
+  path: /terminal/print
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 171
+- operationId: prompt-signature
+  method: POST
+  path: /terminal/prompt/signature
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 3564
+- operationId: prompt-input
+  method: POST
+  path: /terminal/promptInput
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 21
+- operationId: refund
+  method: POST
+  path: /terminal/refund
+  example_count: 3
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 6029
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 144
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 90
+- operationId: get-all-devices
+  method: GET
+  path: /terminal/register
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 662
+- operationId: tokenize
+  method: POST
+  path: /terminal/tokenize
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 218
+- operationId: void
+  method: POST
+  path: /terminal/void
+  example_count: 3
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 6029
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 144
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 90
+- operationId: void-refund
+  method: POST
+  path: /terminal/void-or-refund
+  example_count: 3
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 6029
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 144
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 90
+- operationId: get-transaction-status
+  method: GET
+  path: /terminal/{registerId}/status/{transactionId}
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1592
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Transaction not Found
+    bytes: 93
+- operationId: list-and-filter-all-transactions
+  method: GET
+  path: /transaction
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 4817
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 142
+- operationId: get-a-transactions-information
+  method: GET
+  path: /transaction/{id}
+  example_count: 3
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 4022
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Payment Link w/ surcharging
+    bytes: 9635
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 51
+- operationId: update-a-transactions-information
+  method: PUT
+  path: /transaction/{id}/
+  example_count: 3
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 4023
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: immutable
+    bytes: 53
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 77
+- operationId: get-a-transactions-funding-instructions
+  method: GET
+  path: /transaction/{id}/funding
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1315
+  - kind: response
+    status: '404'
+    content_type: application/json
+    name: Not Found
+    bytes: 29
+- operationId: sms-transaction-receipt
+  method: PUT
+  path: /transaction/{id}/receipt-sms
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 4472
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 62
+- operationId: e-mail-transaction-receipt
+  method: PUT
+  path: /transaction/{id}/receipt/email
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 4472
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Invalid Email
+    bytes: 77
+- operationId: refund-transaction
+  method: POST
+  path: /transaction/{id}/refund
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 2
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 2
+- operationId: get-a-related-transaction
+  method: GET
+  path: /transaction/{id}/related
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 4176
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Invalid ID
+    bytes: 51
+- operationId: void-transaction
+  method: POST
+  path: /transaction/{id}/void
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 8159
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 67
+- operationId: void-or-refund-transaction
+  method: POST
+  path: /transaction/{id}/void-or-refund
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 8159
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 247
+- operationId: capture-a-pre-auth-transaction
+  method: POST
+  path: /transaction/{transactionid}/capture
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 9216
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Invalid Id
+    bytes: 51
+- operationId: submit-dispute-evidence-files-for-review
+  method: POST
+  path: /underwriting/dispute/{disputeId}/submit
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 347
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 202
+- operationId: list-disputes
+  method: GET
+  path: /underwriting/disputes
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1007
+- operationId: list-disputes-copy
+  method: GET
+  path: /underwriting/disputes/{merchantId}
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1007
+- operationId: get-registration-documents
+  method: GET
+  path: /underwriting/merchant/{id}/registration/documents
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 10126
+  - kind: response
+    status: '401'
+    content_type: application/json
+    name: Result
+    bytes: 150
+- operationId: retrieve-terms-and-conditions
+  method: GET
+  path: /underwriting/terms-and-conditions/{id}
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: text/plain
+    name: Result
+    bytes: 73
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 24
+- operationId: verify-a-payment-method
+  method: POST
+  path: /verify
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 8031
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 185
+- operationId: create-new-webhook-for-all-of-my-users-merchants
+  method: POST
+  path: /webhook
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 290
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 118
+- operationId: get-all-webhooks
+  method: GET
+  path: /webhook
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 2221
+- operationId: delete-a-webhook
+  method: DELETE
+  path: /webhook/{id}
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 397
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 50
+- operationId: create-partner-level-webhook-for-your-brand
+  method: POST
+  path: /webhookadmin/webhook/brand
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 427
+  - kind: response
+    status: '422'
+    content_type: application/json
+    name: Result
+    bytes: 426
+- operationId: get-all-partner-level-webhooks-for-your-brand
+  method: GET
+  path: /webhookadmin/webhook/brand
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 1133
+- operationId: delete-a-partner-level-webhook-for-your-brand
+  method: DELETE
+  path: /webhookadmin/webhook/brand/{webhook_id}
+  example_count: 1
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 375
+- operationId: get-a-specific-partner-level-webhook-for-your-brand
+  method: GET
+  path: /webhookadmin/webhook/brand/{webhook_id}
+  example_count: 2
+  examples:
+  - kind: response
+    status: '200'
+    content_type: application/json
+    name: Result
+    bytes: 352
+  - kind: response
+    status: '400'
+    content_type: application/json
+    name: Result
+    bytes: 2

@@ -1,0 +1,90 @@
+generated: '2026-08-29'
+method: searched
+source: https://docs.staxpayments.com/docs/payment-decline-codes
+note: Stax publishes decline and processing error MESSAGES rather than numeric decline codes for card transactions; the strings
+  below are what appears in the Stax Pay platform and in Transaction.message. In a SANDBOX account a failure test card always
+  returns the generic 'Unable to process the purchase transaction' and never the real reason — the specific message only appears
+  on a live gateway (docs/test-card-payment-methods).
+envelope_field: Transaction.message
+masked_to_buyers: The sandbox masks every failure reason behind one generic string; on live accounts the issuer reason is
+  passed through to the merchant. Stax does not document a separate buyer-facing masking policy.
+decline_code_count: 26
+decline_codes:
+- code: ' -----------------------------------------------------------------'
+  meaning: '---------------------------------------------------------------------------------------------------'
+  action: '------------------------------------------------------------------------------------'
+- code: ACH transactions are not accepted
+  meaning: The account has not been set up for ACH transactions.
+  action: Please reach out to <success@staxpayments.com> to have ACH added to your account.
+- code: An error occurred during processing.
+  meaning: The platform lost connection to the gateway.
+  action: Try processing the transaction again.
+- code: AUTH UNAVAIL
+  meaning: No authorization is available for this transaction.
+  action: Please reach out to <support@staxpayments.com>
+- code: CVV does not match.
+  meaning: The issuing bank reports that the CVV entered does not match.
+  action: Verify the CVV with the customer's card.
+- code: DAILY TRANSACTION LIMIT EXCEEDED
+  meaning: The daily ACH transaction limit has been met for the account.
+  action: Wait for another day to process more transactions.
+- code: DECLINE
+  meaning: Hard decline from the issuing bank. Insufficient funds or daily limits met.
+  action: Please have your customer contact their bank and ask for a different payment method.
+- code: Decline Limit Error
+  meaning: Decline-to-approval ratio is too high.
+  action: Please contact <support@staxpayments.com>
+- code: Do Not Honor
+  meaning: Hard decline from the issuing bank. Insufficient funds or daily limits met.
+  action: Please have your customer contact their bank and ask for a different payment method.
+- code: Expiry Date is invalid
+  meaning: The expiration date is invalid.
+  action: Confirm the card's expiration date or with your customer.
+- code: Gateway Unreachable
+  meaning: The payment gateway is currently unavailable.
+  action: Please try again later.
+- code: HOLD-CALL
+  meaning: Merchant to keep the card. There is a problem with the card.
+  action: Call the number on the back of the card to determine the issue.
+- code: Insufficient Funds
+  meaning: The issuing bank reports that the card does not have enough funds to cover the transaction.
+  action: Enter a new payment method.
+- code: Invalid Account error
+  meaning: Bank account information is invalid.
+  action: Reach out to your customer for a new payment method.
+- code: Invalid Merchant ID
+  meaning: Merchant ID is incorrect or inactive.
+  action: Please contact <support@staxpayments.com>
+- code: Lost/Stolen
+  meaning: The card has been reported as lost or stolen.
+  action: Don't accept any form of payment from this customer.
+- code: Max attempts exceeded
+  meaning: The previous charge was recently successful. Please review and try again later.
+  action: Wait 5 minutes and try again.
+- code: NO ACCOUNT
+  meaning: The account number is invalid.
+  action: Please reach out to <support@staxpayments.com>
+- code: TERM ID ERROR
+  meaning: TSYS/Vital configuration is incorrect or no longer valid.
+  action: Please reach out to <support@staxpayments.com>
+- code: The credit card has expired.
+  meaning: The card is expired.
+  action: Please enter a new payment method.
+- code: Invalid CC Number
+  meaning: The credit card number entered is not valid.
+  action: Confirm the number with the cardholder.
+- code: CARD NO. ERROR
+  meaning: The issuing bank reports that the address does not match.
+  action: Verify that the customer's address matches the issuing bank for the credit card.
+- code: TYPE NOT ALLOWED
+  meaning: The transaction type is not allowed.
+  action: Please reach out to <support@staxpayments.com>
+- code: User authentication failed
+  meaning: The gateway codes no longer match those in the interface.
+  action: Please reach out to <support@staxpayments.com>
+- code: Using a live Authorize.net account in Test Mode is not permitted.
+  meaning: The gateway is in test mode. The account needs to be in live mode to process a transaction.
+  action: Please reach out to <activations@staxpayments.com>
+- code: This payment could not be processed.
+  meaning: This payment could not be processed. Please try a different payment method or contact the merchant.
+  action: Try a different payment method or contact the merchant.

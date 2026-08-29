@@ -1,0 +1,41 @@
+generated: '2026-08-29'
+method: derived
+source: openapi/stax-api-openapi.json + https://docs.staxpayments.com/reference/overview
+format: custom
+rfc9457: false
+envelope:
+  content_type: application/json
+  shape: 'Validation errors (422) return a Laravel-style object keyed by field name, each value an ARRAY of human-readable
+    messages, e.g. {"total": ["The total field is required."]}. Some authorization errors (401) return a bare JSON ARRAY of
+    strings, e.g. ["not team admin"]. There is no type/title/status/detail/instance envelope and no application/problem+json
+    media type anywhere in the contract.'
+  machine_readable_code_field: null
+  note: An agent cannot branch on a stable error code from the HTTP body; it must branch on the status code plus the field
+    keys.
+status_codes:
+- status: '400'
+  meaning: Bad Request — invalid request, missing parameters
+  operations: 41
+- status: '401'
+  meaning: Unauthorized — authentication failed, missing or incorrect API key
+  operations: 6
+- status: '404'
+  meaning: Not Found — the requested resource does not exist
+  operations: 7
+- status: '422'
+  meaning: Unprocessable Entity — field-level validation failure
+  operations: 54
+- status: '429'
+  meaning: Too Many Requests — rate limit exceeded; Retry-After indicates when to retry
+  operations: 0
+  note: Documented on reference/overview but declared on ZERO of the 133 operations in the contract.
+- status: '500'
+  meaning: Internal Server Error
+  operations: 4
+coverage:
+  operations: 133
+  with_a_4xx_response: 96
+  with_a_5xx_response: 4
+related:
+- errors/stax-decline-codes.yml
+- errors/stax-ach-error-codes.yml

@@ -1,0 +1,42 @@
+generated: '2026-08-29'
+method: searched
+source: https://docs.staxpayments.com/reference/overview + https://status.staxpayments.com/
+versioning:
+  style: unversioned
+  in_path: false
+  in_header: false
+  note: No version segment in the base URL and no version header. The published contract carries info.version '0.1'. Some
+    reporting routes embed an internal /v3/ segment (/query/statement/v3/*), which is the only version marker anywhere in
+    the 101 paths.
+  spec_version: '0.1'
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  deprecated_operations: []
+  note: 'Stax publishes no deprecation or sunset policy, sends no Deprecation/Sunset headers per RFC 8594, and marks no operation
+    deprecated: true in the contract. The only deprecation-shaped signal is prose — the test-card page is labelled ''(Legacy)''
+    and applies only to sandbox accounts created before 2026-07-17, and a Token Migration Process guide exists. An integrator
+    cannot learn from the API that something is going away.'
+status_page:
+  url: https://status.staxpayments.com/
+  status: 200
+  verified: '2026-08-29'
+  note: Live status page on Stax's own subdomain.
+sla:
+  published: false
+  note: No public SLA or uptime commitment found on staxpayments.com or the docs host.
+changelog:
+  url: https://docs.staxpayments.com/changelog
+  see: changelog/stax-changelog.yml
+  latest_entry: '2025-09-04'
+support:
+  knowledgebase: https://support.fattmerchant.com/
+  contact: https://staxpayments.com/contact/
+  note: The support knowledgebase still lives on the legacy fattmerchant.com domain.
+token_migration:
+  documented: true
+  url: https://docs.staxpayments.com/docs/token-migration-process
+  note: Stax documents a process for migrating stored payment tokens in or out — the closest thing to an exit/portability
+    path.

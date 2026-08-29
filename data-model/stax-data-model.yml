@@ -1,0 +1,331 @@
+generated: '2026-08-29'
+method: derived
+source: openapi/stax-api-openapi.json (path structure + id-reference fields in the published response examples)
+note: The published contract declares NO components.schemas — every request and response body is an inline object, so this
+  graph is derived from path structure and from the *_id reference fields that appear in Stax's own response examples, not
+  from $ref links. Reference counts below are occurrences across the 133 operations.
+identifier_format: UUID v4 strings (e.g. 5ff4e048-c9f3-4993-81be-f7253d132c19). No typed id prefixes.
+entities:
+- name: merchant
+  description: A merchant account. The root tenant for the Merchant API and the child object of the Partner API.
+  operations:
+  - create-a-merchant
+  - get-all-merchants
+  - get-merchant-by-id
+  - enroll-a-merchant
+  relationships:
+  - type: has_many
+    target: user
+    via: user_id
+  - type: has_one
+    target: registration
+    via: registration_id
+  - type: has_many
+    target: apikey
+    via: merchant_id
+  - type: has_many
+    target: transaction
+    via: merchant_id
+- name: registration
+  description: Underwriting/onboarding data for a merchant, including documents and electronic signature.
+  operations:
+  - get-merchant-registration-data
+  - update-merchant-registration-data
+  - add-file-to-merchant-registration
+  - delete-file-from-merchant-registration
+  - get-registration-documents
+  - retrieve-terms-and-conditions
+  relationships:
+  - type: belongs_to
+    target: merchant
+    via: merchant_id
+  - type: has_many
+    target: file
+    via: file_id
+- name: team
+  description: 'The merchant''s team: settings, branding, users and API keys.'
+  operations:
+  - create-a-team
+  - edit-your-merchant-teams-info
+  - addupdate-team-settings
+  - team-branding
+  - list-api-keys
+  - create-a-new-team-member
+  - find-the-merchant-teams-users
+  relationships:
+  - type: has_many
+    target: user
+    via: user_id
+  - type: belongs_to
+    target: merchant
+    via: merchant_id
+- name: user
+  description: A person with access to a merchant account.
+  operations:
+  - create-a-user-account-self-registration
+  - get-self-and-teams-info
+  - update-your-user-info
+  - link-existing-user-to-merchant
+  - unlink-user-from-merchant
+  relationships:
+  - type: belongs_to
+    target: merchant
+    via: merchant_id
+  - type: has_one
+    target: role
+    via: role_id
+- name: customer
+  description: A payer record owned by a merchant.
+  operations:
+  - create-customer
+  - find-all-customers
+  - get-a-customers-information
+  - update-customer-info
+  - delete-a-customer
+  relationships:
+  - type: has_many
+    target: payment_method
+    via: customer_id
+  - type: has_many
+    target: invoice
+    via: customer_id
+  - type: has_many
+    target: transaction
+    via: customer_id
+  - type: has_many
+    target: file
+    via: files
+- name: payment_method
+  description: A tokenized card or bank account stored against a customer.
+  operations:
+  - create-a-payment-method
+  - get-all-payment-methods-for-a-merchant
+  - get-all-payment-methods-for-a-customer
+  - get-a-payment-method-by-id
+  - update-a-payment-method
+  - delete-a-payment-method
+  - verify-a-payment-method
+  - share-a-payment-method-with-a-third-party
+  relationships:
+  - type: belongs_to
+    target: customer
+    via: customer_id
+  - type: has_many
+    target: transaction
+    via: payment_method_id
+- name: transaction
+  description: A charge, credit, refund or void. The central money object.
+  operations:
+  - charge-a-payment-method
+  - credit-a-payment-method
+  - list-and-filter-all-transactions
+  - get-a-transactions-information
+  - update-a-transactions-information
+  - refund-transaction
+  - void-transaction
+  - void-or-refund-transaction
+  - capture-a-pre-auth-transaction
+  - get-a-related-transaction
+  - get-a-transactions-funding-instructions
+  relationships:
+  - type: belongs_to
+    target: customer
+    via: customer_id
+  - type: belongs_to
+    target: payment_method
+    via: payment_method_id
+  - type: belongs_to
+    target: invoice
+    via: invoice_id
+  - type: has_many
+    target: transaction
+    via: child_transactions
+    note: voids and refunds are child transactions of the original
+  - type: belongs_to
+    target: deposit
+    via: batch_id
+  - type: has_one
+    target: auth
+    via: auth_id
+- name: invoice
+  description: A billable document that can be sent by email or SMS and paid online.
+  operations:
+  - create-an-invoice
+  - get-all-invoices
+  - get-an-invoice
+  - update-an-invoice
+  - delete-an-invoice
+  - pay-an-invoice
+  - mark-an-invoice-paid-in-cash-or-check
+  - send-an-invoice-via-email
+  - send-an-invoice-via-sms
+  relationships:
+  - type: belongs_to
+    target: customer
+    via: customer_id
+  - type: has_many
+    target: transaction
+    via: invoice_id
+  - type: belongs_to
+    target: invoice_schedule
+    via: schedule_id
+  - type: has_many
+    target: item
+    via: items
+- name: invoice_schedule
+  description: A recurrence rule that emits invoices.
+  operations:
+  - createScheduledInvoice
+  - retrieve-all-scheduled-invoices
+  - editInvoiceSchedule
+  - delete-invoice-schedule
+  relationships:
+  - type: has_many
+    target: invoice
+    via: schedule_id
+  - type: belongs_to
+    target: customer
+    via: customer_id
+- name: item
+  description: A catalog product or service with stock tracking.
+  operations:
+  - create-catalog-item
+  - retrieve-all-catalog-items
+  - retrieve-an-item-by-id
+  - update-an-item
+  - delete-a-catalog-item
+  - increment-items-stock
+  - decrement-items-stock
+  - retrieve-all-item-codes
+  relationships:
+  - type: belongs_to
+    target: merchant
+    via: merchant_id
+- name: payment_link
+  description: A shareable hosted payment URL with optional custom fields.
+  operations:
+  - create-a-payment-link
+  - list-and-filter-all-payment-links
+  - get-a-payment-links-information
+  - update-a-payment-link
+  - delete-a-payment-link
+  - get-a-payment-links-active-status
+  - update-a-payment-links-stats
+  relationships:
+  - type: belongs_to
+    target: merchant
+    via: merchant_id
+- name: terminal
+  description: A card-present device and its transaction queue.
+  operations:
+  - charge
+  - charge-queue
+  - credit
+  - refund
+  - void
+  - void-refund
+  - tokenize
+  - print
+  - prompt-signature
+  - prompt-input
+  - get-all-devices
+  - get-transaction-status
+  relationships:
+  - type: has_many
+    target: transaction
+    via: transaction_id
+- name: deposit
+  description: A settlement batch paid to the merchant's bank.
+  operations:
+  - get-list-of-deposits
+  - get-detail-of-specific-deposit
+  relationships:
+  - type: has_many
+    target: transaction
+    via: batch_id
+  - type: belongs_to
+    target: merchant
+    via: merchant_id
+- name: dispute
+  description: A chargeback or dispute with evidence files.
+  operations:
+  - list-disputes
+  - list-disputes-copy
+  - submit-dispute-evidence-files-for-review
+  - upload-evidence-for-dispute
+  - delete-evidence-for-dispute
+  relationships:
+  - type: belongs_to
+    target: transaction
+    via: transaction_id
+  - type: has_many
+    target: file
+    via: evidenceFileId
+- name: file
+  description: An uploaded document attached to a customer, registration or dispute.
+  operations:
+  - post_file
+  - get_file
+  - get_file{id}
+  - put_file{id}
+  - delete_file{id}
+  - get_file{tag}
+  relationships:
+  - type: belongs_to
+    target: merchant
+    via: merchant_id
+- name: webhook
+  description: A merchant-level or partner-brand event subscription.
+  operations:
+  - create-new-webhook-for-all-of-my-users-merchants
+  - get-all-webhooks
+  - delete-a-webhook
+  - create-partner-level-webhook-for-your-brand
+  - get-all-partner-level-webhooks-for-your-brand
+  - get-a-specific-partner-level-webhook-for-your-brand
+  - delete-a-partner-level-webhook-for-your-brand
+  relationships:
+  - type: belongs_to
+    target: merchant
+    via: merchant_id
+  see: asyncapi/stax-webhooks.yml
+- name: statement
+  description: 'Reporting surface: daily sales, card-processing volumes, surcharges, disputes, adjustments and ACH rejects.'
+  operations:
+  - daily-sales
+  - card-processing
+  - volumes-by-card-type
+  - surcharging-1
+  - disputes
+  - refund-and-adjustments
+  - ach-rejections
+  - team-summary
+  relationships:
+  - type: belongs_to
+    target: merchant
+    via: merchant_id
+top_reference_fields:
+- field: user_id
+  occurrences: 135
+- field: merchant_id
+  occurrences: 130
+- field: customer_id
+  occurrences: 66
+- field: payment_method_id
+  occurrences: 40
+- field: reference_id
+  occurrences: 38
+- field: schedule_id
+  occurrences: 30
+- field: invoice_id
+  occurrences: 29
+- field: recurring_transaction_id
+  occurrences: 25
+- field: batch_id
+  occurrences: 19
+- field: auth_id
+  occurrences: 15
+- field: transaction_id
+  occurrences: 13
+- field: registration_id
+  occurrences: 12

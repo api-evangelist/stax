@@ -1,0 +1,61 @@
+generated: '2026-08-29'
+method: searched
+source: https://docs.staxpayments.com/docs/test-environments
+docs:
+- https://docs.staxpayments.com/docs/test-environments
+- https://docs.staxpayments.com/docs/partner-sandbox
+- https://docs.staxpayments.com/docs/test-card-payment-methods
+- https://docs.staxpayments.com/docs/sandbox-workflow-testing
+available: true
+request_url: https://staxpayments.com/request-sandbox/
+model:
+  separate_host: false
+  base_url: https://apiprod.fattlabs.com
+  note: There is NO separate sandbox host. The same production base URL serves both; a sandbox API key is bound to a test
+    gateway so no real money moves. There is also no documented key prefix distinguishing test from live, so an integrator
+    cannot tell by inspecting the credential which gateway it will hit — the account it came from is the only signal.
+  types:
+  - name: API sandbox
+    for: merchants, partners and developers
+    covers: payments, reporting and common workflows
+  - name: Partner sandbox
+    for: partners with a signed partner agreement
+    covers: merchant creation and enrollment, enrollment states, SSO, partner webhooks, merchant API-key creation
+    gate: Requires a valid partner account and signed documents; activated after the API sandbox.
+    activation: Turn on Test Mode in the Stax Connect left menu, then add a test merchant.
+test_payment_methods:
+  status: legacy
+  applies_to: Legacy sandbox accounts — those created before 2026-07-17 unless otherwise communicated.
+  scope: Card-not-present / keyed-in transactions only. Card-present device testing must be arranged with support.
+  cards:
+  - type: Visa
+    success: '4111111111111111'
+    failure: '4012888888881881'
+  - type: Mastercard
+    success: '5555555555554444'
+    failure: '5105105105105100'
+  - type: American Express
+    success: '378282246310005'
+    failure: '371449635398431'
+  - type: Discover
+    success: '6011111111111117'
+    failure: '6011000990139424'
+  - type: Mastercard debit
+    success: '2223003122003222'
+    failure: null
+  ach:
+    routing_number: '021000021'
+    account_number: '9876543210'
+    note: This pair succeeds; any other routing/account combination fails.
+  failure_behaviour: Failure cards tokenize successfully — tokenization only stores the card. The failure appears when the
+    token is charged, and in a sandbox Transaction.message always reads 'Unable to process the purchase transaction' rather
+    than the real issuer reason.
+  warning: None of these numbers behave as test values on a live gateway; there every card and bank number is treated as real.
+test_clocks:
+  supported: false
+  note: No time-simulation or test-clock tooling is documented.
+triggers:
+  supported: false
+  note: No fixture/trigger tooling beyond the fixed success/failure card numbers.
+webhooks_in_sandbox: create_deposit fires in sandbox, but the payload's external_id will not match batch_id there — Stax tells
+  integrators to treat it as a notification and call the deposit APIs for detail.

@@ -1,0 +1,58 @@
+generated: '2026-08-29'
+method: searched
+source: https://docs.staxpayments.com/docs/overview-of-staxjs
+note: Client-side and hosted payment surfaces, distinct from the server SDKs in packages/.
+families:
+- family: Stax.js
+  kind: browser tokenization library
+  loader: <script src="https://staxjs.staxpayments.com/staxjs-captcha.js"></script>
+  init: var staxjs = new StaxJs("<web payments token>", {});
+  credential: Web Payments token (public key) — never the secret API key
+  capabilities:
+  - tokenize a credit card
+  - tokenize a bank account (ACH)
+  - pay() one-time charge
+  - Apple Pay / Google Pay
+  - PayPal, Pay Later and Venmo
+  - surcharging
+  - Level 2 data
+  - validation helpers
+  security: Embeds Google reCAPTCHA in the payment form to mitigate credential stuffing, account takeover and automated account
+    creation before tokenization.
+  docs: https://docs.staxpayments.com/docs/overview-of-staxjs
+  versioning_note: The script URL is unpinned — see packages/stax-packages.yml.
+- family: Lightbox
+  kind: prebuilt hosted payment page (embedded)
+  loader: HTML snippet copied from Stax Pay > Apps > Stax Checkout
+  capabilities:
+  - embedded checkout without leaving the merchant site
+  - customization options in the snippet
+  limitations:
+  - no digital wallets (Apple Pay / Google Pay)
+  - no surcharging
+  docs: https://docs.staxpayments.com/docs/lightbox
+- family: Payment Links
+  kind: hosted payment link / button / QR
+  capabilities:
+  - payment links, buttons and QR codes
+  - custom input fields including dropdowns
+  - social media Shop Now button
+  api:
+  - create-a-payment-link
+  - list-and-filter-all-payment-links
+  - get-a-payment-links-information
+  - update-a-payment-link
+  - delete-a-payment-link
+  - get-a-payment-links-active-status
+  - update-a-payment-links-stats
+  docs: https://docs.staxpayments.com/docs/using-payment-links
+- family: Mobile SDKs
+  kind: native card-present components
+  capabilities:
+  - Tap to Pay on iPhone
+  - iOS SDK with a mobile reader
+  - Android SDK
+  - manual key-in
+  - ACH acceptance
+  docs: https://docs.staxpayments.com/docs/mobile-sdk
+  see: packages/stax-packages.yml

@@ -1,0 +1,64 @@
+generated: '2026-08-29'
+method: searched
+source: https://staxpayments.com/pricing/
+note: Published subscription pricing for Stax Pay, keyed to annual processing volume. Stax Connect (embedded payments for
+  SaaS platforms) is quote-only on the same page. Prices exclude per-transaction cents; interchange is passed through at 0%
+  markup.
+currency: USD
+billing_period: month
+plan_count: 4
+plans:
+- name: Stax Pay — up to $150,000/year processed
+  price: 99
+  currency: USD
+  period: month
+  included: 0% markup on direct-cost interchange; all listed subscription features
+  limits: Annual card processing volume up to $150,000
+  overage: Move to the next tier
+- name: Stax Pay — $150,000–$250,000/year processed
+  price: 139
+  currency: USD
+  period: month
+  included: 0% markup on direct-cost interchange; all listed subscription features
+  limits: Annual card processing volume $150,000–$250,000
+  overage: Move to the next tier
+- name: Stax Pay — $250,000+/year processed
+  price: 199
+  currency: USD
+  period: month
+  price_note: $199+ — 'Processing more? Reach out for a custom quote.'
+  included: 0% markup on direct-cost interchange; all listed subscription features
+  limits: Annual card processing volume above $250,000
+  overage: Custom quote
+- name: SaaS Platforms (Stax Connect)
+  price: null
+  currency: USD
+  period: null
+  included: Embedded payments, merchant enrollment, platform monetization
+  limits: null
+  overage: null
+  note: Quote only — 'Contact sales' / 'Request a quote'. No public price.
+transaction_fees:
+- name: Card present
+  fee: $0.08 per transaction
+  note: Flat fee for swiped, dipped or tapped payments; 0% markup on interchange
+- name: Card not present
+  fee: $0.15 per transaction
+  note: Flat fee for keyed-in or online payments
+- name: ACH
+  fee: 1% per transaction, capped at $10
+- name: Merchant debit surcharge
+  fee: 1.25% + $0.25 per transaction
+- name: Credit card surcharging
+  fee: 0% paid by merchant; 3% paid by cardholder where eligible
+add_ons:
+- name: ACH processing
+  price: 1% per transaction (capped at $10)
+- name: Terminal protection plan
+  price: $19/month
+  note: Unlimited swaps for defects, accidents and wear; cancellable
+- name: Equipment
+  price: See device pricing
+  note: Terminals priced separately
+api_access: API key integration capability is listed as included in the subscription at no extra cost — the API is not a separately-priced
+  product.
