@@ -26,6 +26,21 @@ tags:
 - Invoicing
 - Subscription Billing
 - Surcharging
+- Point-of-Sale
+- Tokenization
+- Financial-Services
+- Fintech
+- Card Present
+- Merchant Onboarding
+tags_raw:
+- Payments
+- Payment Processing
+- Merchant Services
+- Embedded Payments
+- ACH
+- Invoicing
+- Subscription Billing
+- Surcharging
 - Point of Sale
 - Tokenization
 - Financial Services
@@ -42,6 +57,12 @@ apis:
   baseURL: https://apiprod.fattlabs.com
   image: https://staxpayments.com/wp-content/uploads/2024/04/stax-logo-full.png
   tags:
+  - Payments
+  - Invoicing
+  - Merchant Onboarding
+  - Webhook
+  - Terminals
+  tags_raw:
   - Payments
   - Invoicing
   - Merchant Onboarding
