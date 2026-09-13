@@ -2,18 +2,25 @@ generated: '2026-08-29'
 method: probed
 source: https://docs.staxpayments.com/docs/mcp
 name: Stax Docs MCP Server
-description: 'Stax hosts a remote MCP server at https://docs.staxpayments.com/mcp. It answered an anonymous initialize + tools/list
-  on 2026-08-29 (protocolVersion 2025-06-18, serverInfo {name: ''Stax Docs'', version: ''0.1''}) and returned six tools with
-  full inputSchemas. Five are read-only documentation/OpenAPI navigation tools; execute-request is annotated destructiveHint:true
-  / openWorldHint:true and proxies real calls to the Stax API, so it is an execution surface, not only a docs surface. Authentication
-  for the underlying API is passed by the MCP client as headers; the server itself required no auth to enumerate tools.'
+description: 'Stax hosts a remote MCP server at https://docs.staxpayments.com/mcp. It answered an anonymous
+  initialize + tools/list on 2026-08-29 (protocolVersion 2025-06-18, serverInfo {name: ''Stax Docs'',
+  version: ''0.1''}) and returned six tools with full inputSchemas. Five are read-only documentation/OpenAPI
+  navigation tools; execute-request is annotated destructiveHint:true / openWorldHint:true and proxies
+  real calls to the Stax API, so it is an execution surface, not only a docs surface. Authentication for
+  the underlying API is passed by the MCP client as headers; the server itself required no auth to enumerate
+  tools.'
 deployment:
   mode: remote
   endpoint: https://docs.staxpayments.com/mcp
   auth: api-key
   verified: probed
-  note: 'Remote streamable-HTTP endpoint. auth: api-key because the provider documents passing API credentials through as
-    MCP client headers; tools/list itself is anonymous. No stdio package is published.'
+  note: 'Remote streamable-HTTP endpoint. auth: api-key because the provider documents passing API credentials
+    through as MCP client headers; tools/list itself is anonymous. No stdio package is published.'
+  probe_prior: (never probed)
+  probe: live
+  probe_why: live
+  checked: '2026-09-11'
+  source: claimed-backlog re-probe 2026-09-11
 transport: streamable-http
 protocol_version: '2025-06-18'
 server_info:
@@ -27,14 +34,15 @@ tool_count: 6
 tools:
 - name: list-endpoints
   title: List API Endpoints
-  description: Lists all API paths and their HTTP methods with summaries, organized by path. Results can be passed directly
-    into 'get-endpoint'.
+  description: Lists all API paths and their HTTP methods with summaries, organized by path. Results can
+    be passed directly into 'get-endpoint'.
   read_only: true
   destructive: false
   input_schema_properties: []
 - name: get-endpoint
   title: Get Endpoint Details
-  description: Gets detailed information about a specific API endpoint, including security schemes and servers
+  description: Gets detailed information about a specific API endpoint, including security schemes and
+    servers
   read_only: true
   destructive: false
   input_schema_properties:
@@ -42,9 +50,9 @@ tools:
   - path
 - name: search-endpoints
   title: Search API Endpoints
-  description: Performs a deep search through paths, operations, and parameters to discover relevant API endpoints. Use this
-    tool to find specific API capabilities, required parameters, or data models based on search keywords. Results can be passed
-    directly into 'get-endpoint'.
+  description: Performs a deep search through paths, operations, and parameters to discover relevant API
+    endpoints. Use this tool to find specific API capabilities, required parameters, or data models based
+    on search keywords. Results can be passed directly into 'get-endpoint'.
   read_only: true
   destructive: false
   input_schema_properties:
@@ -58,8 +66,8 @@ tools:
   - harRequest
 - name: search
   title: Search Documentation
-  description: Searches through documentation with the given search query, returning a list of results with ID, title, and
-    URL.
+  description: Searches through documentation with the given search query, returning a list of results
+    with ID, title, and URL.
   read_only: true
   destructive: false
   input_schema_properties:
