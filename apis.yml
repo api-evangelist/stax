@@ -1,14 +1,16 @@
 aid: stax
 name: Stax
-description: Stax (formerly Fattmerchant) is an Orlando, Florida payments technology company that sells subscription-priced
-  payment processing to small and large merchants (Stax Pay), embedded payments and merchant onboarding to SaaS
-  platforms and ISVs (Stax Connect), compliant credit-card surcharging (CardX by Stax), automated subscription billing
-  (Stax Bill), and full-stack processing for partners and ISOs (Stax Processing). Its public REST API at apiprod.fattlabs.com
-  covers charges, credits, refunds and voids, stored payment methods and tokenization, customers, invoices and invoice
-  schedules, payment links, catalog items, terminals and card-present devices, merchant enrollment and underwriting,
-  disputes, statements and deposit reporting, teams, users and API keys, and merchant- and partner-level webhooks.
-  Stax.js handles browser tokenization; iOS and Android SDKs cover card-present and Tap to Pay. Stax Payments, Inc.
-  is a registered ISO/MSP of Fifth Third Bank and Synovus Bank and a registered partner/ISO of Elavon, Inc.
+description: Stax (formerly Fattmerchant) is an Orlando, Florida payments technology company that sells
+  subscription-priced payment processing to small and large merchants (Stax Pay), embedded payments and
+  merchant onboarding to SaaS platforms and ISVs (Stax Connect), compliant credit-card surcharging (CardX
+  by Stax), automated subscription billing (Stax Bill), and full-stack processing for partners and ISOs
+  (Stax Processing). Its public REST API at apiprod.fattlabs.com covers charges, credits, refunds and
+  voids, stored payment methods and tokenization, customers, invoices and invoice schedules, payment links,
+  catalog items, terminals and card-present devices, merchant enrollment and underwriting, disputes, statements
+  and deposit reporting, teams, users and API keys, and merchant- and partner-level webhooks. Stax.js
+  handles browser tokenization; iOS and Android SDKs cover card-present and Tap to Pay. Stax Payments,
+  Inc. is a registered ISO/MSP of Fifth Third Bank and Synovus Bank and a registered partner/ISO of Elavon,
+  Inc.
 url: https://raw.githubusercontent.com/api-evangelist/stax/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
@@ -32,7 +34,7 @@ accessModel:
   method: derived
 specificationVersion: '0.20'
 created: '2026-08-29'
-modified: '2026-08-29'
+modified: '2026-09-16'
 tags:
 - Payments
 - Payment Processing
@@ -64,31 +66,544 @@ tags_raw:
 - Card Present
 - Merchant Onboarding
 apis:
-- name: Stax API
-  description: The Stax REST API (published as "stax-api") exposes 133 operations across 101 paths at https://apiprod.fattlabs.com
-    — the Merchant API for payments, payment methods, customers, invoices, payment links, catalog, terminals, transactions
-    and webhooks, and the Partner API for merchant creation, enrollment, registration data, API-key issuance, disputes
-    and partner-brand webhooks. Authentication is a bearer API key; sandbox and live keys use the same base URL.
+- aid: stax:stax-admin-api
+  name: Stax Admin API
+  description: The Admin API from Stax — 1 operation(s) for admin.
   humanURL: https://docs.staxpayments.com/reference/overview
   baseURL: https://apiprod.fattlabs.com
-  image: https://staxpayments.com/wp-content/uploads/2024/04/stax-logo-full.png
   tags:
-  - Payments
-  - Invoicing
-  - Merchant Onboarding
-  - Webhook
-  - Terminals
-  tags_raw:
-  - Payments
-  - Invoicing
-  - Merchant Onboarding
-  - Webhooks
-  - Terminals
+  - Admin
   properties:
   - type: OpenAPI
-    url: openapi/stax-api-openapi.json
-  - type: Overlay
-    url: overlays/stax-api-overlay.yaml
+    url: openapi/stax-admin-api-openapi.yml
+  - type: Documentation
+    url: https://docs.staxpayments.com/
+  - type: APIReference
+    url: https://docs.staxpayments.com/reference/overview
+  - type: Examples
+    url: examples/stax-api-examples.yml
+  - type: DataModel
+    url: data-model/stax-data-model.yml
+  - type: ErrorCatalog
+    url: errors/stax-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/stax-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/stax-agentic-access.yml
+- aid: stax:stax-charge-api
+  name: Stax Charge API
+  description: The Charge API from Stax — 1 operation(s) for charge.
+  humanURL: https://docs.staxpayments.com/reference/overview
+  baseURL: https://apiprod.fattlabs.com
+  tags:
+  - Charge
+  properties:
+  - type: OpenAPI
+    url: openapi/stax-charge-api-openapi.yml
+  - type: Documentation
+    url: https://docs.staxpayments.com/
+  - type: APIReference
+    url: https://docs.staxpayments.com/reference/overview
+  - type: Examples
+    url: examples/stax-api-examples.yml
+  - type: DataModel
+    url: data-model/stax-data-model.yml
+  - type: ErrorCatalog
+    url: errors/stax-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/stax-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/stax-agentic-access.yml
+- aid: stax:stax-credit-api
+  name: Stax Credit API
+  description: The Credit API from Stax — 1 operation(s) for credit.
+  humanURL: https://docs.staxpayments.com/reference/overview
+  baseURL: https://apiprod.fattlabs.com
+  tags:
+  - Credit
+  properties:
+  - type: OpenAPI
+    url: openapi/stax-credit-api-openapi.yml
+  - type: Documentation
+    url: https://docs.staxpayments.com/
+  - type: APIReference
+    url: https://docs.staxpayments.com/reference/overview
+  - type: Examples
+    url: examples/stax-api-examples.yml
+  - type: DataModel
+    url: data-model/stax-data-model.yml
+  - type: ErrorCatalog
+    url: errors/stax-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/stax-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/stax-agentic-access.yml
+- aid: stax:stax-customer-api
+  name: Stax Customer API
+  description: The Customer API from Stax — 3 operation(s) for customer.
+  humanURL: https://docs.staxpayments.com/reference/overview
+  baseURL: https://apiprod.fattlabs.com
+  tags:
+  - Customer
+  properties:
+  - type: OpenAPI
+    url: openapi/stax-customer-api-openapi.yml
+  - type: Documentation
+    url: https://docs.staxpayments.com/
+  - type: APIReference
+    url: https://docs.staxpayments.com/reference/overview
+  - type: Examples
+    url: examples/stax-api-examples.yml
+  - type: DataModel
+    url: data-model/stax-data-model.yml
+  - type: ErrorCatalog
+    url: errors/stax-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/stax-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/stax-agentic-access.yml
+- aid: stax:stax-ephemeral-api
+  name: Stax Ephemeral API
+  description: The Ephemeral API from Stax — 1 operation(s) for ephemeral.
+  humanURL: https://docs.staxpayments.com/reference/overview
+  baseURL: https://apiprod.fattlabs.com
+  tags:
+  - Ephemeral
+  properties:
+  - type: OpenAPI
+    url: openapi/stax-ephemeral-api-openapi.yml
+  - type: Documentation
+    url: https://docs.staxpayments.com/
+  - type: APIReference
+    url: https://docs.staxpayments.com/reference/overview
+  - type: Examples
+    url: examples/stax-api-examples.yml
+  - type: DataModel
+    url: data-model/stax-data-model.yml
+  - type: ErrorCatalog
+    url: errors/stax-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/stax-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/stax-agentic-access.yml
+- aid: stax:stax-file-api
+  name: Stax File API
+  description: The File API from Stax — 5 operation(s) for file.
+  humanURL: https://docs.staxpayments.com/reference/overview
+  baseURL: https://apiprod.fattlabs.com
+  tags:
+  - File
+  properties:
+  - type: OpenAPI
+    url: openapi/stax-file-api-openapi.yml
+  - type: Documentation
+    url: https://docs.staxpayments.com/
+  - type: APIReference
+    url: https://docs.staxpayments.com/reference/overview
+  - type: Examples
+    url: examples/stax-api-examples.yml
+  - type: DataModel
+    url: data-model/stax-data-model.yml
+  - type: ErrorCatalog
+    url: errors/stax-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/stax-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/stax-agentic-access.yml
+- aid: stax:stax-file-id-api
+  name: Stax File{id} API
+  description: The File{id} API from Stax — 1 operation(s) for file{id}.
+  humanURL: https://docs.staxpayments.com/reference/overview
+  baseURL: https://apiprod.fattlabs.com
+  tags:
+  - File{id}
+  properties:
+  - type: OpenAPI
+    url: openapi/stax-file-id-api-openapi.yml
+  - type: Documentation
+    url: https://docs.staxpayments.com/
+  - type: APIReference
+    url: https://docs.staxpayments.com/reference/overview
+  - type: Examples
+    url: examples/stax-api-examples.yml
+  - type: DataModel
+    url: data-model/stax-data-model.yml
+  - type: ErrorCatalog
+    url: errors/stax-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/stax-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/stax-agentic-access.yml
+- aid: stax:stax-forgot-api
+  name: Stax Forgot API
+  description: The Forgot API from Stax — 1 operation(s) for forgot.
+  humanURL: https://docs.staxpayments.com/reference/overview
+  baseURL: https://apiprod.fattlabs.com
+  tags:
+  - Forgot
+  properties:
+  - type: OpenAPI
+    url: openapi/stax-forgot-api-openapi.yml
+  - type: Documentation
+    url: https://docs.staxpayments.com/
+  - type: APIReference
+    url: https://docs.staxpayments.com/reference/overview
+  - type: Examples
+    url: examples/stax-api-examples.yml
+  - type: DataModel
+    url: data-model/stax-data-model.yml
+  - type: ErrorCatalog
+    url: errors/stax-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/stax-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/stax-agentic-access.yml
+- aid: stax:stax-invoice-api
+  name: Stax Invoice API
+  description: The Invoice API from Stax — 9 operation(s) for invoice.
+  humanURL: https://docs.staxpayments.com/reference/overview
+  baseURL: https://apiprod.fattlabs.com
+  tags:
+  - Invoice
+  properties:
+  - type: OpenAPI
+    url: openapi/stax-invoice-api-openapi.yml
+  - type: Documentation
+    url: https://docs.staxpayments.com/
+  - type: APIReference
+    url: https://docs.staxpayments.com/reference/overview
+  - type: Examples
+    url: examples/stax-api-examples.yml
+  - type: DataModel
+    url: data-model/stax-data-model.yml
+  - type: ErrorCatalog
+    url: errors/stax-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/stax-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/stax-agentic-access.yml
+- aid: stax:stax-item-api
+  name: Stax Item API
+  description: The Item API from Stax — 5 operation(s) for item.
+  humanURL: https://docs.staxpayments.com/reference/overview
+  baseURL: https://apiprod.fattlabs.com
+  tags:
+  - Item
+  properties:
+  - type: OpenAPI
+    url: openapi/stax-item-api-openapi.yml
+  - type: Documentation
+    url: https://docs.staxpayments.com/
+  - type: APIReference
+    url: https://docs.staxpayments.com/reference/overview
+  - type: Examples
+    url: examples/stax-api-examples.yml
+  - type: DataModel
+    url: data-model/stax-data-model.yml
+  - type: ErrorCatalog
+    url: errors/stax-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/stax-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/stax-agentic-access.yml
+- aid: stax:stax-merchant-api
+  name: Stax Merchant API
+  description: The Merchant API from Stax — 7 operation(s) for merchant.
+  humanURL: https://docs.staxpayments.com/reference/overview
+  baseURL: https://apiprod.fattlabs.com
+  tags:
+  - Merchant
+  properties:
+  - type: OpenAPI
+    url: openapi/stax-merchant-api-openapi.yml
+  - type: Documentation
+    url: https://docs.staxpayments.com/
+  - type: APIReference
+    url: https://docs.staxpayments.com/reference/overview
+  - type: Examples
+    url: examples/stax-api-examples.yml
+  - type: DataModel
+    url: data-model/stax-data-model.yml
+  - type: ErrorCatalog
+    url: errors/stax-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/stax-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/stax-agentic-access.yml
+- aid: stax:stax-payment-method-api
+  name: Stax Payment Method API
+  description: The Payment Method API from Stax — 4 operation(s) for payment method.
+  humanURL: https://docs.staxpayments.com/reference/overview
+  baseURL: https://apiprod.fattlabs.com
+  tags:
+  - Payment Method
+  properties:
+  - type: OpenAPI
+    url: openapi/stax-payment-method-api-openapi.yml
+  - type: Documentation
+    url: https://docs.staxpayments.com/
+  - type: APIReference
+    url: https://docs.staxpayments.com/reference/overview
+  - type: Examples
+    url: examples/stax-api-examples.yml
+  - type: DataModel
+    url: data-model/stax-data-model.yml
+  - type: ErrorCatalog
+    url: errors/stax-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/stax-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/stax-agentic-access.yml
+- aid: stax:stax-query-api
+  name: Stax Query API
+  description: The Query API from Stax — 14 operation(s) for query.
+  humanURL: https://docs.staxpayments.com/reference/overview
+  baseURL: https://apiprod.fattlabs.com
+  tags:
+  - Query
+  properties:
+  - type: OpenAPI
+    url: openapi/stax-query-api-openapi.yml
+  - type: Documentation
+    url: https://docs.staxpayments.com/
+  - type: APIReference
+    url: https://docs.staxpayments.com/reference/overview
+  - type: Examples
+    url: examples/stax-api-examples.yml
+  - type: DataModel
+    url: data-model/stax-data-model.yml
+  - type: ErrorCatalog
+    url: errors/stax-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/stax-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/stax-agentic-access.yml
+- aid: stax:stax-reset-api
+  name: Stax Reset API
+  description: The Reset API from Stax — 1 operation(s) for reset.
+  humanURL: https://docs.staxpayments.com/reference/overview
+  baseURL: https://apiprod.fattlabs.com
+  tags:
+  - Reset
+  properties:
+  - type: OpenAPI
+    url: openapi/stax-reset-api-openapi.yml
+  - type: Documentation
+    url: https://docs.staxpayments.com/
+  - type: APIReference
+    url: https://docs.staxpayments.com/reference/overview
+  - type: Examples
+    url: examples/stax-api-examples.yml
+  - type: DataModel
+    url: data-model/stax-data-model.yml
+  - type: ErrorCatalog
+    url: errors/stax-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/stax-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/stax-agentic-access.yml
+- aid: stax:stax-self-api
+  name: Stax Self API
+  description: The Self API from Stax — 4 operation(s) for self.
+  humanURL: https://docs.staxpayments.com/reference/overview
+  baseURL: https://apiprod.fattlabs.com
+  tags:
+  - Self
+  properties:
+  - type: OpenAPI
+    url: openapi/stax-self-api-openapi.yml
+  - type: Documentation
+    url: https://docs.staxpayments.com/
+  - type: APIReference
+    url: https://docs.staxpayments.com/reference/overview
+  - type: Examples
+    url: examples/stax-api-examples.yml
+  - type: DataModel
+    url: data-model/stax-data-model.yml
+  - type: ErrorCatalog
+    url: errors/stax-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/stax-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/stax-agentic-access.yml
+- aid: stax:stax-surcharge-api
+  name: Stax Surcharge API
+  description: The Surcharge API from Stax — 1 operation(s) for surcharge.
+  humanURL: https://docs.staxpayments.com/reference/overview
+  baseURL: https://apiprod.fattlabs.com
+  tags:
+  - Surcharge
+  properties:
+  - type: OpenAPI
+    url: openapi/stax-surcharge-api-openapi.yml
+  - type: Documentation
+    url: https://docs.staxpayments.com/
+  - type: APIReference
+    url: https://docs.staxpayments.com/reference/overview
+  - type: Examples
+    url: examples/stax-api-examples.yml
+  - type: DataModel
+    url: data-model/stax-data-model.yml
+  - type: ErrorCatalog
+    url: errors/stax-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/stax-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/stax-agentic-access.yml
+- aid: stax:stax-team-api
+  name: Stax Team API
+  description: The Team API from Stax — 8 operation(s) for team.
+  humanURL: https://docs.staxpayments.com/reference/overview
+  baseURL: https://apiprod.fattlabs.com
+  tags:
+  - Team
+  properties:
+  - type: OpenAPI
+    url: openapi/stax-team-api-openapi.yml
+  - type: Documentation
+    url: https://docs.staxpayments.com/
+  - type: APIReference
+    url: https://docs.staxpayments.com/reference/overview
+  - type: Examples
+    url: examples/stax-api-examples.yml
+  - type: DataModel
+    url: data-model/stax-data-model.yml
+  - type: ErrorCatalog
+    url: errors/stax-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/stax-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/stax-agentic-access.yml
+- aid: stax:stax-terminal-api
+  name: Stax Terminal API
+  description: The Terminal API from Stax — 13 operation(s) for terminal.
+  humanURL: https://docs.staxpayments.com/reference/overview
+  baseURL: https://apiprod.fattlabs.com
+  tags:
+  - Terminal
+  properties:
+  - type: OpenAPI
+    url: openapi/stax-terminal-api-openapi.yml
+  - type: Documentation
+    url: https://docs.staxpayments.com/
+  - type: APIReference
+    url: https://docs.staxpayments.com/reference/overview
+  - type: Examples
+    url: examples/stax-api-examples.yml
+  - type: DataModel
+    url: data-model/stax-data-model.yml
+  - type: ErrorCatalog
+    url: errors/stax-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/stax-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/stax-agentic-access.yml
+- aid: stax:stax-transaction-api
+  name: Stax Transaction API
+  description: The Transaction API from Stax — 11 operation(s) for transaction.
+  humanURL: https://docs.staxpayments.com/reference/overview
+  baseURL: https://apiprod.fattlabs.com
+  tags:
+  - Transaction
+  properties:
+  - type: OpenAPI
+    url: openapi/stax-transaction-api-openapi.yml
+  - type: Documentation
+    url: https://docs.staxpayments.com/
+  - type: APIReference
+    url: https://docs.staxpayments.com/reference/overview
+  - type: Examples
+    url: examples/stax-api-examples.yml
+  - type: DataModel
+    url: data-model/stax-data-model.yml
+  - type: ErrorCatalog
+    url: errors/stax-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/stax-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/stax-agentic-access.yml
+- aid: stax:stax-underwriting-api
+  name: Stax Underwriting API
+  description: The Underwriting API from Stax — 5 operation(s) for underwriting.
+  humanURL: https://docs.staxpayments.com/reference/overview
+  baseURL: https://apiprod.fattlabs.com
+  tags:
+  - Underwriting
+  properties:
+  - type: OpenAPI
+    url: openapi/stax-underwriting-api-openapi.yml
+  - type: Documentation
+    url: https://docs.staxpayments.com/
+  - type: APIReference
+    url: https://docs.staxpayments.com/reference/overview
+  - type: Examples
+    url: examples/stax-api-examples.yml
+  - type: DataModel
+    url: data-model/stax-data-model.yml
+  - type: ErrorCatalog
+    url: errors/stax-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/stax-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/stax-agentic-access.yml
+- aid: stax:stax-verify-api
+  name: Stax Verify API
+  description: The Verify API from Stax — 1 operation(s) for verify.
+  humanURL: https://docs.staxpayments.com/reference/overview
+  baseURL: https://apiprod.fattlabs.com
+  tags:
+  - Verify
+  properties:
+  - type: OpenAPI
+    url: openapi/stax-verify-api-openapi.yml
+  - type: Documentation
+    url: https://docs.staxpayments.com/
+  - type: APIReference
+    url: https://docs.staxpayments.com/reference/overview
+  - type: Examples
+    url: examples/stax-api-examples.yml
+  - type: DataModel
+    url: data-model/stax-data-model.yml
+  - type: ErrorCatalog
+    url: errors/stax-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/stax-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/stax-agentic-access.yml
+- aid: stax:stax-webhook-api
+  name: Stax Webhook API
+  description: The Webhook API from Stax — 2 operation(s) for webhook.
+  humanURL: https://docs.staxpayments.com/reference/overview
+  baseURL: https://apiprod.fattlabs.com
+  tags:
+  - Webhook
+  properties:
+  - type: OpenAPI
+    url: openapi/stax-webhook-api-openapi.yml
+  - type: Documentation
+    url: https://docs.staxpayments.com/
+  - type: APIReference
+    url: https://docs.staxpayments.com/reference/overview
+  - type: Examples
+    url: examples/stax-api-examples.yml
+  - type: DataModel
+    url: data-model/stax-data-model.yml
+  - type: ErrorCatalog
+    url: errors/stax-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/stax-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/stax-agentic-access.yml
+- aid: stax:stax-webhookadmin-api
+  name: Stax Webhookadmin API
+  description: The Webhookadmin API from Stax — 2 operation(s) for webhookadmin.
+  humanURL: https://docs.staxpayments.com/reference/overview
+  baseURL: https://apiprod.fattlabs.com
+  tags:
+  - Webhookadmin
+  properties:
+  - type: OpenAPI
+    url: openapi/stax-webhookadmin-api-openapi.yml
   - type: Documentation
     url: https://docs.staxpayments.com/
   - type: APIReference
@@ -196,7 +711,7 @@ common:
 - type: Overlay
   url: overlays/stax-api-overlay.yaml
 - type: OpenAPI
-  url: openapi/stax-api-openapi.json
+  url: openapi/_original/stax-api-openapi.json
 image: https://staxpayments.com/wp-content/uploads/2024/04/stax-logo-full.png
 x-enrichment:
   date: '2026-08-29'
