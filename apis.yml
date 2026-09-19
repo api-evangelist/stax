@@ -144,6 +144,8 @@ apis:
   humanURL: https://docs.staxpayments.com/reference/overview
   baseURL: https://apiprod.fattlabs.com
   tags:
+  - Customers
+  tags_raw:
   - Customer
   properties:
   - type: OpenAPI
@@ -215,7 +217,8 @@ apis:
   description: The File{id} API from Stax — 1 operation(s) for file{id}.
   humanURL: https://docs.staxpayments.com/reference/overview
   baseURL: https://apiprod.fattlabs.com
-  tags:
+  tags: []
+  tags_raw:
   - File{id}
   properties:
   - type: OpenAPI
@@ -264,6 +267,8 @@ apis:
   humanURL: https://docs.staxpayments.com/reference/overview
   baseURL: https://apiprod.fattlabs.com
   tags:
+  - Invoices
+  tags_raw:
   - Invoice
   properties:
   - type: OpenAPI
@@ -312,6 +317,8 @@ apis:
   humanURL: https://docs.staxpayments.com/reference/overview
   baseURL: https://apiprod.fattlabs.com
   tags:
+  - Merchants
+  tags_raw:
   - Merchant
   properties:
   - type: OpenAPI
