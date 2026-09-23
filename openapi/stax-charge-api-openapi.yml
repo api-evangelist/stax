@@ -1,0 +1,603 @@
+openapi: 3.2.0
+info:
+  title: stax-api Charge API
+  version: '0.1'
+servers:
+- url: https://apiprod.fattlabs.com/
+security:
+- ApiKeyAuth: []
+tags:
+- name: Charge
+paths:
+  /charge:
+    post:
+      summary: Charge a Payment Method
+      description: Processes a charge on a specified payment method under the merchant's account.
+      operationId: charge-a-payment-method
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - total
+              - payment_method_id
+              - pre_auth
+              properties:
+                total:
+                  type: number
+                  description: 'Float is required and will be the amount a customer is charged, in dollars and cents. Min: 00.01'
+                  format: float
+                payment_method_id:
+                  type: string
+                  description: An existing payment_method id within Stax. The customer_id is derived from this automatically.
+                meta:
+                  properties:
+                    tax:
+                      type: number
+                      description: This tax dollar amount value must be a numeric value representing 0.1% and 30% of the transaction's total in order to qualify for L2 processing rates.
+                    poNumber:
+                      type: string
+                      description: This is the customer code or customer identifier sometimes referred to as the PO number, and is used for L2 processing
+                    shippingAmount:
+                      type: number
+                      description: The shipping amount for the transaction. Can be zero and still qualify for L2 processing.
+                    payment_note:
+                      type: string
+                      description: This note displays in Stax Pay when viewing a payment's details.
+                    fee:
+                      type: integer
+                      description: The amount to be used for the transaction fee, if allowed.
+                      format: int32
+                    transaction_initiation_type:
+                      type: string
+                      description: This specifies whether a transaction is Merchant Initiated Transaction (MIT) or Customer Initiated Transaction (CIT).
+                      enum:
+                      - MIT
+                      - CIT
+                    transaction_schedule_type:
+                      type: string
+                      description: This specifies whether a transaction is recurring (scheduled) or unscheduled.
+                      enum:
+                      - scheduled
+                      - unscheduled
+                    lineItems:
+                      properties:
+                        id:
+                          type: string
+                          description: id is optional and corresponds to the Stax Catalog Item Id
+                        price:
+                          type: string
+                          description: Price of the line item
+                        quantity:
+                          type: integer
+                          description: Quantity of the line item
+                          format: int32
+                        item:
+                          type: string
+                          description: Name of the line item
+                        details:
+                          type: string
+                          description: Description of the line item
+                      required: []
+                      type: object
+                  required: []
+                  type: object
+                  description: Can contain any json object
+                pre_auth:
+                  type: boolean
+                  description: Creates a pre authorization
+                invoice_id:
+                  type: string
+                  description: Creates a pre authorization
+                idempotency_id:
+                  type: string
+                  description: A unique string identifier to help prevent against duplicate operations
+                channel:
+                  type: string
+                  description: A way to identify where a transaction originated (ex. "partner-mobile-application" or "partner-web-application:). Stax's UI fills this channel parameter with values that correspond to where the transaction originated from. This value lives in the API only and does not show up on the Stax Payment dashboards.
+                funding:
+                  properties:
+                    account_id:
+                      type: string
+                    amount:
+                      type: number
+                      format: float
+                  required: []
+                  type: object
+                  description: Defines how the funds from this transaction should be paid out. This attribute is only supported with the Split Funding feature enabled
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"ad107d1a-819b-45f8-9f46-0260a3b05d26\",\n  \"invoice_id\": \"\",\n  \"reference_id\": \"\",\n  \"recurring_transaction_id\": \"\",\n  \"type\": \"charge\",\n  \"source\": null,\n  \"merchant_id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n  \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n  \"customer_id\": \"d1e9fdca-52e8-4b8a-9dd6-5ae8b0b03178\",\n  \"payment_method_id\": \"b5f8729c-93ee-4bbb-9bfe-4a71f7b0e126\",\n  \"is_manual\": null,\n  \"success\": true,\n  \"message\": null,\n  \"meta\": {\n    \"tax\": 4,\n    \"poNumber\": \"1234\",\n    \"shippingAmount\": 2,\n    \"subtotal\": 20,\n    \"lineItems\": [\n      {\n        \"id\": \"optional-fm-catalog-item-id\",\n        \"item\": \"Demo Item\",\n        \"details\": \"this is a regular demo item\",\n        \"quantity\": 20,\n        \"price\": 1\n      }\n    ]\n  },\n  \"total\": 26,\n  \"method\": \"card\",\n  \"pre_auth\": false,\n  \"last_four\": \"1111\",\n  \"receipt_email_at\": null,\n  \"receipt_sms_at\": null,\n  \"settled_at\": null,\n  \"created_at\": \"2017-05-08 17:59:32\",\n  \"updated_at\": \"2017-05-08 17:59:32\",\n  \"total_refunded\": null,\n  \"issuer_auth_code\": \"06782D\",\n  \"is_refundable\": false,\n  \"is_voided\": false,\n  \"is_voidable\": true,\n  \"currency\": \"USD\",\n  \"is_settling\": null,\n  \"schedule_id\": null,\n  \"customer\": {\n    \"id\": \"d1e9fdca-52e8-4b8a-9dd6-5ae8b0b03178\",\n    \"firstname\": \"Jfdfddohn\",\n    \"lastname\": \"Smith\",\n    \"company\": \"ABC INC\",\n    \"email\": \"contact@example.com\",\n    \"cc_emails\": [\n      \"demo@abc.com\"\n    ],\n    \"phone\": \"1234567898\",\n    \"address_1\": \"123 Rite Way\",\n    \"address_2\": \"Unit 12\",\n    \"address_city\": \"Orlando\",\n    \"address_state\": \"FL\",\n    \"address_zip\": \"32801\",\n    \"address_country\": \"USA\",\n    \"notes\": null,\n    \"reference\": \"BARTLE\",\n    \"options\": \"\",\n    \"created_at\": \"2017-04-17 15:16:28\",\n    \"updated_at\": \"2017-04-17 15:16:28\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/45357c125af15b6df8864a71a653bea2\"\n  },\n  \"child_transactions\": [],\n  \"files\": [],\n  \"payment_method\": {\n    \"id\": \"b5f8729c-93ee-4bbb-9bfe-4a71f7b0e126\",\n    \"customer_id\": \"d1e9fdca-52e8-4b8a-9dd6-5ae8b0b03178\",\n    \"merchant_id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n    \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n    \"nickname\": \"VISA: Steven Smith Jr. (ending in: 1111)\",\n    \"is_default\": 1,\n    \"method\": \"card\",\n    \"person_name\": \"Steven Smith Jr.\",\n    \"card_type\": \"visa\",\n    \"card_last_four\": \"1111\",\n    \"card_exp\": \"042019\",\n    \"bank_name\": null,\n    \"bank_type\": null,\n    \"bank_holder_type\": null,\n    \"address_1\": null,\n    \"address_2\": null,\n    \"address_city\": null,\n    \"address_state\": null,\n    \"address_zip\": \"32944\",\n    \"address_country\": \"USA\",\n    \"purged_at\": null,\n    \"deleted_at\": null,\n    \"created_at\": \"2017-05-08 17:59:19\",\n    \"updated_at\": \"2017-05-08 17:59:19\",\n    \"card_exp_datetime\": \"2019-04-30 23:59:59\",\n    \"customer\": {\n      \"id\": \"d1e9fdca-52e8-4b8a-9dd6-5ae8b0b03178\",\n      \"firstname\": \"Jfdfddohn\",\n      \"lastname\": \"Smith\",\n      \"company\": \"ABC INC\",\n      \"email\": \"contact@example.com\",\n      \"cc_emails\": [\n        \"demo@abc.com\"\n      ],\n      \"phone\": \"1234567898\",\n      \"address_1\": \"123 Rite Way\",\n      \"address_2\": \"Unit 12\",\n      \"address_city\": \"Orlando\",\n      \"address_state\": \"FL\",\n      \"address_zip\": \"32801\",\n      \"address_country\": \"USA\",\n      \"notes\": null,\n      \"reference\": \"BARTLE\",\n      \"options\": \"\",\n      \"created_at\": \"2017-04-17 15:16:28\",\n      \"updated_at\": \"2017-04-17 15:16:28\",\n      \"deleted_at\": null,\n      \"gravatar\": \"//www.gravatar.com/avatar/45357c125af15b6df8864a71a653bea2\"\n    }\n  },\n  \"user\": {\n    \"id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n    \"system_admin\": false,\n    \"name\": \"Demo\",\n    \"email\": \"contact@example.com\",\n    \"email_verification_sent_at\": \"2017-03-29 15:27:19\",\n    \"email_verified_at\": \"2017-03-29 15:27:21\",\n    \"is_api_key\": false,\n    \"created_at\": \"2017-01-11 21:44:02\",\n    \"updated_at\": \"2017-04-24 15:41:58\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650\",\n    \"team_admin\": null,\n    \"team_enabled\": null,\n    \"team_role\": null\n  },\n  \"avs_code\": null,\n  \"avs_message\": \"Postcode and Address Matched\"\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: ad107d1a-819b-45f8-9f46-0260a3b05d26
+                  invoice_id:
+                    type: string
+                    example: ''
+                  reference_id:
+                    type: string
+                    example: ''
+                  recurring_transaction_id:
+                    type: string
+                    example: ''
+                  type:
+                    type: string
+                    example: charge
+                  source: {}
+                  merchant_id:
+                    type: string
+                    example: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                  user_id:
+                    type: string
+                    example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                  customer_id:
+                    type: string
+                    example: d1e9fdca-52e8-4b8a-9dd6-5ae8b0b03178
+                  payment_method_id:
+                    type: string
+                    example: b5f8729c-93ee-4bbb-9bfe-4a71f7b0e126
+                  is_manual: {}
+                  success:
+                    type: boolean
+                    example: true
+                    default: true
+                  message: {}
+                  meta:
+                    type: object
+                    properties:
+                      tax:
+                        type: integer
+                        example: 4
+                        default: 0
+                      poNumber:
+                        type: string
+                        example: '1234'
+                      shippingAmount:
+                        type: integer
+                        example: 2
+                        default: 0
+                      subtotal:
+                        type: integer
+                        example: 20
+                        default: 0
+                      lineItems:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: optional-fm-catalog-item-id
+                            item:
+                              type: string
+                              example: Demo Item
+                            details:
+                              type: string
+                              example: this is a regular demo item
+                            quantity:
+                              type: integer
+                              example: 20
+                              default: 0
+                            price:
+                              type: integer
+                              example: 1
+                              default: 0
+                  total:
+                    type: integer
+                    example: 26
+                    default: 0
+                  method:
+                    type: string
+                    example: card
+                  pre_auth:
+                    type: boolean
+                    example: false
+                    default: true
+                  last_four:
+                    type: string
+                    example: '1111'
+                  receipt_email_at: {}
+                  receipt_sms_at: {}
+                  settled_at: {}
+                  created_at:
+                    type: string
+                    example: '2017-05-08 17:59:32'
+                  updated_at:
+                    type: string
+                    example: '2017-05-08 17:59:32'
+                  total_refunded: {}
+                  issuer_auth_code:
+                    type: string
+                    example: 06782D
+                  is_refundable:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_voided:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_voidable:
+                    type: boolean
+                    example: true
+                    default: true
+                  currency:
+                    type: string
+                    example: USD
+                  is_settling: {}
+                  schedule_id: {}
+                  customer:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: d1e9fdca-52e8-4b8a-9dd6-5ae8b0b03178
+                      firstname:
+                        type: string
+                        example: Jfdfddohn
+                      lastname:
+                        type: string
+                        example: Smith
+                      company:
+                        type: string
+                        example: ABC INC
+                      email:
+                        type: string
+                        example: contact@example.com
+                      cc_emails:
+                        type: array
+                        items:
+                          type: string
+                          example: demo@abc.com
+                      phone:
+                        type: string
+                        example: '1234567898'
+                      address_1:
+                        type: string
+                        example: 123 Rite Way
+                      address_2:
+                        type: string
+                        example: Unit 12
+                      address_city:
+                        type: string
+                        example: Orlando
+                      address_state:
+                        type: string
+                        example: FL
+                      address_zip:
+                        type: string
+                        example: '32801'
+                      address_country:
+                        type: string
+                        example: USA
+                      notes: {}
+                      reference:
+                        type: string
+                        example: BARTLE
+                      options:
+                        type: string
+                        example: ''
+                      created_at:
+                        type: string
+                        example: '2017-04-17 15:16:28'
+                      updated_at:
+                        type: string
+                        example: '2017-04-17 15:16:28'
+                      deleted_at: {}
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/45357c125af15b6df8864a71a653bea2
+                  child_transactions:
+                    type: array
+                  files:
+                    type: array
+                  payment_method:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: b5f8729c-93ee-4bbb-9bfe-4a71f7b0e126
+                      customer_id:
+                        type: string
+                        example: d1e9fdca-52e8-4b8a-9dd6-5ae8b0b03178
+                      merchant_id:
+                        type: string
+                        example: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                      user_id:
+                        type: string
+                        example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                      nickname:
+                        type: string
+                        example: 'VISA: Steven Smith Jr. (ending in: 1111)'
+                      is_default:
+                        type: integer
+                        example: 1
+                        default: 0
+                      method:
+                        type: string
+                        example: card
+                      person_name:
+                        type: string
+                        example: Steven Smith Jr.
+                      card_type:
+                        type: string
+                        example: visa
+                      card_last_four:
+                        type: string
+                        example: '1111'
+                      card_exp:
+                        type: string
+                        example: 042019
+                      bank_name: {}
+                      bank_type: {}
+                      bank_holder_type: {}
+                      address_1: {}
+                      address_2: {}
+                      address_city: {}
+                      address_state: {}
+                      address_zip:
+                        type: string
+                        example: '32944'
+                      address_country:
+                        type: string
+                        example: USA
+                      purged_at: {}
+                      deleted_at: {}
+                      created_at:
+                        type: string
+                        example: '2017-05-08 17:59:19'
+                      updated_at:
+                        type: string
+                        example: '2017-05-08 17:59:19'
+                      card_exp_datetime:
+                        type: string
+                        example: '2019-04-30 23:59:59'
+                      customer:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            example: d1e9fdca-52e8-4b8a-9dd6-5ae8b0b03178
+                          firstname:
+                            type: string
+                            example: Jfdfddohn
+                          lastname:
+                            type: string
+                            example: Smith
+                          company:
+                            type: string
+                            example: ABC INC
+                          email:
+                            type: string
+                            example: contact@example.com
+                          cc_emails:
+                            type: array
+                            items:
+                              type: string
+                              example: demo@abc.com
+                          phone:
+                            type: string
+                            example: '1234567898'
+                          address_1:
+                            type: string
+                            example: 123 Rite Way
+                          address_2:
+                            type: string
+                            example: Unit 12
+                          address_city:
+                            type: string
+                            example: Orlando
+                          address_state:
+                            type: string
+                            example: FL
+                          address_zip:
+                            type: string
+                            example: '32801'
+                          address_country:
+                            type: string
+                            example: USA
+                          notes: {}
+                          reference:
+                            type: string
+                            example: BARTLE
+                          options:
+                            type: string
+                            example: ''
+                          created_at:
+                            type: string
+                            example: '2017-04-17 15:16:28'
+                          updated_at:
+                            type: string
+                            example: '2017-04-17 15:16:28'
+                          deleted_at: {}
+                          gravatar:
+                            type: string
+                            example: //www.gravatar.com/avatar/45357c125af15b6df8864a71a653bea2
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                      system_admin:
+                        type: boolean
+                        example: false
+                        default: true
+                      name:
+                        type: string
+                        example: Demo
+                      email:
+                        type: string
+                        example: contact@example.com
+                      email_verification_sent_at:
+                        type: string
+                        example: '2017-03-29 15:27:19'
+                      email_verified_at:
+                        type: string
+                        example: '2017-03-29 15:27:21'
+                      is_api_key:
+                        type: boolean
+                        example: false
+                        default: true
+                      created_at:
+                        type: string
+                        example: '2017-01-11 21:44:02'
+                      updated_at:
+                        type: string
+                        example: '2017-04-24 15:41:58'
+                      deleted_at: {}
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650
+                      team_admin: {}
+                      team_enabled: {}
+                      team_role: {}
+                  avs_code: {}
+                  avs_message:
+                    type: string
+                    example: Postcode and Address Matched
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Missing Fields:
+                  value: "{\n  \"payment_method_id\": [\n    \"The payment method id field is required.\"\n  ],\n  \"meta\": [\n    \"The meta field is required.\"\n  ],\n  \"total\": [\n    \"The total field is required.\"\n  ],\n  \"files.0\": [\n    \"The selected files.0 is invalid.\"\n  ]\n}"
+                Invalid/Unauthorized:
+                  value: "{\n  \"payment_method_id\": [\n    \"Payment method is invalid or unauthorized.\"\n  ]\n}"
+                Redacted:
+                  value: "{\n  \"payment_method_id\": [\n    \"The Payment Method has been redacted.\"\n  ]\n}"
+                Deleted:
+                  value: "{\n  \"payment_method_id\": [\n    \"The Payment Method has been deleted.\"\n  ]\n}"
+                Missing Funding Field:
+                  value: "{\n  \"funding.0.account_id\": [\n    \"The funding.0.account_id field is required.\"\n  ]\n}"
+                Inactive Funding Account:
+                  value: "{\n  \"funding.0.account_id\": [\n    \"Inactive funding account\"\n  ]\n}"
+                Mismatch Sum:
+                  value: "{\n  \"error\": [\n    \"The transaction total does not match the sum of the funding amounts.\"\n  ]\n}"
+                Invalid Transaction Meta:
+                  value: "{\n  \"meta.transaction_initiation_type\": [\n    \"The selected meta.transaction initiation type is invalid.\"\n  ],\n  \"meta.transaction_schedule_type\": [\n    \"The selected meta.transaction schedule type is invalid.\"\n  ]\n}"
+                Inactive Account:
+                  value: "{\n  \"authorization_error\": [\n    \"your merchant account must be ACTIVE to perform this action\"\n  ]\n}"
+              schema:
+                oneOf:
+                - title: Missing Fields
+                  type: object
+                  properties:
+                    payment_method_id:
+                      type: array
+                      items:
+                        type: string
+                        example: The payment method id field is required.
+                    meta:
+                      type: array
+                      items:
+                        type: string
+                        example: The meta field is required.
+                    total:
+                      type: array
+                      items:
+                        type: string
+                        example: The total field is required.
+                    files.0:
+                      type: array
+                      items:
+                        type: string
+                        example: The selected files.0 is invalid.
+                - title: Invalid/Unauthorized
+                  type: object
+                  properties:
+                    payment_method_id:
+                      type: array
+                      items:
+                        type: string
+                        example: Payment method is invalid or unauthorized.
+                - title: Redacted
+                  type: object
+                  properties:
+                    payment_method_id:
+                      type: array
+                      items:
+                        type: string
+                        example: The Payment Method has been redacted.
+                - title: Deleted
+                  type: object
+                  properties:
+                    payment_method_id:
+                      type: array
+                      items:
+                        type: string
+                        example: The Payment Method has been deleted.
+                - title: Missing Funding Field
+                  type: object
+                  properties:
+                    funding.0.account_id:
+                      type: array
+                      items:
+                        type: string
+                        example: The funding.0.account_id field is required.
+                - title: Inactive Funding Account
+                  type: object
+                  properties:
+                    funding.0.account_id:
+                      type: array
+                      items:
+                        type: string
+                        example: Inactive funding account
+                - title: Mismatch Sum
+                  type: object
+                  properties:
+                    error:
+                      type: array
+                      items:
+                        type: string
+                        example: The transaction total does not match the sum of the funding amounts.
+                - title: Invalid Transaction Meta
+                  type: object
+                  properties:
+                    meta.transaction_initiation_type:
+                      type: array
+                      items:
+                        type: string
+                        example: The selected meta.transaction initiation type is invalid.
+                    meta.transaction_schedule_type:
+                      type: array
+                      items:
+                        type: string
+                        example: The selected meta.transaction schedule type is invalid.
+                - title: Inactive Account
+                  type: object
+                  properties:
+                    authorization_error:
+                      type: array
+                      items:
+                        type: string
+                        example: your merchant account must be ACTIVE to perform this action
+      tags:
+      - Charge
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: API key for merchant-level operations. Provides access to merchant-specific endpoints including transactions, payments, customer management, and merchant account settings. This key is scoped to a single merchant account and cannot access partner-level functionality.
+    PartnerApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Partner-level API key with elevated privileges. Grants access to all partner operations including merchant management, portfolio oversight, reporting across multiple merchant accounts, and partner-specific administrative functions. Also provides access to all merchant-level operations for accounts under the partner's management.
+    EphemeralAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Temporary authentication token with limited lifespan. Used for short-term access to specific operations, typically generated for secure one-time actions or time-bounded sessions. Automatically expires after a predefined period for enhanced security.

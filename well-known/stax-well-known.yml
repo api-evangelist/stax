@@ -1,14 +1,14 @@
 generated: '2026-08-29'
 method: probed
 source: live GET of /.well-known/* on every Stax host
-note: staxpayments.com serves a real RFC 9116 security.txt. Every other probed path 404s on both the marketing host and the
-  API host, so no WellKnown/APICatalog pointer is claimed — only SecurityTxt.
+note: staxpayments.com serves a real RFC 9116 security.txt. Every other probed path 404s on both the marketing
+  host and the API host, so no WellKnown/APICatalog pointer is claimed — only SecurityTxt.
 hosts:
 - host: staxpayments.com
   documents:
   - path: /.well-known/security.txt
     status: 200
-    file: well-known/stax-security.txt
+    file: stax-security.txt
   - path: /.well-known/openid-configuration
     status: 404
   - path: /.well-known/oauth-authorization-server

@@ -1,0 +1,178 @@
+openapi: 3.2.0
+info:
+  title: stax-api Reset API
+  version: '0.1'
+servers:
+- url: https://apiprod.fattlabs.com/
+security:
+- ApiKeyAuth: []
+tags:
+- name: Reset
+paths:
+  /reset/{token}:
+    post:
+      summary: Reset Password
+      description: ''
+      operationId: reset-password
+      parameters:
+      - name: token
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: password
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: password_confirmation
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value:
+                  - token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImRlZTc1MjE1LWIzYmMtNGU0NC05YmM1LTc1ZDBmYjQ5OGI2MSIsInN1YiI6IjdjMzBhN2Y2LWVhYmMtNDM1NS1iNTMwLWQzNTFmOGYwYTRmMSIsImlzcyI6Imh0dHA6XC9cL2ZtYXBpLmxvY2FsXC9yZXNldFwvZDg0ZGE3MzMtY2ExOC00YzczLWIwNmYtOGY3Y2JiMzU2NzIxIiwiaWF0IjoxNDYxMDgzMDQzLCJleHAiOjE0NjExNjk0NDMsIm5iZiI6MTQ2MTA4MzA0MywianRpIjoiMjNjZjU1MWQyZDllNDA4ODA1ZjQ5MWE1YjI5ZjY2YTQifQ.Io7dLSUBayeRbgZEkq60M3b7hmVzuWLEpj0r5bE7hYk
+                    user:
+                      id: 7c30a7f6-eabc-4355-b530-d351f8f0a4f1
+                      system_admin: true
+                      name: DANIEL WALKER
+                      email: contact@example.com
+                      created_at: '2016-04-12 13:52:26'
+                      updated_at: '2016-04-19 16:24:02'
+                      deleted_at: null
+                      gravatar: //www.gravatar.com/avatar/772cbf95746d7da86789cc3634c46ba8
+                      team_admin: true
+                      team_enabled: true
+                    merchant:
+                      id: dee75215-b3bc-4e44-9bc5-75d0fb498b61
+                      mid: '520000294774'
+                      status: ACTIVE
+                      subdomain: demo
+                      company_name: Stax
+                      contact_name: Stax
+                      contact_email: contact@example.com
+                      contact_phone: '8555503288'
+                      address_1: 25 Wall Street
+                      address_2: Suite 1
+                      address_city: Orlando
+                      address_state: FL
+                      address_zip: '32801'
+                      hosted_payments_token: null
+                      currency:
+                      - USD
+                      branding: https://s3-us-west-2.amazonaws.com/fattpaydocuments/avatars/0624acc8-c0be-45dc-a153-134da1990218.jpeg
+                      options: null
+                      gateway_type: null
+                      gateway_name: null
+                      created_at: '2016-04-12 13:52:26'
+                      updated_at: '2016-04-12 13:52:26'
+                      deleted_at: null
+              schema:
+                type: object
+                properties:
+                  property1:
+                    type: string
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      tags:
+      - Reset
+    get:
+      summary: Verify Password Reset Token
+      description: Determines if the given token in the URL is correct or not.
+      operationId: verify-password-reset-token
+      parameters:
+      - name: token
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"token\": \"d84da733-ca18-4c73-b06f-8f7cbb356721\",\n  \"user_id\": \"7c30a7f£6-eabc-4355-b530-d351f8f0a4f1\",\n  \"email\": \"contact@example.com\",\n  \"reset_at\": null,\n  \"created_at\": \"2016-04-19 16:22:10\",\n  \"updated_at\": \"2016-04-19 16:22:10\"\n}"
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: d84da733-ca18-4c73-b06f-8f7cbb356721
+                  user_id:
+                    type: string
+                    example: 7c30a7f£6-eabc-4355-b530-d351f8f0a4f1
+                  email:
+                    type: string
+                    example: contact@example.com
+                  reset_at:
+                    type: string
+                    format: date-time
+                  created_at:
+                    type: string
+                    example: '2016-04-19 16:22:10'
+                  updated_at:
+                    type: string
+                    example: '2016-04-19 16:22:10'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Token:
+                    type: string
+                    description: 404 page not found
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"token\": [\n    \"The selected token is invalid.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: array
+                    items:
+                      type: string
+                      example: The selected token is invalid.
+      deprecated: false
+      tags:
+      - Reset
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: API key for merchant-level operations. Provides access to merchant-specific endpoints including transactions, payments, customer management, and merchant account settings. This key is scoped to a single merchant account and cannot access partner-level functionality.
+    PartnerApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Partner-level API key with elevated privileges. Grants access to all partner operations including merchant management, portfolio oversight, reporting across multiple merchant accounts, and partner-specific administrative functions. Also provides access to all merchant-level operations for accounts under the partner's management.
+    EphemeralAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Temporary authentication token with limited lifespan. Used for short-term access to specific operations, typically generated for secure one-time actions or time-bounded sessions. Automatically expires after a predefined period for enhanced security.

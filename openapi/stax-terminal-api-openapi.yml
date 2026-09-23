@@ -1,0 +1,3821 @@
+openapi: 3.2.0
+info:
+  title: stax-api Terminal API
+  version: '0.1'
+servers:
+- url: https://apiprod.fattlabs.com/
+security:
+- ApiKeyAuth: []
+tags:
+- name: Terminal
+paths:
+  /terminal/charge/queue:
+    post:
+      summary: Charge (Queue)
+      description: 'Queues a card-present sale on the terminal rather than waking it immediately. Useful when multiple transactions need to be staged (e.g., busy lanes) or when the device is currently in use. Response mirrors `/terminal/charge` but processing begins only when the terminal becomes available.
+
+
+        Workflow:
+
+        1. Create queued charge.
+
+        2. Terminal processes queued items FIFO.
+
+        3. Poll status endpoint for each queued transaction.
+
+
+        Differences vs `/terminal/charge`:
+
+        - Terminal may return `terminalservice.waiting` until it dequeues.
+
+        - If queue is full returns a 422 or device-specific error.
+
+        - Cancellation before processing removes from queue.
+
+
+        Recommended Use: High concurrency environments; fall back to direct charge for immediate processing.
+
+
+        Security: ApiKeyAuth or EphemeralAuth required.
+
+
+        Polling: Same recommendations as charge; consider exponential backoff if many queued items.'
+      security:
+      - ApiKeyAuth: []
+      operationId: charge-queue
+      parameters: []
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"71d7f9ec-59d9-4fab-891e-fa612cd2e275\",\n  \"invoice_id\": \"02936d77-93cc-48a6-b712-7f7234c19b7c\",\n  \"reference_id\": \"\",\n  \"recurring_transaction_id\": \"\",\n  \"auth_id\": null,\n  \"type\": \"charge\",\n  \"source\": \"terminalservice.dejavoo\",\n  \"source_ip\": \"127.0.0.1\",\n  \"is_merchant_present\": true,\n  \"merchant_id\": \"07420820-9b00-4816-9199-2071af7019f4\",\n  \"user_id\": \"61822412-09b3-4f5a-a90f-fd9f1db703b4\",\n  \"customer_id\": \"df25411e-4b01-4efe-8368-496b959b253f\",\n  \"payment_method_id\": null,\n  \"is_manual\": true,\n  \"success\": false,\n  \"message\": \"terminalservice.waiting\",\n  \"meta\": {\n    \"lineItems\": [],\n    \"tax\": 0,\n    \"subtotal\": 0.01,\n    \"printReceipt\": \"Merchant\",\n    \"paymentType\": \"Credit\",\n    \"invoiceId\": \"02936d77-93cc-48a6-b712-7f7234c19b7c\",\n    \"message\": \"terminalservice.waiting\",\n    \"type\": \"charge\",\n    \"registerId\": \"ba5c-5b03\",\n    \"registerStatusPort\": \"3594291\",\n    \"registerNickname\": \"Dejavoo Z8\",\n    \"registerSerial\": \"\",\n    \"registerType\": \"dejavoo\"\n  },\n  \"total\": 0.01,\n  \"method\": \"card\",\n  \"pre_auth\": false,\n  \"is_captured\": 0,\n  \"last_four\": \"\",\n  \"interchange_code\": \"\",\n  \"interchange_fee\": null,\n  \"batch_id\": \"\",\n  \"batched_at\": \"2018-12-19 14:23:43\",\n  \"emv_response\": \"\",\n  \"avs_response\": \"\",\n  \"cvv_response\": \"\",\n  \"pos_entry\": \"\",\n  \"pos_salesperson\": \"\",\n  \"receipt_email_at\": null,\n  \"receipt_sms_at\": null,\n  \"settled_at\": null,\n  \"created_at\": \"2018-12-19 19:23:43\",\n  \"updated_at\": \"2018-12-19 19:23:43\",\n  \"gateway_id\": null,\n  \"total_refunded\": 0,\n  \"is_refundable\": false,\n  \"is_voided\": false,\n  \"is_voidable\": false,\n  \"schedule_id\": null,\n  \"child_captures\": [],\n  \"parent_auth\": null,\n  \"gateway_name\": \"\",\n  \"customer\": {\n    \"id\": \"df25411e-4b01-4efe-8368-496b959b253f\",\n    \"firstname\": \"Swipe\",\n    \"lastname\": \"Customer\",\n    \"company\": \"\",\n    \"email\": \"\",\n    \"cc_emails\": null,\n    \"cc_sms\": null,\n    \"phone\": \"\",\n    \"address_1\": \"\",\n    \"address_2\": \"\",\n    \"address_city\": \"\",\n    \"address_state\": \"\",\n    \"address_zip\": \"\",\n    \"address_country\": \"\",\n    \"notes\": \"\",\n    \"reference\": \"Physical Terminal customer\",\n    \"options\": null,\n    \"created_at\": \"2018-12-19 19:23:43\",\n    \"updated_at\": \"2018-12-19 19:23:43\",\n    \"deleted_at\": null,\n    \"allow_invoice_credit_card_payments\": true,\n    \"gravatar\": false\n  },\n  \"child_transactions\": [],\n  \"files\": [],\n  \"payment_method\": null,\n  \"user\": {\n    \"id\": \"61822412-09b3-4f5a-a90f-fd9f1db703b4\",\n    \"name\": \"David Johnson\",\n    \"email\": \"demo1@abc.com\",\n    \"email_verification_sent_at\": \"2018-09-27 15:24:38\",\n    \"email_verified_at\": \"2017-12-05 19:05:53\",\n    \"is_api_key\": false,\n    \"acknowledgments\": {\n      \"setPassword\": true,\n      \"godviewOmniSearchTooltip\": true,\n      \"tutorial\": true,\n      \"godviewWelcome\": true\n    },\n    \"created_at\": \"2016-12-05 19:05:53\",\n    \"updated_at\": \"2018-11-20 14:51:28\",\n    \"deleted_at\": null,\n    \"brand\": \"Stax\",\n    \"gravatar\": \"//www.gravatar.com/avatar/1cd5aef1d36d07e495abb73061f857d4\",\n    \"team_admin\": null,\n    \"team_enabled\": null,\n    \"team_role\": null,\n    \"merchant_options\": [],\n    \"is_default\": false\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 71d7f9ec-59d9-4fab-891e-fa612cd2e275
+                  invoice_id:
+                    type: string
+                    example: 02936d77-93cc-48a6-b712-7f7234c19b7c
+                  reference_id:
+                    type: string
+                    example: ''
+                  recurring_transaction_id:
+                    type: string
+                    example: ''
+                  auth_id: {}
+                  type:
+                    type: string
+                    example: charge
+                  source:
+                    type: string
+                    example: terminalservice.dejavoo
+                  source_ip:
+                    type: string
+                    example: 127.0.0.1
+                  is_merchant_present:
+                    type: boolean
+                    example: true
+                    default: true
+                  merchant_id:
+                    type: string
+                    example: 07420820-9b00-4816-9199-2071af7019f4
+                  user_id:
+                    type: string
+                    example: 61822412-09b3-4f5a-a90f-fd9f1db703b4
+                  customer_id:
+                    type: string
+                    example: df25411e-4b01-4efe-8368-496b959b253f
+                  payment_method_id: {}
+                  is_manual:
+                    type: boolean
+                    example: true
+                    default: true
+                  success:
+                    type: boolean
+                    example: false
+                    default: true
+                  message:
+                    type: string
+                    example: terminalservice.waiting
+                  meta:
+                    type: object
+                    properties:
+                      lineItems:
+                        type: array
+                      tax:
+                        type: integer
+                        example: 0
+                        default: 0
+                      subtotal:
+                        type: number
+                        example: 0.01
+                        default: 0
+                      printReceipt:
+                        type: string
+                        example: Merchant
+                      paymentType:
+                        type: string
+                        example: Credit
+                      invoiceId:
+                        type: string
+                        example: 02936d77-93cc-48a6-b712-7f7234c19b7c
+                      message:
+                        type: string
+                        example: terminalservice.waiting
+                      type:
+                        type: string
+                        example: charge
+                      registerId:
+                        type: string
+                        example: ba5c-5b03
+                      registerStatusPort:
+                        type: string
+                        example: '3594291'
+                      registerNickname:
+                        type: string
+                        example: Dejavoo Z8
+                      registerSerial:
+                        type: string
+                        example: ''
+                      registerType:
+                        type: string
+                        example: dejavoo
+                  total:
+                    type: number
+                    example: 0.01
+                    default: 0
+                  method:
+                    type: string
+                    example: card
+                  pre_auth:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_captured:
+                    type: integer
+                    example: 0
+                    default: 0
+                  last_four:
+                    type: string
+                    example: ''
+                  interchange_code:
+                    type: string
+                    example: ''
+                  interchange_fee: {}
+                  batch_id:
+                    type: string
+                    example: ''
+                  batched_at:
+                    type: string
+                    example: '2018-12-19 14:23:43'
+                  emv_response:
+                    type: string
+                    example: ''
+                  avs_response:
+                    type: string
+                    example: ''
+                  cvv_response:
+                    type: string
+                    example: ''
+                  pos_entry:
+                    type: string
+                    example: ''
+                  pos_salesperson:
+                    type: string
+                    example: ''
+                  receipt_email_at: {}
+                  receipt_sms_at: {}
+                  settled_at: {}
+                  created_at:
+                    type: string
+                    example: '2018-12-19 19:23:43'
+                  updated_at:
+                    type: string
+                    example: '2018-12-19 19:23:43'
+                  gateway_id: {}
+                  total_refunded:
+                    type: integer
+                    example: 0
+                    default: 0
+                  is_refundable:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_voided:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_voidable:
+                    type: boolean
+                    example: false
+                    default: true
+                  schedule_id: {}
+                  child_captures:
+                    type: array
+                  parent_auth: {}
+                  gateway_name:
+                    type: string
+                    example: ''
+                  customer:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: df25411e-4b01-4efe-8368-496b959b253f
+                      firstname:
+                        type: string
+                        example: Swipe
+                      lastname:
+                        type: string
+                        example: Customer
+                      company:
+                        type: string
+                        example: ''
+                      email:
+                        type: string
+                        example: ''
+                      cc_emails: {}
+                      cc_sms: {}
+                      phone:
+                        type: string
+                        example: ''
+                      address_1:
+                        type: string
+                        example: ''
+                      address_2:
+                        type: string
+                        example: ''
+                      address_city:
+                        type: string
+                        example: ''
+                      address_state:
+                        type: string
+                        example: ''
+                      address_zip:
+                        type: string
+                        example: ''
+                      address_country:
+                        type: string
+                        example: ''
+                      notes:
+                        type: string
+                        example: ''
+                      reference:
+                        type: string
+                        example: Physical Terminal customer
+                      options: {}
+                      created_at:
+                        type: string
+                        example: '2018-12-19 19:23:43'
+                      updated_at:
+                        type: string
+                        example: '2018-12-19 19:23:43'
+                      deleted_at: {}
+                      allow_invoice_credit_card_payments:
+                        type: boolean
+                        example: true
+                        default: true
+                      gravatar:
+                        type: boolean
+                        example: false
+                        default: true
+                  child_transactions:
+                    type: array
+                  files:
+                    type: array
+                  payment_method: {}
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 61822412-09b3-4f5a-a90f-fd9f1db703b4
+                      name:
+                        type: string
+                        example: David Johnson
+                      email:
+                        type: string
+                        example: demo1@abc.com
+                      email_verification_sent_at:
+                        type: string
+                        example: '2018-09-27 15:24:38'
+                      email_verified_at:
+                        type: string
+                        example: '2017-12-05 19:05:53'
+                      is_api_key:
+                        type: boolean
+                        example: false
+                        default: true
+                      acknowledgments:
+                        type: object
+                        properties:
+                          setPassword:
+                            type: boolean
+                            example: true
+                            default: true
+                          godviewOmniSearchTooltip:
+                            type: boolean
+                            example: true
+                            default: true
+                          tutorial:
+                            type: boolean
+                            example: true
+                            default: true
+                          godviewWelcome:
+                            type: boolean
+                            example: true
+                            default: true
+                      created_at:
+                        type: string
+                        example: '2016-12-05 19:05:53'
+                      updated_at:
+                        type: string
+                        example: '2018-11-20 14:51:28'
+                      deleted_at: {}
+                      brand:
+                        type: string
+                        example: Stax
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/1cd5aef1d36d07e495abb73061f857d4
+                      team_admin: {}
+                      team_enabled: {}
+                      team_role: {}
+                      merchant_options:
+                        type: array
+                      is_default:
+                        type: boolean
+                        example: false
+                        default: true
+      deprecated: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                total:
+                  type: number
+                  description: '(Min: 0.01) The dollar amount a customer is charged. This field is required and will be the amount a customer is charged. If tip prompting is enabled, the selected tip will be added to this total.'
+                  format: float
+                meta:
+                  type: object
+                  required: true
+                  description: (required, json literal) i.e. {"tax":2,"subtotal":10} can contain any json object. Will be blindly stored and returned during a GET operation. Values in meta may also appear in an email receipt if the template calls for it. The Stax front-end uses subtotal, tax, memo, lineItems = [].
+                  properties: {}
+                register:
+                  type: string
+                  required: true
+                  description: The id of the register performing this operation. This should be the 'id' value returned by GET /terminal/register, not the serial or status_port.
+                printReceipt:
+                  type: string
+                  enum:
+                  - 'No'
+                  - Merchant
+                  - Customer
+                  - Both
+                  description: 'Possible values: No, Merchant, Customer, Both. Defaults to Both.'
+                  default: both
+                promptCardType:
+                  type: boolean
+                  description: If true, will prompt the user to select Credit or Debit for this transaction.
+                  default: 'true'
+                paymentType:
+                  type: string
+                  enum:
+                  - Credit
+                  - Debit
+                  - Check
+                  - Gift
+                  - Loyalty
+                  default: Credit
+                  description: 'Possible values: Credit, Debit, Check, Gift, Loyalty. Defaults to Credit.'
+                customerId:
+                  type: string
+                  description: The id of the customer attributed to this charge.
+                invoiceId:
+                  type: string
+                  description: The id of the invoice attributed to this charge.
+                promptTipInput:
+                  type: boolean
+                  description: If true, will prompt the user to input a custom tip that will be added to total and set to meta.tip. promptTipInput and promptTipChoice cannot both be true. (defaults to false)
+                  default: 'false'
+                promptTipChoice:
+                  type: boolean
+                  description: 'If true, will prompt the user to select a tip from a list defined by either percentageTipChoices or wholeTipChoices. The selected tip will be added to total and set to meta.tip. '
+                  default: 'false'
+                percentageTipThreshold:
+                  type: integer
+                  format: int32
+                  default: '10'
+                  description: If total is greater than or equal to percentageTipThreshold, percentageTipChoices will be used. If the total is less than percentageTipThreshold, wholeTipChoices will be used. (defaults to 10)
+                percentageTipChoices:
+                  type: array
+                  description: The array of tip percentages to show to the user. Tip amount will be automatically calculated and shown alongside the percent.
+                  items:
+                    type: integer
+                    format: int32
+                  default: 15,18,20,25
+                wholeTipChoices:
+                  type: array
+                  items:
+                    type: string
+                  description: The array of flat dollar amount tips to show to the user. Defaults to [1, 3, 5].
+                  default: 1,3,5
+                tokenize:
+                  type: boolean
+                  description: This value is ignored unless the CP tokenization feature is enabled. If true, the system will attempt to tokenize the card and attach it to the customer associated with customerId. Please reach out to Stax for more information about enabling the CP tokenization feature.
+              required:
+              - total
+              - register
+      tags:
+      - Terminal
+  /terminal/charge:
+    post:
+      summary: Charge
+      description: 'Initiates a card-present sale (auth + capture) on a paired terminal. The initial synchronous response will often have `success = false` and a `message` like `terminalservice.waiting` while the customer is interacting with the device. Poll `GET /terminal/{registerId}/status/{transactionId}` (or listen for webhooks, if configured) until the transaction reaches an approved or declined state.
+
+
+        Workflow:
+
+        1. POST this endpoint with `total`, `register`, optional `invoiceId`, and `meta` fields.
+
+        2. Terminal wakes and prompts customer to insert, tap, or swipe.
+
+        3. (Optional) Signature / additional prompts may fire based on card brand, amount, or merchant configuration.
+
+        4. Status endpoint returns approved/declined details; final transaction object will have `success = true` when approved.
+
+
+        Key Fields:
+
+        - `total`: Decimal amount in dollars; must be >= 0.01; negative values are not allowed.
+
+        - `meta.lineItems`: Array of { price, quantity, item, details } used for receipts & reporting (schema not previously documented).
+
+        - `printReceipt`: One of Merchant|Customer|Both|No; defaults to Both. If the hardware cannot print, receipt is silently skipped.
+
+        - `paymentType`: Currently most terminals default to `Credit`; `Debit`, `Gift`, etc. depend on device/gateway support.
+
+        - `tokenize`: If card-present tokenization feature is enabled and true, Stax will attempt to create a reusable payment method after settlement (see Settlement Tokenization).
+
+        - `invoiceId`: Link the sale to an existing invoice for reporting and partial payments.
+
+
+        Business Rules:
+
+        - Pre-authorizations: For variable final amounts, pass `pre_auth = true` (if supported); capture later via standard transaction endpoints.
+
+        - Idempotency: Provide a unique `idempotency_id` in `meta` if you need safe retries; duplicate will return original transaction.
+
+        - Tips: If supported by device configuration, tip prompts may occur automatically (not defined in schema here).
+
+        - Custom Fees: Card-present sales cannot use `meta.customFee`.
+
+
+        Errors & States:
+
+        - 422 validation errors before reaching a gateway (e.g. missing register).
+
+        - 400 gateway errors after processing attempt (e.g. decline).
+
+        - Cancellation: Customer or merchant cancels; `cancelled = true`.
+
+        - Offline Approval: Terminals may approve offline; final capture occurs at batch close.
+
+
+        Security: Requires ApiKeyAuth or EphemeralAuth. PartnerApiKey may be required for advanced features (e.g. settlement tokenization enablement).
+
+
+        PCI: Raw PAN data never passes through your application; terminal handles encryption.
+
+
+        Polling Recommendation: 1–2s interval, max 30 attempts, then surface a timeout error and instruct merchant to check device.
+
+
+        Receipts: Email/SMS receipts can be triggered using transaction receipt endpoints after approval.'
+      security:
+      - ApiKeyAuth: []
+      - EphemeralAuth: []
+      operationId: charge
+      parameters: []
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"71d7f9ec-59d9-4fab-891e-fa612cd2e275\",\n  \"invoice_id\": \"02936d77-93cc-48a6-b712-7f7234c19b7c\",\n  \"reference_id\": \"\",\n  \"recurring_transaction_id\": \"\",\n  \"auth_id\": null,\n  \"type\": \"charge\",\n  \"source\": \"terminalservice.dejavoo\",\n  \"source_ip\": \"127.0.0.1\",\n  \"is_merchant_present\": true,\n  \"merchant_id\": \"07420820-9b00-4816-9199-2071af7019f4\",\n  \"user_id\": \"61822412-09b3-4f5a-a90f-fd9f1db703b4\",\n  \"customer_id\": \"df25411e-4b01-4efe-8368-496b959b253f\",\n  \"payment_method_id\": null,\n  \"is_manual\": true,\n  \"success\": false,\n  \"message\": \"terminalservice.waiting\",\n  \"meta\": {\n    \"lineItems\": [],\n    \"tax\": 0,\n    \"subtotal\": 0.01,\n    \"printReceipt\": \"Merchant\",\n    \"paymentType\": \"Credit\",\n    \"invoiceId\": \"02936d77-93cc-48a6-b712-7f7234c19b7c\",\n    \"message\": \"terminalservice.waiting\",\n    \"type\": \"charge\",\n    \"registerId\": \"ba5c-5b03\",\n    \"registerStatusPort\": \"3594291\",\n    \"registerNickname\": \"Dejavoo Z8\",\n    \"registerSerial\": \"\",\n    \"registerType\": \"dejavoo\"\n  },\n  \"total\": 0.01,\n  \"method\": \"card\",\n  \"pre_auth\": false,\n  \"is_captured\": 0,\n  \"last_four\": \"\",\n  \"interchange_code\": \"\",\n  \"interchange_fee\": null,\n  \"batch_id\": \"\",\n  \"batched_at\": \"2018-12-19 14:23:43\",\n  \"emv_response\": \"\",\n  \"avs_response\": \"\",\n  \"cvv_response\": \"\",\n  \"pos_entry\": \"\",\n  \"pos_salesperson\": \"\",\n  \"receipt_email_at\": null,\n  \"receipt_sms_at\": null,\n  \"settled_at\": null,\n  \"created_at\": \"2018-12-19 19:23:43\",\n  \"updated_at\": \"2018-12-19 19:23:43\",\n  \"gateway_id\": null,\n  \"total_refunded\": 0,\n  \"is_refundable\": false,\n  \"is_voided\": false,\n  \"is_voidable\": false,\n  \"schedule_id\": null,\n  \"child_captures\": [],\n  \"parent_auth\": null,\n  \"gateway_name\": \"\",\n  \"customer\": {\n    \"id\": \"df25411e-4b01-4efe-8368-496b959b253f\",\n    \"firstname\": \"Swipe\",\n    \"lastname\": \"Customer\",\n    \"company\": \"\",\n    \"email\": \"\",\n    \"cc_emails\": null,\n    \"cc_sms\": null,\n    \"phone\": \"\",\n    \"address_1\": \"\",\n    \"address_2\": \"\",\n    \"address_city\": \"\",\n    \"address_state\": \"\",\n    \"address_zip\": \"\",\n    \"address_country\": \"\",\n    \"notes\": \"\",\n    \"reference\": \"Physical Terminal customer\",\n    \"options\": null,\n    \"created_at\": \"2018-12-19 19:23:43\",\n    \"updated_at\": \"2018-12-19 19:23:43\",\n    \"deleted_at\": null,\n    \"allow_invoice_credit_card_payments\": true,\n    \"gravatar\": false\n  },\n  \"child_transactions\": [],\n  \"files\": [],\n  \"payment_method\": null,\n  \"user\": {\n    \"id\": \"61822412-09b3-4f5a-a90f-fd9f1db703b4\",\n    \"name\": \"David Johnson\",\n    \"email\": \"demo1@abc.com\",\n    \"email_verification_sent_at\": \"2018-09-27 15:24:38\",\n    \"email_verified_at\": \"2017-12-05 19:05:53\",\n    \"is_api_key\": false,\n    \"acknowledgments\": {\n      \"setPassword\": true,\n      \"godviewOmniSearchTooltip\": true,\n      \"tutorial\": true,\n      \"godviewWelcome\": true\n    },\n    \"created_at\": \"2016-12-05 19:05:53\",\n    \"updated_at\": \"2018-11-20 14:51:28\",\n    \"deleted_at\": null,\n    \"brand\": \"Stax\",\n    \"gravatar\": \"//www.gravatar.com/avatar/1cd5aef1d36d07e495abb73061f857d4\",\n    \"team_admin\": null,\n    \"team_enabled\": null,\n    \"team_role\": null,\n    \"merchant_options\": [],\n    \"is_default\": false\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 71d7f9ec-59d9-4fab-891e-fa612cd2e275
+                  invoice_id:
+                    type: string
+                    example: 02936d77-93cc-48a6-b712-7f7234c19b7c
+                  reference_id:
+                    type: string
+                    example: ''
+                  recurring_transaction_id:
+                    type: string
+                    example: ''
+                  auth_id: {}
+                  type:
+                    type: string
+                    example: charge
+                  source:
+                    type: string
+                    example: terminalservice.dejavoo
+                  source_ip:
+                    type: string
+                    example: 127.0.0.1
+                  is_merchant_present:
+                    type: boolean
+                    example: true
+                    default: true
+                  merchant_id:
+                    type: string
+                    example: 07420820-9b00-4816-9199-2071af7019f4
+                  user_id:
+                    type: string
+                    example: 61822412-09b3-4f5a-a90f-fd9f1db703b4
+                  customer_id:
+                    type: string
+                    example: df25411e-4b01-4efe-8368-496b959b253f
+                  payment_method_id: {}
+                  is_manual:
+                    type: boolean
+                    example: true
+                    default: true
+                  success:
+                    type: boolean
+                    example: false
+                    default: true
+                  message:
+                    type: string
+                    example: terminalservice.waiting
+                  meta:
+                    type: object
+                    properties:
+                      lineItems:
+                        type: array
+                      tax:
+                        type: integer
+                        example: 0
+                        default: 0
+                      subtotal:
+                        type: number
+                        example: 0.01
+                        default: 0
+                      printReceipt:
+                        type: string
+                        example: Merchant
+                      paymentType:
+                        type: string
+                        example: Credit
+                      invoiceId:
+                        type: string
+                        example: 02936d77-93cc-48a6-b712-7f7234c19b7c
+                      message:
+                        type: string
+                        example: terminalservice.waiting
+                      type:
+                        type: string
+                        example: charge
+                      registerId:
+                        type: string
+                        example: ba5c-5b03
+                      registerStatusPort:
+                        type: string
+                        example: '3594291'
+                      registerNickname:
+                        type: string
+                        example: Dejavoo Z8
+                      registerSerial:
+                        type: string
+                        example: ''
+                      registerType:
+                        type: string
+                        example: dejavoo
+                  total:
+                    type: number
+                    example: 0.01
+                    default: 0
+                  method:
+                    type: string
+                    example: card
+                  pre_auth:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_captured:
+                    type: integer
+                    example: 0
+                    default: 0
+                  last_four:
+                    type: string
+                    example: ''
+                  interchange_code:
+                    type: string
+                    example: ''
+                  interchange_fee: {}
+                  batch_id:
+                    type: string
+                    example: ''
+                  batched_at:
+                    type: string
+                    example: '2018-12-19 14:23:43'
+                  emv_response:
+                    type: string
+                    example: ''
+                  avs_response:
+                    type: string
+                    example: ''
+                  cvv_response:
+                    type: string
+                    example: ''
+                  pos_entry:
+                    type: string
+                    example: ''
+                  pos_salesperson:
+                    type: string
+                    example: ''
+                  receipt_email_at: {}
+                  receipt_sms_at: {}
+                  settled_at: {}
+                  created_at:
+                    type: string
+                    example: '2018-12-19 19:23:43'
+                  updated_at:
+                    type: string
+                    example: '2018-12-19 19:23:43'
+                  gateway_id: {}
+                  total_refunded:
+                    type: number
+                    example: 0
+                    default: 0
+                  is_refundable:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_voided:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_voidable:
+                    type: boolean
+                    example: false
+                    default: true
+                  schedule_id: {}
+                  child_captures:
+                    type: array
+                  parent_auth: {}
+                  gateway_name:
+                    type: string
+                    example: ''
+                  customer:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: df25411e-4b01-4efe-8368-496b959b253f
+                      firstname:
+                        type: string
+                        example: Swipe
+                      lastname:
+                        type: string
+                        example: Customer
+                      company:
+                        type: string
+                        example: ''
+                      email:
+                        type: string
+                        example: ''
+                      cc_emails: {}
+                      cc_sms: {}
+                      phone:
+                        type: string
+                        example: ''
+                      address_1:
+                        type: string
+                        example: ''
+                      address_2:
+                        type: string
+                        example: ''
+                      address_city:
+                        type: string
+                        example: ''
+                      address_state:
+                        type: string
+                        example: ''
+                      address_zip:
+                        type: string
+                        example: ''
+                      address_country:
+                        type: string
+                        example: ''
+                      notes:
+                        type: string
+                        example: ''
+                      reference:
+                        type: string
+                        example: Physical Terminal customer
+                      options: {}
+                      created_at:
+                        type: string
+                        example: '2018-12-19 19:23:43'
+                      updated_at:
+                        type: string
+                        example: '2018-12-19 19:23:43'
+                      deleted_at: {}
+                      allow_invoice_credit_card_payments:
+                        type: boolean
+                        example: true
+                        default: true
+                      gravatar:
+                        type: boolean
+                        example: false
+                        default: true
+                  child_transactions:
+                    type: array
+                  files:
+                    type: array
+                  payment_method: {}
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 61822412-09b3-4f5a-a90f-fd9f1db703b4
+                      name:
+                        type: string
+                        example: David Johnson
+                      email:
+                        type: string
+                        example: demo1@abc.com
+                      email_verification_sent_at:
+                        type: string
+                        example: '2018-09-27 15:24:38'
+                      email_verified_at:
+                        type: string
+                        example: '2017-12-05 19:05:53'
+                      is_api_key:
+                        type: boolean
+                        example: false
+                        default: true
+                      acknowledgments:
+                        type: object
+                        properties:
+                          setPassword:
+                            type: boolean
+                            example: true
+                            default: true
+                          godviewOmniSearchTooltip:
+                            type: boolean
+                            example: true
+                            default: true
+                          tutorial:
+                            type: boolean
+                            example: true
+                            default: true
+                          godviewWelcome:
+                            type: boolean
+                            example: true
+                            default: true
+                      created_at:
+                        type: string
+                        example: '2016-12-05 19:05:53'
+                      updated_at:
+                        type: string
+                        example: '2018-11-20 14:51:28'
+                      deleted_at: {}
+                      brand:
+                        type: string
+                        example: Stax
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/1cd5aef1d36d07e495abb73061f857d4
+                      team_admin: {}
+                      team_enabled: {}
+                      team_role: {}
+                      merchant_options:
+                        type: array
+                      is_default:
+                        type: boolean
+                        example: false
+                        default: true
+      deprecated: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                total:
+                  type: number
+                  description: '(Min: 0.01) The dollar amount a customer is charged. This field is required and will be the amount a customer is charged. If tip prompting is enabled, the selected tip will be added to this total.'
+                meta:
+                  type: object
+                  required: true
+                  description: (required, json literal) i.e. {"tax":2,"subtotal":10} can contain any json object. Will be blindly stored and returned during a GET operation. Values in meta may also appear in an email receipt if the template calls for it. The Stax front-end uses subtotal, tax, memo, lineItems = [].
+                  properties: {}
+                register:
+                  type: string
+                  required: true
+                  description: The id of the register performing this operation. This should be the 'id' value returned by GET /terminal/register, not the serial or status_port.
+                printReceipt:
+                  type: string
+                  enum:
+                  - Merchant
+                  - Customer
+                  - Both
+                  - 'No'
+                  description: 'Possible values: No, Merchant, Customer, Both. Defaults to Both.'
+                  default: Both
+                promptCardType:
+                  type: boolean
+                  description: If true, will prompt the user to select Credit or Debit for this transaction.
+                  default: 'true'
+                paymentType:
+                  type: string
+                  enum:
+                  - Credit
+                  - Debit
+                  - Gift
+                  - Loyalty
+                  - Check
+                  default: Credit
+                  description: 'Possible values: Credit, Debit, Check, Gift, Loyalty. Defaults to Credit.'
+                customerId:
+                  type: string
+                  description: The id of the customer attributed to this charge.
+                invoiceId:
+                  type: string
+                  description: The id of the invoice attributed to this charge.
+                promptTipInput:
+                  type: boolean
+                  description: If true, will prompt the user to input a custom tip that will be added to total and set to meta.tip. promptTipInput and promptTipChoice cannot both be true. Defaults to false.
+                  default: 'false'
+                promptTipChoice:
+                  type: boolean
+                  description: If true, will prompt the user to select a tip from a list defined by either percentageTipChoices or wholeTipChoices. The selected tip will be added to total and set to meta.tip. See the following params for more details. Defaults to false.
+                  default: 'false'
+                percentageTipThreshold:
+                  type: number
+                  default: '10'
+                  description: If total is greater than or equal to percentageTipThreshold, percentageTipChoices will be used. If the total is less than percentageTipThreshold, wholeTipChoices will be used. Defaults to 10.
+                percentageTipChoices:
+                  type: array
+                  items:
+                    type: integer
+                    format: int32
+                  default: 15,18,20,25
+                  description: The array of tip percentages to show to the user. Tip amount will be automatically calculated and shown alongside the percent. Defaults to [15, 20, 25].
+                wholeTipChoices:
+                  type: array
+                  default: 1,3,5
+                  description: The array of flat dollar amount tips to show to the user. Defaults to [1, 3, 5].
+                  items:
+                    type: string
+                tokenize:
+                  type: boolean
+                  description: This value is ignored unless the CP tokenization feature is enabled. If true, the system will attempt to tokenize the card and attach it to the customer associated with customerId. Please reach out to Stax for more information about enabling the CP tokenization feature.
+              required:
+              - total
+              - register
+      tags:
+      - Terminal
+  /terminal/credit:
+    post:
+      summary: Credit
+      description: 'Performs a standalone credit (general credit) returning funds to a customer without referencing an original sale. Only available when the merchant''s gateway supports the general credit feature; otherwise returns a 400 error. Prefer refund routes when reversing a known prior transaction.
+
+
+        Use Cases: Goodwill adjustments, manual payouts where an original transaction does not exist.
+
+
+        Restrictions & Considerations:
+
+        - Gateway must permit general credits; feature is rarely enabled by default.
+
+        - May trigger higher fraud scrutiny; velocity limits can apply.
+
+        - Amount must be >= 0.01.
+
+        - Inventory adjustments: `meta.update_inventory` indicates stock changes (often inverted).
+
+
+        Differences vs Refund:
+
+        - Refund references a prior sale; credit does not.
+
+        - Settlement tokenization is not required for credit.
+
+
+        Security: ApiKeyAuth or EphemeralAuth.
+
+
+        Errors: 400 gateway reject, 422 validation, cancellation by user.
+
+
+        Polling & Receipts: Same as charge.'
+      security:
+      - ApiKeyAuth: []
+      operationId: credit
+      parameters: []
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"meta\": {\n    \"reference\": 2479,\n    \"taxRate\": 10,\n    \"tax\": 0,\n    \"subtotal\": -0.02,\n    \"lineItems\": [\n      {\n        \"price\": \"-0.02\",\n        \"quantity\": 1,\n        \"details\": \"\",\n        \"item\": \"Item Name\"\n      }\n    ]\n  },\n  \"customerId\": \"2a503ed1-99ea-4b35-a30a-605253f7c05a\",\n  \"invoiceId\": \"\",\n  \"register\": \"4f1b-f10a\",\n  \"total\": 0.02\n}\nResponse\n200\nHEADERS\nContent-Type:application/json\nBODY\n{\n  \"id\": \"07b7f3ac-20f0-472a-bf51-a4d534d1579d\",\n  \"invoice_id\": \"\",\n  \"reference_id\": \"\",\n  \"recurring_transaction_id\": \"\",\n  \"auth_id\": null,\n  \"type\": \"credit\",\n  \"source\": \"terminalservice.dejavoo\",\n  \"is_merchant_present\": true,\n  \"merchant_id\": \"27fad5e4-0210-4c91-9596-417b0ea0dbb1\",\n  \"user_id\": \"dbc85118-3309-4129-b966-0108c0fb18a0\",\n  \"customer_id\": \"2a503ed1-99ea-4b35-a30a-605253f7c05a\",\n  \"payment_method_id\": \"bb61a1f5-c3ab-460f-ba8f-0aef9b4c550b\",\n  \"is_manual\": true,\n  \"success\": true,\n  \"message\": \"\",\n  \"meta\": {\n    \"reference\": 2479,\n    \"update_inventory\": true,\n    \"taxOverride\": false,\n    \"isBulkInvoice\": false,\n    \"taxRate\": 10,\n    \"tax\": 0,\n    \"subtotal\": -0.02,\n    \"lineItems\": [\n      {\n        \"price\": \"-0.02\",\n        \"quantity\": 1,\n        \"details\": \"\",\n        \"item\": \"Item Name\"\n      }\n    ],\n    \"RegisterId\": 3594291,\n    \"ResultCode\": 0,\n    \"RespMSG\": \"Approved Offline\",\n    \"Message\": \"Approved\",\n    \"PaymentType\": \"Credit\",\n    \"TransType\": \"Return\",\n    \"SN\": 118816524647,\n    \"ExtData\": {\n      \"Amount\": \"0.02\",\n      \"InvNum\": \"7\",\n      \"CardType\": \"VISA\",\n      \"BatchNum\": \"56\",\n      \"Tip\": \"0.00\",\n      \"CashBack\": \"0.00\",\n      \"Fee\": \"0.00\",\n      \"AcntLast4\": \"1396\",\n      \"Name\": \"JOHNSON/DAVID\",\n      \"SVC\": \"0.00\",\n      \"TotalAmt\": \"0.02\",\n      \"DISC\": \"0.00\",\n      \"Donation\": \"0.00\",\n      \"SHFee\": \"0.00\",\n      \"RwdPoints\": \"0\",\n      \"RwdBalance\": \"0\",\n      \"RwdIssued\": \"\",\n      \"EBTFSLedgerBalance\": \"\",\n      \"EBTFSAvailBalance\": \"\",\n      \"EBTFSBeginBalance\": \"\",\n      \"EBTCashLedgerBalance\": \"\",\n      \"EBTCashAvailBalance\": \"\",\n      \"EBTCashBeginBalance\": \"\",\n      \"RewardCode\": \"\",\n      \"AcqRefData\": \"\",\n      \"ProcessData\": \"\",\n      \"RefNo\": \"\",\n      \"RewardQR\": \"\",\n      \"Language\": \"English\",\n      \"EntryType\": \"CHIP\",\n      \"table_num\": \"0\",\n      \"clerk_id\": \"\",\n      \"ticket_num\": \"\",\n      \"ControlNum\": \"\",\n      \"TaxCity\": \"0.00\",\n      \"TaxState\": \"0.00\",\n      \"Cust1\": \"\",\n      \"Cust1Value\": \"\",\n      \"Cust2\": \"\",\n      \"Cust2Value\": \"\",\n      \"Cust3\": \"\",\n      \"Cust3Value\": \"\",\n      \"AcntFirst4\": \"4147\"\n    },\n    \"EMVData\": {\n      \"AID\": \"A0000000031010\",\n      \"AppName\": \"CHASE VISA\",\n      \"TVR\": \"0080008000\",\n      \"TSI\": \"E800\",\n      \"IAD\": \"\",\n      \"ARC\": \"00\"\n    },\n    \"CVMResult\": 2,\n    \"cancelled\": false,\n    \"gatewayStatus\": 200,\n    \"gatewayStatusText\": \"OK\",\n    \"printReceipt\": \"Both\",\n    \"paymentType\": \"Credit\",\n    \"type\": \"credit\",\n    \"registerId\": \"4f1b-f10a\",\n    \"registerStatusPort\": \"3594291\",\n    \"registerNickname\": \"Tech Area Z8 (3594291)\",\n    \"registerSerial\": \"124124\",\n    \"registerType\": \"dejavoo\"\n  },\n  \"total\": 0.02,\n  \"method\": \"card\",\n  \"pre_auth\": false,\n  \"is_captured\": 0,\n  \"last_four\": \"\",\n  \"interchange_code\": \"\",\n  \"interchange_fee\": null,\n  \"batch_id\": \"\",\n  \"batched_at\": \"2018-04-16 19:02:24\",\n  \"emv_response\": \"\",\n  \"avs_response\": \"\",\n  \"cvv_response\": \"\",\n  \"pos_entry\": \"\",\n  \"pos_salesperson\": \"\",\n  \"receipt_email_at\": null,\n  \"receipt_sms_at\": null,\n  \"created_at\": \"2018-04-16 19:02:24\",\n  \"updated_at\": \"2018-04-16 19:02:24\",\n  \"total_refunded\": 0,\n  \"is_refundable\": false,\n  \"is_voided\": false,\n  \"is_voidable\": true,\n  \"currency\": \"USD\",\n  \"schedule_id\": null,\n  \"child_captures\": [],\n  \"parent_auth\": null,\n  \"customer\": {\n    \"id\": \"2a503ed1-99ea-4b35-a30a-605253f7c05a\",\n    \"firstname\": \"A\",\n    \"lastname\": \"Customer\",\n    \"company\": \"\",\n    \"email\": \"\",\n    \"cc_emails\": [],\n    \"cc_sms\": null,\n    \"phone\": \"\",\n    \"address_1\": \"\",\n    \"address_2\": \"\",\n    \"address_city\": \"\",\n    \"address_state\": \"\",\n    \"address_zip\": \"\",\n    \"address_country\": \"USA\",\n    \"notes\": \"\",\n    \"reference\": \"\",\n    \"options\": \"\",\n    \"created_at\": \"2018-02-23 22:32:19\",\n    \"updated_at\": \"2018-02-23 22:32:19\",\n    \"deleted_at\": null,\n    \"allow_invoice_credit_card_payments\": true,\n    \"gravatar\": false\n  },\n  \"child_transactions\": [],\n  \"files\": [],\n  \"payment_method\": {\n    \"id\": \"bb61a1f5-c3ab-460f-ba8f-0aef9b4c550b\",\n    \"customer_id\": \"2a503ed1-99ea-4b35-a30a-605253f7c05a\",\n    \"merchant_id\": \"27fad5e4-0210-4c91-9596-417b0ea0dbb1\",\n    \"user_id\": \"dbc85118-3309-4129-b966-0108c0fb18a0\",\n    \"nickname\": \"VISA: JOHNSON/DAVID (ending in: 1396)\",\n    \"has_cvv\": 0,\n    \"is_default\": 1,\n    \"method\": \"card\",\n    \"person_name\": \"JOHNSON/DAVID\",\n    \"card_type\": \"visa\",\n    \"card_last_four\": \"1396\",\n    \"card_exp\": \"992099\",\n    \"bank_name\": null,\n    \"bank_type\": null,\n    \"bank_holder_type\": null,\n    \"address_1\": null,\n    \"address_2\": null,\n    \"address_city\": null,\n    \"address_state\": null,\n    \"address_zip\": \"\",\n    \"address_country\": \"\",\n    \"purged_at\": null,\n    \"deleted_at\": null,\n    \"created_at\": \"2018-04-16 19:02:24\",\n    \"updated_at\": \"2018-04-16 19:02:24\",\n    \"card_exp_datetime\": \"2107-03-31 23:59:59\",\n    \"customer\": {\n      \"id\": \"2a503ed1-99ea-4b35-a30a-605253f7c05a\",\n      \"firstname\": \"A\",\n      \"lastname\": \"Customer\",\n      \"company\": \"\",\n      \"email\": \"\",\n      \"cc_emails\": [],\n      \"cc_sms\": null,\n      \"phone\": \"\",\n      \"address_1\": \"\",\n      \"address_2\": \"\",\n      \"address_city\": \"\",\n      \"address_state\": \"\",\n      \"address_zip\": \"\",\n      \"address_country\": \"USA\",\n      \"notes\": \"\",\n      \"reference\": \"\",\n      \"options\": \"\",\n      \"created_at\": \"2018-02-23 22:32:19\",\n      \"updated_at\": \"2018-02-23 22:32:19\",\n      \"deleted_at\": null,\n      \"allow_invoice_credit_card_payments\": true,\n      \"gravatar\": false\n    }\n  },\n  \"user\": {\n    \"id\": \"dbc85118-3309-4129-b966-0108c0fb18a0\",\n    \"system_admin\": true,\n    \"name\": \"David Johnson\",\n    \"email\": \"demo1@abc.com\",\n    \"email_verification_sent_at\": \"2017-05-16 17:35:16\",\n    \"email_verified_at\": \"2017-05-16 17:35:33\",\n    \"is_api_key\": false,\n    \"acknowledgments\": {\n      \"tutorial\": true,\n      \"godviewWelcome\": true\n    },\n    \"created_at\": \"2016-05-12 15:57:19\",\n    \"updated_at\": \"2018-04-16 18:08:55\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/1cd5aef1d36d07e495abb73061f857d4\",\n    \"team_admin\": null,\n    \"team_enabled\": null,\n    \"team_role\": null,\n    \"merchant_options\": [],\n    \"is_portal\": false\n  }\n}"
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"success\": false,\n  \"message\": \"User Cancelled\",\n  \"gatewayStatus\": 200,\n  \"gatewayStatusText\": \"OK\",\n  \"cancelled\": true,\n  \"status\": 400\n}"
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                    default: true
+                  message:
+                    type: string
+                    example: User Cancelled
+                  gatewayStatus:
+                    type: integer
+                    example: 200
+                    default: 0
+                  gatewayStatusText:
+                    type: string
+                    example: OK
+                  cancelled:
+                    type: boolean
+                    example: true
+                    default: true
+                  status:
+                    type: integer
+                    example: 400
+                    default: 0
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"validation\": \"register not found\",\n  \"status\": 422,\n  \"message\": \"Validation Error\"\n}"
+              schema:
+                type: object
+                properties:
+                  validation:
+                    type: string
+                    example: register not found
+                  status:
+                    type: integer
+                    example: 422
+                    default: 0
+                  message:
+                    type: string
+                    example: Validation Error
+      deprecated: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                total:
+                  type: number
+                  format: float
+                  description: this float is required and will be the amount a customer is credited.
+                meta:
+                  type: string
+                  description: i.e. {"tax":2,"subtotal":10} can contain any json objectwill be blindly stored and returned during a GET operation.values in meta may also appear in an email receipt if the template calls for it.the Stax front-end uses subtotal, tax, memo, lineItems = [].
+                  format: json
+                printReceipt:
+                  type: string
+                  enum:
+                  - Both
+                  - Customer
+                  - Merchant
+                  - 'No'
+                  default: Both
+                  description: 'Possible values: No, Merchant, Customer, Both. (defaults to Both).'
+                paymentType:
+                  type: string
+                  enum:
+                  - Credit
+                  - Debit
+                  - Check
+                  - Gift
+                  - Loyalty
+                  description: 'Possible values: Credit, Debit, Check, Gift, Loyalty'
+                  default: Credit
+                customerId:
+                  type: string
+                  description: The id of the customer attributed to this credit.
+                invoiceId:
+                  type: string
+                  description: The id of the invoice attributed to this charge.
+                register:
+                  type: string
+                  description: The id of the register performing this operation.
+              required:
+              - total
+              - register
+      tags:
+      - Terminal
+  /terminal/register:
+    get:
+      summary: Get all devices
+      description: Returns a list of WIFI registers (devices) associated to the merchant account.
+      operationId: get-all-devices
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "[\n  {\n    \"id\": \"4f1b-f10a\",\n    \"nickname\": \"Tech Area Z8 (3594291)\",\n    \"status_port\": \"3594291\",\n    \"serial\": \"124124\",\n    \"type\": \"dejavoo\",\n    \"model\": \"\",\n    \"isDefault\": false,\n    \"register_num\": \"3594291\"\n  },\n  {\n    \"id\": \"18a3-83e7\",\n    \"nickname\": \"DANIEL HOME OFFICE (3598304)\",\n    \"status_port\": \"3598304\",\n    \"serial\": \"123123\",\n    \"type\": \"dejavoo\",\n    \"model\": \"\",\n    \"isDefault\": true,\n    \"register_num\": \"3598304\"\n  },\n  {\n    \"id\": \"94d1-318d\",\n    \"nickname\": \"Tech Area Z1 (6880)\",\n    \"status_port\": \"6880\",\n    \"serial\": \"2434\",\n    \"type\": \"dejavoo\",\n    \"model\": \"\",\n    \"isDefault\": false,\n    \"register_num\": \"6880\"\n  }\n]"
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: 4f1b-f10a
+                    nickname:
+                      type: string
+                      example: Tech Area Z8 (3594291)
+                    status_port:
+                      type: string
+                      example: '3594291'
+                    serial:
+                      type: string
+                      example: '124124'
+                    type:
+                      type: string
+                      example: dejavoo
+                    model:
+                      type: string
+                      example: ''
+                    isDefault:
+                      type: boolean
+                      example: false
+                      default: true
+                    register_num:
+                      type: string
+                      example: '3594291'
+      deprecated: false
+      tags:
+      - Terminal
+  /terminal/{registerId}/status/{transactionId}:
+    get:
+      summary: Get Transaction Status
+      description: Retrieves real-time status details for a previously initiated card-present transaction.
+      security:
+      - ApiKeyAuth: []
+      operationId: get-transaction-status
+      parameters:
+      - name: registerId
+        in: path
+        description: The id of the register where this transaction id located
+        schema:
+          type: string
+        required: true
+      - name: transactionId
+        in: path
+        description: The id of the transaction you want the info about.
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"RefId\": \"fb1a60b1-2186-4a2b-9c02-b2c01e736d99\",\n  \"RegisterId\": 3594291,\n  \"ResultCode\": \"\",\n  \"RespMSG\": \"APPROVAL 02051D\",\n  \"Message\": \"Approved\",\n  \"AuthCode\": \"02051D\",\n  \"PNRef\": 835318402983,\n  \"PaymentType\": \"Credit\",\n  \"TransType\": \"Sale\",\n  \"SN\": 118816524647,\n  \"ExtData\": {\n    \"Amount\": \"\",\n    \"InvNum\": \"4\",\n    \"CardType\": \"VISA\",\n    \"BatchNum\": \"70\",\n    \"Tip\": \"0.00\",\n    \"CashBack\": \"0.00\",\n    \"Fee\": \"0.00\",\n    \"AcntLast4\": \"4301\",\n    \"Name\": \"JOHNSON/DAVID\",\n    \"SVC\": \"0.00\",\n    \"TotalAmt\": \"0.01\",\n    \"DISC\": \"0.00\",\n    \"Donation\": \"0.00\",\n    \"SHFee\": \"0.00\",\n    \"RwdPoints\": \"0\",\n    \"RwdBalance\": \"0\",\n    \"RwdIssued\": \"\",\n    \"EBTFSLedgerBalance\": \"\",\n    \"EBTFSAvailBalance\": \"\",\n    \"EBTFSBeginBalance\": \"\",\n    \"EBTCashLedgerBalance\": \"\",\n    \"EBTCashAvailBalance\": \"\",\n    \"EBTCashBeginBalance\": \"\",\n    \"RewardCode\": \"\",\n    \"AcqRefData\": \"\",\n    \"ProcessData\": \"\",\n    \"RefNo\": \"\",\n    \"RewardQR\": \"\",\n    \"Language\": \"English\",\n    \"EntryType\": \"CHIP\",\n    \"table_num\": \"0\",\n    \"clerk_id\": \"\",\n    \"ticket_num\": \"\",\n    \"ControlNum\": \"\",\n    \"TaxCity\": \"0.00\",\n    \"TaxState\": \"0.00\",\n    \"Cust1\": \"\",\n    \"Cust1Value\": \"\",\n    \"Cust2\": \"\",\n    \"Cust2Value\": \"\",\n    \"Cust3\": \"\",\n    \"Cust3Value\": \"\",\n    \"AcntFirst4\": \"4147\",\n    \"TaxAmount\": \"0.00\"\n  },\n  \"EMVData\": {\n    \"AID\": \"A0000000031010\",\n    \"AppName\": \"CHASE VISA\",\n    \"TVR\": \"0080008800\",\n    \"TSI\": \"E800\",\n    \"IAD\": \"A07EEBA094234F9C3030\",\n    \"ARC\": \"00\"\n  },\n  \"CVMResult\": 2,\n  \"cancelled\": false,\n  \"gatewayStatus\": 200,\n  \"gatewayStatusText\": \"OK\",\n  \"success\": true\n}"
+              schema:
+                type: object
+                properties:
+                  RefId:
+                    type: string
+                    example: fb1a60b1-2186-4a2b-9c02-b2c01e736d99
+                  RegisterId:
+                    type: integer
+                    example: 3594291
+                    default: 0
+                  ResultCode:
+                    type: string
+                    example: ''
+                  RespMSG:
+                    type: string
+                    example: APPROVAL 02051D
+                  Message:
+                    type: string
+                    example: Approved
+                  AuthCode:
+                    type: string
+                    example: 02051D
+                  PNRef:
+                    type: integer
+                    example: 835318402983
+                    default: 0
+                  PaymentType:
+                    type: string
+                    example: Credit
+                  TransType:
+                    type: string
+                    example: Sale
+                  SN:
+                    type: integer
+                    example: 118816524647
+                    default: 0
+                  ExtData:
+                    type: object
+                    properties:
+                      Amount:
+                        type: string
+                        example: ''
+                      InvNum:
+                        type: string
+                        example: '4'
+                      CardType:
+                        type: string
+                        example: VISA
+                      BatchNum:
+                        type: string
+                        example: '70'
+                      Tip:
+                        type: string
+                        example: '0.00'
+                      CashBack:
+                        type: string
+                        example: '0.00'
+                      Fee:
+                        type: string
+                        example: '0.00'
+                      AcntLast4:
+                        type: string
+                        example: '4301'
+                      Name:
+                        type: string
+                        example: JOHNSON/DAVID
+                      SVC:
+                        type: string
+                        example: '0.00'
+                      TotalAmt:
+                        type: string
+                        example: '0.01'
+                      DISC:
+                        type: string
+                        example: '0.00'
+                      Donation:
+                        type: string
+                        example: '0.00'
+                      SHFee:
+                        type: string
+                        example: '0.00'
+                      RwdPoints:
+                        type: string
+                        example: '0'
+                      RwdBalance:
+                        type: string
+                        example: '0'
+                      RwdIssued:
+                        type: string
+                        example: ''
+                      EBTFSLedgerBalance:
+                        type: string
+                        example: ''
+                      EBTFSAvailBalance:
+                        type: string
+                        example: ''
+                      EBTFSBeginBalance:
+                        type: string
+                        example: ''
+                      EBTCashLedgerBalance:
+                        type: string
+                        example: ''
+                      EBTCashAvailBalance:
+                        type: string
+                        example: ''
+                      EBTCashBeginBalance:
+                        type: string
+                        example: ''
+                      RewardCode:
+                        type: string
+                        example: ''
+                      AcqRefData:
+                        type: string
+                        example: ''
+                      ProcessData:
+                        type: string
+                        example: ''
+                      RefNo:
+                        type: string
+                        example: ''
+                      RewardQR:
+                        type: string
+                        example: ''
+                      Language:
+                        type: string
+                        example: English
+                      EntryType:
+                        type: string
+                        example: CHIP
+                      table_num:
+                        type: string
+                        example: '0'
+                      clerk_id:
+                        type: string
+                        example: ''
+                      ticket_num:
+                        type: string
+                        example: ''
+                      ControlNum:
+                        type: string
+                        example: ''
+                      TaxCity:
+                        type: string
+                        example: '0.00'
+                      TaxState:
+                        type: string
+                        example: '0.00'
+                      Cust1:
+                        type: string
+                        example: ''
+                      Cust1Value:
+                        type: string
+                        example: ''
+                      Cust2:
+                        type: string
+                        example: ''
+                      Cust2Value:
+                        type: string
+                        example: ''
+                      Cust3:
+                        type: string
+                        example: ''
+                      Cust3Value:
+                        type: string
+                        example: ''
+                      AcntFirst4:
+                        type: string
+                        example: '4147'
+                      TaxAmount:
+                        type: string
+                        example: '0.00'
+                  EMVData:
+                    type: object
+                    properties:
+                      AID:
+                        type: string
+                        example: A0000000031010
+                      AppName:
+                        type: string
+                        example: CHASE VISA
+                      TVR:
+                        type: string
+                        example: 0080008800
+                      TSI:
+                        type: string
+                        example: E800
+                      IAD:
+                        type: string
+                        example: A07EEBA094234F9C3030
+                      ARC:
+                        type: string
+                        example: '00'
+                  CVMResult:
+                    type: integer
+                    example: 2
+                    default: 0
+                  cancelled:
+                    type: boolean
+                    example: false
+                    default: true
+                  gatewayStatus:
+                    type: integer
+                    example: 200
+                    default: 0
+                  gatewayStatusText:
+                    type: string
+                    example: OK
+                  success:
+                    type: boolean
+                    example: true
+                    default: true
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Transaction not Found:
+                  value: "{\n  \"validation\": \"Transaction not found\",\n  \"status\": 422,\n  \"message\": \"Validation Error\"\n}"
+              schema:
+                type: object
+                properties:
+                  validation:
+                    type: string
+                    example: Transaction not found
+                  status:
+                    type: integer
+                    example: 422
+                    default: 0
+                  message:
+                    type: string
+                    example: Validation Error
+      deprecated: false
+      tags:
+      - Terminal
+  /terminal/print:
+    post:
+      summary: Print
+      description: Prints a custom multi-line message or receipt supplement on the terminal's paper printer.
+      operationId: print
+      parameters: []
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"RegisterId\": 3594291,\n  \"Message\": \"Success\",\n  \"cancelled\": false,\n  \"gatewayStatus\": 200,\n  \"gatewayStatusText\": \"OK\",\n  \"success\": true,\n  \"RespMSG\": \"undefined\"\n}"
+              schema:
+                type: object
+                properties:
+                  RegisterId:
+                    type: integer
+                    example: 3594291
+                    default: 0
+                  Message:
+                    type: string
+                    example: Success
+                  cancelled:
+                    type: boolean
+                    example: false
+                    default: true
+                  gatewayStatus:
+                    type: integer
+                    example: 200
+                    default: 0
+                  gatewayStatusText:
+                    type: string
+                    example: OK
+                  success:
+                    type: boolean
+                    example: true
+                    default: true
+                  RespMSG:
+                    type: string
+                    example: undefined
+      deprecated: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: array
+                  items:
+                    type: string
+                  required: true
+                  description: The message which will print on the receipt. When specifying multiple strings within the array, each new string will begin on a new line. A single string may not respect word wrap on all terminal models.
+                register:
+                  type: string
+                  required: true
+                  description: The id of the register performing this operation. This should be the 'id' value returned by GET /terminal/register, not the register number or serial.
+              required:
+              - register
+              - message
+      tags:
+      - Terminal
+  /terminal/promptChoice:
+    post:
+      description: ''
+      operationId: get_terminalpromptChoice
+      responses:
+        '200':
+          description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                register:
+                  type: string
+                  description: The id of the register performing this operation.
+                title:
+                  type: string
+                  description: Title for this prompt, displayed on the top of the terminal screen. Default is "" (empty string).
+                choices:
+                  type: array
+                  description: Choices to present to the user.
+                  items:
+                    type: string
+              required:
+              - register
+              - choices
+      tags:
+      - Terminal
+      summary: Get terminalprompt choice
+      x-summary-source: derived
+  /terminal/promptInput:
+    post:
+      summary: Prompt (Input)
+      description: 'Displays a text input prompt on the terminal for the customer or clerk to enter free-form data (e.g., table number, PO reference). Returns the entered string in the response.
+
+
+        Usage:
+
+        - Provide `register`.
+
+        - Optional `title` customizes terminal screen header.
+
+
+        Considerations: Length and character restrictions depend on device; keep alphanumeric to ensure compatibility. Provide client-side validation if a specific format is needed.
+
+
+        Security: ApiKeyAuth or EphemeralAuth.
+
+
+        Errors: Cancelled entry, timeout, unsupported character input.'
+      security:
+      - ApiKeyAuth: []
+      operationId: prompt-input
+      parameters: []
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"input\": \"G164\"\n}"
+              schema:
+                type: object
+                properties:
+                  input:
+                    type: string
+                    example: G164
+      deprecated: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                register:
+                  type: string
+                  required: true
+                  description: ' The id of the register performing this operation. This should be the ''id'' value returned by GET /terminal/register.'
+                title:
+                  type: string
+                  description: Title for this prompt, displayed on the top of the terminal screen. Defaults to '' (empty string).
+              required:
+              - register
+      tags:
+      - Terminal
+  /terminal/prompt/signature:
+    post:
+      summary: Prompt (Signature)
+      description: Captures a digital signature on the terminal when card brand or merchant configuration requires it (e.g., high amount, specific entry mode).
+      security:
+      - ApiKeyAuth: []
+      operationId: prompt-signature
+      parameters: []
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n    \"signature\": \"Qk1eCgAAAAAAAD4AAAAoAAAAIAEAAEgAAAABAAEAAAAAACAKAADEDgAAxA4AAAAAAAAAAAAAAAAAAP///wD///////////////////////4///////////////////////////////////////////////4///////////////////////////////////////////////4f/////////////h////////////////////////////////4P/////////////gf///////////////Af//////////////8P/////////////gH////////////4AAAB//////////////+H//////+P/////4B//////8D////AAAAAP/////////////+D//////8P/////+Af////4AD////AAAOAB//////////////B//////4P//////gH///+AAD////B///4Af/////4///////gf/////gP//////4A//+AAA//////////AB/////4///////wP////8A///////+AP/wAB///////////4B/////4///////4AAH//8B////////gBAAAf///////////+B/////4///////8AAAAAAH////////8AAAf////////////8B/////4///////8AAAAAAf////////4AAD/////////////AD/////4////////gfgAAA////////8AAA/////////////8AH/////4////////wP//4D///////+AAGAH////////////gA//////4////////8H//AH///////AAB/wB///////////4AP//////4////////+B/8Af//////wAA//8Af/////////8AA///////4/////////A/wB//////8AAf///gH/////////AAH///////4/////////geAP//////wAP////4B////////wAB/////gP/4/////////4AA///////wD/////+AP//////8AA//////gAB4f////////8AD///////w///////gH//////wAP//////gAAAAAAA/////8Af///////////////4B//////gD////////AAAAAAA////////////////////////B//////gAD////////4AAAAA////////////////////////h//////gAAAP///////8f///////////////////////////////////AAAAAD///////////////////////////////////////////wAAAAf////////////////////////////////////////////AAAf//////////////////////////////////////////////wf///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////gP////////////////////////////////////////////+AAP///////////////////////////////////////////8AAAP//////////////////////////////////////////gAAAH//////////////////////////////////////////4AAAf/////////////////////////////////////////+AAAA///8H/////////////+AAH/////////////////////gAAH////8AH////////////+AAAAAAAAAAAP///////////4AAB/////8AAP///////////+AAAAAAAAAAAP//////////+AAf///////gAA//////////////gAAAAAAAAP//////////4AH/////////gAB////////////////////////////////+AB///////////AAB///////////////////////////////wAf///////////8AAH//////////////////////////////gB/////////////4AB///////////////j/////////////+Af//////////////4AH//////////////j/////////////8D////////////////gAf/////////////j/////////////8H////////////////4AD/////////////j/////////////4f/////////////////gAf////////////j/////////////4f/////////////////+AH////////////j/////////////4///////////////////wA////////////j/////////////4/////////j/////////+AH///////////j/////////////4f///////+D//////////gD///////////j/////////////4P///////8D//////////8B///////////j/////////////8H///////wH8P/////////g///////////j/////////////8B//////8Af8B/////////wf//////////j//////////////Af////8AA/8AD////////wf//////////j//////////////gH///4AAD//AAD///////gf//////////D//////////////4B//gAAA///4AAAAH///+B///////////D//////////////+AAAAAA/////wAAAAAAAAD///////////H///////////////gAAAB///////wAAAAAAAH///////////H///////////////4AAH///////////gAAAAf///////////H////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8AAAAAAAAAAAD///////////////////////////////////8AAAAAAAAAAAD///////////////////////////////////8AAAAAAAAAAAD///////////////////////////////////8=\",\n}"
+      deprecated: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                register:
+                  type: string
+                  required: true
+                  description: The id of the register performing this operation. This should be the 'id' value returned by GET /terminal/register.
+              required:
+              - register
+      tags:
+      - Terminal
+  /terminal/refund:
+    post:
+      summary: Refund
+      description: Performs a card-present refund for a prior sale by re-presenting the card at the terminal.
+      operationId: refund
+      parameters: []
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"4be11b7e-21cb-4c9e-ba8f-5e173d13d7b7\",\n  \"invoice_id\": \"\",\n  \"reference_id\": \"5114aea7-5c7f-40ab-8a62-84f239e4b2b1\",\n  \"recurring_transaction_id\": \"\",\n  \"auth_id\": null,\n  \"type\": \"refund\",\n  \"source\": \"terminalservice.dejavoo\",\n  \"is_merchant_present\": true,\n  \"merchant_id\": \"27fad5e4-0210-4c91-9596-417b0ea0dbb1\",\n  \"user_id\": \"dbc85118-3309-4129-b966-0108c0fb18a0\",\n  \"customer_id\": \"2a503ed1-99ea-4b35-a30a-605253f7c05a\",\n  \"payment_method_id\": \"bf1aee65-dad9-4b74-8800-a75e435e3e7b\",\n  \"is_manual\": true,\n  \"success\": true,\n  \"message\": \"\",\n  \"meta\": {\n    \"lineItems\": [\n      {\n        \"item\": \"\",\n        \"details\": \"\",\n        \"quantity\": 1,\n        \"price\": \"0.01\"\n      }\n    ],\n    \"subtotal\": 0.01,\n    \"tax\": 0,\n    \"taxRate\": 10,\n    \"isBulkInvoice\": false,\n    \"taxOverride\": false,\n    \"update_inventory\": true,\n    \"reference\": 2477,\n    \"RegisterId\": 3594291,\n    \"ResultCode\": 0,\n    \"RespMSG\": \"Approved Offline\",\n    \"Message\": \"Approved\",\n    \"AuthCode\": 145599,\n    \"PNRef\": 810618212223,\n    \"PaymentType\": \"Credit\",\n    \"TransType\": \"Return\",\n    \"SN\": 118816524647,\n    \"ExtData\": {\n      \"Amount\": \"0.01\",\n      \"InvNum\": \"10\",\n      \"CardType\": \"VISA\",\n      \"BatchNum\": \"56\",\n      \"Tip\": \"0.00\",\n      \"CashBack\": \"0.00\",\n      \"Fee\": \"0.00\",\n      \"AcntLast4\": \"0281\",\n      \"Name\": \"YOU/A GIFT FOR\",\n      \"SVC\": \"0.00\",\n      \"TotalAmt\": \"0.01\",\n      \"DISC\": \"0.00\",\n      \"Donation\": \"0.00\",\n      \"SHFee\": \"0.00\",\n      \"RwdPoints\": \"0\",\n      \"RwdBalance\": \"0\",\n      \"RwdIssued\": \"\",\n      \"EBTFSLedgerBalance\": \"\",\n      \"EBTFSAvailBalance\": \"\",\n      \"EBTFSBeginBalance\": \"\",\n      \"EBTCashLedgerBalance\": \"\",\n      \"EBTCashAvailBalance\": \"\",\n      \"EBTCashBeginBalance\": \"\",\n      \"RewardCode\": \"\",\n      \"AcqRefData\": \"\",\n      \"ProcessData\": \"\",\n      \"RefNo\": \"\",\n      \"RewardQR\": \"\",\n      \"Language\": \"English\",\n      \"EntryType\": \"Swipe\",\n      \"table_num\": \"0\",\n      \"clerk_id\": \"\",\n      \"ticket_num\": \"\",\n      \"ControlNum\": \"\",\n      \"TaxCity\": \"0.00\",\n      \"TaxState\": \"0.00\",\n      \"Cust1\": \"\",\n      \"Cust1Value\": \"\",\n      \"Cust2\": \"\",\n      \"Cust2Value\": \"\",\n      \"Cust3\": \"\",\n      \"Cust3Value\": \"\",\n      \"AcntFirst4\": \"4941\"\n    },\n    \"CVMResult\": 2,\n    \"cancelled\": false,\n    \"gatewayStatus\": 200,\n    \"gatewayStatusText\": \"OK\",\n    \"printReceipt\": \"Both\",\n    \"paymentType\": \"Credit\",\n    \"type\": \"refund\",\n    \"registerId\": \"4f1b-f10a\",\n    \"registerStatusPort\": \"3594291\",\n    \"registerNickname\": \"Tech Area Z8 (3594291)\",\n    \"registerSerial\": \"124124\",\n    \"registerType\": \"dejavoo\"\n  },\n  \"total\": 0.01,\n  \"method\": \"card\",\n  \"pre_auth\": false,\n  \"is_captured\": 0,\n  \"last_four\": \"5114\",\n  \"interchange_code\": \"\",\n  \"interchange_fee\": null,\n  \"batch_id\": \"\",\n  \"batched_at\": \"2018-04-16 19:09:37\",\n  \"emv_response\": \"\",\n  \"avs_response\": \"\",\n  \"cvv_response\": \"\",\n  \"pos_entry\": \"\",\n  \"pos_salesperson\": \"\",\n  \"receipt_email_at\": null,\n  \"receipt_sms_at\": null,\n  \"created_at\": \"2018-04-16 19:09:37\",\n  \"updated_at\": \"2018-04-16 19:09:37\",\n  \"total_refunded\": 0,\n  \"is_refundable\": false,\n  \"is_voided\": false,\n  \"is_voidable\": false,\n  \"schedule_id\": null,\n  \"child_captures\": [],\n  \"parent_auth\": null,\n  \"customer\": {\n    \"id\": \"2a503ed1-99ea-4b35-a30a-605253f7c05a\",\n    \"firstname\": \"A\",\n    \"lastname\": \"Customer\",\n    \"company\": \"\",\n    \"email\": \"\",\n    \"cc_emails\": [],\n    \"cc_sms\": null,\n    \"phone\": \"\",\n    \"address_1\": \"\",\n    \"address_2\": \"\",\n    \"address_city\": \"\",\n    \"address_state\": \"\",\n    \"address_zip\": \"\",\n    \"address_country\": \"USA\",\n    \"notes\": \"\",\n    \"reference\": \"\",\n    \"options\": \"\",\n    \"created_at\": \"2018-02-23 22:32:19\",\n    \"updated_at\": \"2018-02-23 22:32:19\",\n    \"deleted_at\": null,\n    \"allow_invoice_credit_card_payments\": true,\n    \"gravatar\": false\n  },\n  \"child_transactions\": [],\n  \"files\": [],\n  \"payment_method\": {\n    \"id\": \"bf1aee65-dad9-4b74-8800-a75e435e3e7b\",\n    \"customer_id\": \"2a503ed1-99ea-4b35-a30a-605253f7c05a\",\n    \"merchant_id\": \"27fad5e4-0210-4c91-9596-417b0ea0dbb1\",\n    \"user_id\": \"dbc85118-3309-4129-b966-0108c0fb18a0\",\n    \"nickname\": \"VISA: YOU/A GIFT FOR (ending in: 0281)\",\n    \"has_cvv\": 0,\n    \"is_default\": 1,\n    \"method\": \"card\",\n    \"person_name\": \"YOU/A GIFT FOR\",\n    \"card_type\": \"visa\",\n    \"card_last_four\": \"0281\",\n    \"card_exp\": \"992099\",\n    \"bank_name\": null,\n    \"bank_type\": null,\n    \"bank_holder_type\": null,\n    \"address_1\": null,\n    \"address_2\": null,\n    \"address_city\": null,\n    \"address_state\": null,\n    \"address_zip\": \"\",\n    \"address_country\": \"\",\n    \"purged_at\": null,\n    \"deleted_at\": null,\n    \"created_at\": \"2018-04-16 19:09:36\",\n    \"updated_at\": \"2018-04-16 19:09:36\",\n    \"card_exp_datetime\": \"2107-03-31 23:59:59\",\n    \"customer\": {\n      \"id\": \"2a503ed1-99ea-4b35-a30a-605253f7c05a\",\n      \"firstname\": \"A\",\n      \"lastname\": \"Customer\",\n      \"company\": \"\",\n      \"email\": \"\",\n      \"cc_emails\": [],\n      \"cc_sms\": null,\n      \"phone\": \"\",\n      \"address_1\": \"\",\n      \"address_2\": \"\",\n      \"address_city\": \"\",\n      \"address_state\": \"\",\n      \"address_zip\": \"\",\n      \"address_country\": \"USA\",\n      \"notes\": \"\",\n      \"reference\": \"\",\n      \"options\": \"\",\n      \"created_at\": \"2018-02-23 22:32:19\",\n      \"updated_at\": \"2018-02-23 22:32:19\",\n      \"deleted_at\": null,\n      \"allow_invoice_credit_card_payments\": true,\n      \"gravatar\": false\n    }\n  },\n  \"user\": {\n    \"id\": \"dbc85118-3309-4129-b966-0108c0fb18a0\",\n    \"system_admin\": true,\n    \"name\": \"David Johnson\",\n    \"email\": \"demo1@abc.com\",\n    \"email_verification_sent_at\": \"2017-05-16 17:35:16\",\n    \"email_verified_at\": \"2017-05-16 17:35:33\",\n    \"is_api_key\": false,\n    \"acknowledgments\": {\n      \"tutorial\": true,\n      \"godviewWelcome\": true\n    },\n    \"created_at\": \"2016-05-12 15:57:19\",\n    \"updated_at\": \"2018-04-16 18:08:55\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/1cd5aef1d36d07e495abb73061f857d4\",\n    \"team_admin\": null,\n    \"team_enabled\": null,\n    \"team_role\": null,\n    \"merchant_options\": [],\n    \"is_portal\": false\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 4be11b7e-21cb-4c9e-ba8f-5e173d13d7b7
+                  invoice_id:
+                    type: string
+                    example: ''
+                  reference_id:
+                    type: string
+                    example: 5114aea7-5c7f-40ab-8a62-84f239e4b2b1
+                  recurring_transaction_id:
+                    type: string
+                    example: ''
+                  auth_id: {}
+                  type:
+                    type: string
+                    example: refund
+                  source:
+                    type: string
+                    example: terminalservice.dejavoo
+                  is_merchant_present:
+                    type: boolean
+                    example: true
+                    default: true
+                  merchant_id:
+                    type: string
+                    example: 27fad5e4-0210-4c91-9596-417b0ea0dbb1
+                  user_id:
+                    type: string
+                    example: dbc85118-3309-4129-b966-0108c0fb18a0
+                  customer_id:
+                    type: string
+                    example: 2a503ed1-99ea-4b35-a30a-605253f7c05a
+                  payment_method_id:
+                    type: string
+                    example: bf1aee65-dad9-4b74-8800-a75e435e3e7b
+                  is_manual:
+                    type: boolean
+                    example: true
+                    default: true
+                  success:
+                    type: boolean
+                    example: true
+                    default: true
+                  message:
+                    type: string
+                    example: ''
+                  meta:
+                    type: object
+                    properties:
+                      lineItems:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            item:
+                              type: string
+                              example: ''
+                            details:
+                              type: string
+                              example: ''
+                            quantity:
+                              type: integer
+                              example: 1
+                              default: 0
+                            price:
+                              type: string
+                              example: '0.01'
+                      subtotal:
+                        type: number
+                        example: 0.01
+                        default: 0
+                      tax:
+                        type: integer
+                        example: 0
+                        default: 0
+                      taxRate:
+                        type: integer
+                        example: 10
+                        default: 0
+                      isBulkInvoice:
+                        type: boolean
+                        example: false
+                        default: true
+                      taxOverride:
+                        type: boolean
+                        example: false
+                        default: true
+                      update_inventory:
+                        type: boolean
+                        example: true
+                        default: true
+                      reference:
+                        type: integer
+                        example: 2477
+                        default: 0
+                      RegisterId:
+                        type: integer
+                        example: 3594291
+                        default: 0
+                      ResultCode:
+                        type: integer
+                        example: 0
+                        default: 0
+                      RespMSG:
+                        type: string
+                        example: Approved Offline
+                      Message:
+                        type: string
+                        example: Approved
+                      AuthCode:
+                        type: integer
+                        example: 145599
+                        default: 0
+                      PNRef:
+                        type: integer
+                        example: 810618212223
+                        default: 0
+                      PaymentType:
+                        type: string
+                        example: Credit
+                      TransType:
+                        type: string
+                        example: Return
+                      SN:
+                        type: integer
+                        example: 118816524647
+                        default: 0
+                      ExtData:
+                        type: object
+                        properties:
+                          Amount:
+                            type: string
+                            example: '0.01'
+                          InvNum:
+                            type: string
+                            example: '10'
+                          CardType:
+                            type: string
+                            example: VISA
+                          BatchNum:
+                            type: string
+                            example: '56'
+                          Tip:
+                            type: string
+                            example: '0.00'
+                          CashBack:
+                            type: string
+                            example: '0.00'
+                          Fee:
+                            type: string
+                            example: '0.00'
+                          AcntLast4:
+                            type: string
+                            example: 0281
+                          Name:
+                            type: string
+                            example: YOU/A GIFT FOR
+                          SVC:
+                            type: string
+                            example: '0.00'
+                          TotalAmt:
+                            type: string
+                            example: '0.01'
+                          DISC:
+                            type: string
+                            example: '0.00'
+                          Donation:
+                            type: string
+                            example: '0.00'
+                          SHFee:
+                            type: string
+                            example: '0.00'
+                          RwdPoints:
+                            type: string
+                            example: '0'
+                          RwdBalance:
+                            type: string
+                            example: '0'
+                          RwdIssued:
+                            type: string
+                            example: ''
+                          EBTFSLedgerBalance:
+                            type: string
+                            example: ''
+                          EBTFSAvailBalance:
+                            type: string
+                            example: ''
+                          EBTFSBeginBalance:
+                            type: string
+                            example: ''
+                          EBTCashLedgerBalance:
+                            type: string
+                            example: ''
+                          EBTCashAvailBalance:
+                            type: string
+                            example: ''
+                          EBTCashBeginBalance:
+                            type: string
+                            example: ''
+                          RewardCode:
+                            type: string
+                            example: ''
+                          AcqRefData:
+                            type: string
+                            example: ''
+                          ProcessData:
+                            type: string
+                            example: ''
+                          RefNo:
+                            type: string
+                            example: ''
+                          RewardQR:
+                            type: string
+                            example: ''
+                          Language:
+                            type: string
+                            example: English
+                          EntryType:
+                            type: string
+                            example: Swipe
+                          table_num:
+                            type: string
+                            example: '0'
+                          clerk_id:
+                            type: string
+                            example: ''
+                          ticket_num:
+                            type: string
+                            example: ''
+                          ControlNum:
+                            type: string
+                            example: ''
+                          TaxCity:
+                            type: string
+                            example: '0.00'
+                          TaxState:
+                            type: string
+                            example: '0.00'
+                          Cust1:
+                            type: string
+                            example: ''
+                          Cust1Value:
+                            type: string
+                            example: ''
+                          Cust2:
+                            type: string
+                            example: ''
+                          Cust2Value:
+                            type: string
+                            example: ''
+                          Cust3:
+                            type: string
+                            example: ''
+                          Cust3Value:
+                            type: string
+                            example: ''
+                          AcntFirst4:
+                            type: string
+                            example: '4941'
+                      CVMResult:
+                        type: integer
+                        example: 2
+                        default: 0
+                      cancelled:
+                        type: boolean
+                        example: false
+                        default: true
+                      gatewayStatus:
+                        type: integer
+                        example: 200
+                        default: 0
+                      gatewayStatusText:
+                        type: string
+                        example: OK
+                      printReceipt:
+                        type: string
+                        example: Both
+                      paymentType:
+                        type: string
+                        example: Credit
+                      type:
+                        type: string
+                        example: refund
+                      registerId:
+                        type: string
+                        example: 4f1b-f10a
+                      registerStatusPort:
+                        type: string
+                        example: '3594291'
+                      registerNickname:
+                        type: string
+                        example: Tech Area Z8 (3594291)
+                      registerSerial:
+                        type: string
+                        example: '124124'
+                      registerType:
+                        type: string
+                        example: dejavoo
+                  total:
+                    type: number
+                    example: 0.01
+                    default: 0
+                  method:
+                    type: string
+                    example: card
+                  pre_auth:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_captured:
+                    type: integer
+                    example: 0
+                    default: 0
+                  last_four:
+                    type: string
+                    example: '5114'
+                  interchange_code:
+                    type: string
+                    example: ''
+                  interchange_fee: {}
+                  batch_id:
+                    type: string
+                    example: ''
+                  batched_at:
+                    type: string
+                    example: '2018-04-16 19:09:37'
+                  emv_response:
+                    type: string
+                    example: ''
+                  avs_response:
+                    type: string
+                    example: ''
+                  cvv_response:
+                    type: string
+                    example: ''
+                  pos_entry:
+                    type: string
+                    example: ''
+                  pos_salesperson:
+                    type: string
+                    example: ''
+                  receipt_email_at: {}
+                  receipt_sms_at: {}
+                  created_at:
+                    type: string
+                    example: '2018-04-16 19:09:37'
+                  updated_at:
+                    type: string
+                    example: '2018-04-16 19:09:37'
+                  total_refunded:
+                    type: integer
+                    example: 0
+                    default: 0
+                  is_refundable:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_voided:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_voidable:
+                    type: boolean
+                    example: false
+                    default: true
+                  schedule_id: {}
+                  child_captures:
+                    type: array
+                  parent_auth: {}
+                  customer:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 2a503ed1-99ea-4b35-a30a-605253f7c05a
+                      firstname:
+                        type: string
+                        example: A
+                      lastname:
+                        type: string
+                        example: Customer
+                      company:
+                        type: string
+                        example: ''
+                      email:
+                        type: string
+                        example: ''
+                      cc_emails:
+                        type: array
+                      cc_sms: {}
+                      phone:
+                        type: string
+                        example: ''
+                      address_1:
+                        type: string
+                        example: ''
+                      address_2:
+                        type: string
+                        example: ''
+                      address_city:
+                        type: string
+                        example: ''
+                      address_state:
+                        type: string
+                        example: ''
+                      address_zip:
+                        type: string
+                        example: ''
+                      address_country:
+                        type: string
+                        example: USA
+                      notes:
+                        type: string
+                        example: ''
+                      reference:
+                        type: string
+                        example: ''
+                      options:
+                        type: string
+                        example: ''
+                      created_at:
+                        type: string
+                        example: '2018-02-23 22:32:19'
+                      updated_at:
+                        type: string
+                        example: '2018-02-23 22:32:19'
+                      deleted_at: {}
+                      allow_invoice_credit_card_payments:
+                        type: boolean
+                        example: true
+                        default: true
+                      gravatar:
+                        type: boolean
+                        example: false
+                        default: true
+                  child_transactions:
+                    type: array
+                  files:
+                    type: array
+                  payment_method:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: bf1aee65-dad9-4b74-8800-a75e435e3e7b
+                      customer_id:
+                        type: string
+                        example: 2a503ed1-99ea-4b35-a30a-605253f7c05a
+                      merchant_id:
+                        type: string
+                        example: 27fad5e4-0210-4c91-9596-417b0ea0dbb1
+                      user_id:
+                        type: string
+                        example: dbc85118-3309-4129-b966-0108c0fb18a0
+                      nickname:
+                        type: string
+                        example: 'VISA: YOU/A GIFT FOR (ending in: 0281)'
+                      has_cvv:
+                        type: integer
+                        example: 0
+                        default: 0
+                      is_default:
+                        type: integer
+                        example: 1
+                        default: 0
+                      method:
+                        type: string
+                        example: card
+                      person_name:
+                        type: string
+                        example: YOU/A GIFT FOR
+                      card_type:
+                        type: string
+                        example: visa
+                      card_last_four:
+                        type: string
+                        example: 0281
+                      card_exp:
+                        type: string
+                        example: '992099'
+                      bank_name: {}
+                      bank_type: {}
+                      bank_holder_type: {}
+                      address_1: {}
+                      address_2: {}
+                      address_city: {}
+                      address_state: {}
+                      address_zip:
+                        type: string
+                        example: ''
+                      address_country:
+                        type: string
+                        example: ''
+                      purged_at: {}
+                      deleted_at: {}
+                      created_at:
+                        type: string
+                        example: '2018-04-16 19:09:36'
+                      updated_at:
+                        type: string
+                        example: '2018-04-16 19:09:36'
+                      card_exp_datetime:
+                        type: string
+                        example: '2107-03-31 23:59:59'
+                      customer:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            example: 2a503ed1-99ea-4b35-a30a-605253f7c05a
+                          firstname:
+                            type: string
+                            example: A
+                          lastname:
+                            type: string
+                            example: Customer
+                          company:
+                            type: string
+                            example: ''
+                          email:
+                            type: string
+                            example: ''
+                          cc_emails:
+                            type: array
+                          cc_sms: {}
+                          phone:
+                            type: string
+                            example: ''
+                          address_1:
+                            type: string
+                            example: ''
+                          address_2:
+                            type: string
+                            example: ''
+                          address_city:
+                            type: string
+                            example: ''
+                          address_state:
+                            type: string
+                            example: ''
+                          address_zip:
+                            type: string
+                            example: ''
+                          address_country:
+                            type: string
+                            example: USA
+                          notes:
+                            type: string
+                            example: ''
+                          reference:
+                            type: string
+                            example: ''
+                          options:
+                            type: string
+                            example: ''
+                          created_at:
+                            type: string
+                            example: '2018-02-23 22:32:19'
+                          updated_at:
+                            type: string
+                            example: '2018-02-23 22:32:19'
+                          deleted_at: {}
+                          allow_invoice_credit_card_payments:
+                            type: boolean
+                            example: true
+                            default: true
+                          gravatar:
+                            type: boolean
+                            example: false
+                            default: true
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: dbc85118-3309-4129-b966-0108c0fb18a0
+                      system_admin:
+                        type: boolean
+                        example: true
+                        default: true
+                      name:
+                        type: string
+                        example: David Johnson
+                      email:
+                        type: string
+                        example: demo1@abc.com
+                      email_verification_sent_at:
+                        type: string
+                        example: '2017-05-16 17:35:16'
+                      email_verified_at:
+                        type: string
+                        example: '2017-05-16 17:35:33'
+                      is_api_key:
+                        type: boolean
+                        example: false
+                        default: true
+                      acknowledgments:
+                        type: object
+                        properties:
+                          tutorial:
+                            type: boolean
+                            example: true
+                            default: true
+                          godviewWelcome:
+                            type: boolean
+                            example: true
+                            default: true
+                      created_at:
+                        type: string
+                        example: '2016-05-12 15:57:19'
+                      updated_at:
+                        type: string
+                        example: '2018-04-16 18:08:55'
+                      deleted_at: {}
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/1cd5aef1d36d07e495abb73061f857d4
+                      team_admin: {}
+                      team_enabled: {}
+                      team_role: {}
+                      merchant_options:
+                        type: array
+                      is_portal:
+                        type: boolean
+                        example: false
+                        default: true
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"success\": false,\n  \"message\": \"User Cancelled\",\n  \"gatewayStatus\": 200,\n  \"gatewayStatusText\": \"OK\",\n  \"cancelled\": true,\n  \"status\": 400\n}"
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                    default: true
+                  message:
+                    type: string
+                    example: User Cancelled
+                  gatewayStatus:
+                    type: integer
+                    example: 200
+                    default: 0
+                  gatewayStatusText:
+                    type: string
+                    example: OK
+                  cancelled:
+                    type: boolean
+                    example: true
+                    default: true
+                  status:
+                    type: integer
+                    example: 400
+                    default: 0
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"validation\": \"register not found\",\n  \"status\": 422,\n  \"message\": \"Validation Error\"\n}"
+              schema:
+                type: object
+                properties:
+                  validation:
+                    type: string
+                    example: register not found
+                  status:
+                    type: integer
+                    example: 422
+                    default: 0
+                  message:
+                    type: string
+                    example: Validation Error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                total:
+                  type: number
+                  description: The amount a customer is credited.
+                  format: float
+                printReceipt:
+                  type: string
+                  enum:
+                  - Both
+                  - Merchant
+                  - Customer
+                  - 'No'
+                  default: Both
+                paymentType:
+                  type: string
+                  enum:
+                  - Credit
+                  - Debit
+                  - Check
+                  - Gift
+                  - Loyalty
+                customerId:
+                  type: string
+                  description: The id of the customer attributed to this credit.
+                invoiceID:
+                  type: string
+                  description: The id of the invoice attributed to this charge.
+                transactionId:
+                  type: string
+                register:
+                  type: string
+                  description: The id of the register performing this operation. This should be the 'id' value returned by GET /terminal/register. The card must be present for a refund operation.
+                meta:
+                  type: array
+                  items:
+                    type: string
+                    format: json
+              required:
+              - total
+              - register
+              - transactionId
+      tags:
+      - Terminal
+  /terminal/tokenize:
+    post:
+      summary: Tokenize
+      description: Requests the terminal to securely read a card and create a stored payment method (token) attached to the specified customer for future card-not-present use.
+      security:
+      - ApiKeyAuth: []
+      operationId: tokenize
+      parameters: []
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n    \"payment_method_id\": <Stax Payment Method ID>,\n    \"customer_id\": <Stax Customer ID>,\n    \"success\": true,\n    \"type\": \"tokenize\",\n    \"cancelled\": false,\n    \"gatewayStatus\": 200,\n    \"gatewayStatusText\": \"OK\"\n}"
+      deprecated: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customerId:
+                  type: string
+                  required: true
+                  description: The id of the customer to attach the newly created tokenized payment method to.
+                register:
+                  type: string
+                  required: true
+                  description: The id of the register performing this operation.
+                tokenize:
+                  type: boolean
+                  required: true
+                  description: This value must be true.
+              required:
+              - register
+              - tokenize
+              - customerId
+      tags:
+      - Terminal
+  /terminal/void-or-refund:
+    post:
+      summary: Void/Refund
+      description: Attempts to void a card-present transaction if still in its open batch window; otherwise performs a refund.
+      operationId: void-refund
+      parameters: []
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"4be11b7e-21cb-4c9e-ba8f-5e173d13d7b7\",\n  \"invoice_id\": \"\",\n  \"reference_id\": \"5114aea7-5c7f-40ab-8a62-84f239e4b2b1\",\n  \"recurring_transaction_id\": \"\",\n  \"auth_id\": null,\n  \"type\": \"refund\",\n  \"source\": \"terminalservice.dejavoo\",\n  \"is_merchant_present\": true,\n  \"merchant_id\": \"27fad5e4-0210-4c91-9596-417b0ea0dbb1\",\n  \"user_id\": \"dbc85118-3309-4129-b966-0108c0fb18a0\",\n  \"customer_id\": \"2a503ed1-99ea-4b35-a30a-605253f7c05a\",\n  \"payment_method_id\": \"bf1aee65-dad9-4b74-8800-a75e435e3e7b\",\n  \"is_manual\": true,\n  \"success\": true,\n  \"message\": \"\",\n  \"meta\": {\n    \"lineItems\": [\n      {\n        \"item\": \"\",\n        \"details\": \"\",\n        \"quantity\": 1,\n        \"price\": \"0.01\"\n      }\n    ],\n    \"subtotal\": 0.01,\n    \"tax\": 0,\n    \"taxRate\": 10,\n    \"isBulkInvoice\": false,\n    \"taxOverride\": false,\n    \"update_inventory\": true,\n    \"reference\": 2477,\n    \"RegisterId\": 3594291,\n    \"ResultCode\": 0,\n    \"RespMSG\": \"Approved Offline\",\n    \"Message\": \"Approved\",\n    \"AuthCode\": 145599,\n    \"PNRef\": 810618212223,\n    \"PaymentType\": \"Credit\",\n    \"TransType\": \"Return\",\n    \"SN\": 118816524647,\n    \"ExtData\": {\n      \"Amount\": \"0.01\",\n      \"InvNum\": \"10\",\n      \"CardType\": \"VISA\",\n      \"BatchNum\": \"56\",\n      \"Tip\": \"0.00\",\n      \"CashBack\": \"0.00\",\n      \"Fee\": \"0.00\",\n      \"AcntLast4\": \"0281\",\n      \"Name\": \"YOU/A GIFT FOR\",\n      \"SVC\": \"0.00\",\n      \"TotalAmt\": \"0.01\",\n      \"DISC\": \"0.00\",\n      \"Donation\": \"0.00\",\n      \"SHFee\": \"0.00\",\n      \"RwdPoints\": \"0\",\n      \"RwdBalance\": \"0\",\n      \"RwdIssued\": \"\",\n      \"EBTFSLedgerBalance\": \"\",\n      \"EBTFSAvailBalance\": \"\",\n      \"EBTFSBeginBalance\": \"\",\n      \"EBTCashLedgerBalance\": \"\",\n      \"EBTCashAvailBalance\": \"\",\n      \"EBTCashBeginBalance\": \"\",\n      \"RewardCode\": \"\",\n      \"AcqRefData\": \"\",\n      \"ProcessData\": \"\",\n      \"RefNo\": \"\",\n      \"RewardQR\": \"\",\n      \"Language\": \"English\",\n      \"EntryType\": \"Swipe\",\n      \"table_num\": \"0\",\n      \"clerk_id\": \"\",\n      \"ticket_num\": \"\",\n      \"ControlNum\": \"\",\n      \"TaxCity\": \"0.00\",\n      \"TaxState\": \"0.00\",\n      \"Cust1\": \"\",\n      \"Cust1Value\": \"\",\n      \"Cust2\": \"\",\n      \"Cust2Value\": \"\",\n      \"Cust3\": \"\",\n      \"Cust3Value\": \"\",\n      \"AcntFirst4\": \"4941\"\n    },\n    \"CVMResult\": 2,\n    \"cancelled\": false,\n    \"gatewayStatus\": 200,\n    \"gatewayStatusText\": \"OK\",\n    \"printReceipt\": \"Both\",\n    \"paymentType\": \"Credit\",\n    \"type\": \"refund\",\n    \"registerId\": \"4f1b-f10a\",\n    \"registerStatusPort\": \"3594291\",\n    \"registerNickname\": \"Tech Area Z8 (3594291)\",\n    \"registerSerial\": \"124124\",\n    \"registerType\": \"dejavoo\"\n  },\n  \"total\": 0.01,\n  \"method\": \"card\",\n  \"pre_auth\": false,\n  \"is_captured\": 0,\n  \"last_four\": \"5114\",\n  \"interchange_code\": \"\",\n  \"interchange_fee\": null,\n  \"batch_id\": \"\",\n  \"batched_at\": \"2018-04-16 19:09:37\",\n  \"emv_response\": \"\",\n  \"avs_response\": \"\",\n  \"cvv_response\": \"\",\n  \"pos_entry\": \"\",\n  \"pos_salesperson\": \"\",\n  \"receipt_email_at\": null,\n  \"receipt_sms_at\": null,\n  \"created_at\": \"2018-04-16 19:09:37\",\n  \"updated_at\": \"2018-04-16 19:09:37\",\n  \"total_refunded\": 0,\n  \"is_refundable\": false,\n  \"is_voided\": false,\n  \"is_voidable\": false,\n  \"schedule_id\": null,\n  \"child_captures\": [],\n  \"parent_auth\": null,\n  \"customer\": {\n    \"id\": \"2a503ed1-99ea-4b35-a30a-605253f7c05a\",\n    \"firstname\": \"A\",\n    \"lastname\": \"Customer\",\n    \"company\": \"\",\n    \"email\": \"\",\n    \"cc_emails\": [],\n    \"cc_sms\": null,\n    \"phone\": \"\",\n    \"address_1\": \"\",\n    \"address_2\": \"\",\n    \"address_city\": \"\",\n    \"address_state\": \"\",\n    \"address_zip\": \"\",\n    \"address_country\": \"USA\",\n    \"notes\": \"\",\n    \"reference\": \"\",\n    \"options\": \"\",\n    \"created_at\": \"2018-02-23 22:32:19\",\n    \"updated_at\": \"2018-02-23 22:32:19\",\n    \"deleted_at\": null,\n    \"allow_invoice_credit_card_payments\": true,\n    \"gravatar\": false\n  },\n  \"child_transactions\": [],\n  \"files\": [],\n  \"payment_method\": {\n    \"id\": \"bf1aee65-dad9-4b74-8800-a75e435e3e7b\",\n    \"customer_id\": \"2a503ed1-99ea-4b35-a30a-605253f7c05a\",\n    \"merchant_id\": \"27fad5e4-0210-4c91-9596-417b0ea0dbb1\",\n    \"user_id\": \"dbc85118-3309-4129-b966-0108c0fb18a0\",\n    \"nickname\": \"VISA: YOU/A GIFT FOR (ending in: 0281)\",\n    \"has_cvv\": 0,\n    \"is_default\": 1,\n    \"method\": \"card\",\n    \"person_name\": \"YOU/A GIFT FOR\",\n    \"card_type\": \"visa\",\n    \"card_last_four\": \"0281\",\n    \"card_exp\": \"992099\",\n    \"bank_name\": null,\n    \"bank_type\": null,\n    \"bank_holder_type\": null,\n    \"address_1\": null,\n    \"address_2\": null,\n    \"address_city\": null,\n    \"address_state\": null,\n    \"address_zip\": \"\",\n    \"address_country\": \"\",\n    \"purged_at\": null,\n    \"deleted_at\": null,\n    \"created_at\": \"2018-04-16 19:09:36\",\n    \"updated_at\": \"2018-04-16 19:09:36\",\n    \"card_exp_datetime\": \"2107-03-31 23:59:59\",\n    \"customer\": {\n      \"id\": \"2a503ed1-99ea-4b35-a30a-605253f7c05a\",\n      \"firstname\": \"A\",\n      \"lastname\": \"Customer\",\n      \"company\": \"\",\n      \"email\": \"\",\n      \"cc_emails\": [],\n      \"cc_sms\": null,\n      \"phone\": \"\",\n      \"address_1\": \"\",\n      \"address_2\": \"\",\n      \"address_city\": \"\",\n      \"address_state\": \"\",\n      \"address_zip\": \"\",\n      \"address_country\": \"USA\",\n      \"notes\": \"\",\n      \"reference\": \"\",\n      \"options\": \"\",\n      \"created_at\": \"2018-02-23 22:32:19\",\n      \"updated_at\": \"2018-02-23 22:32:19\",\n      \"deleted_at\": null,\n      \"allow_invoice_credit_card_payments\": true,\n      \"gravatar\": false\n    }\n  },\n  \"user\": {\n    \"id\": \"dbc85118-3309-4129-b966-0108c0fb18a0\",\n    \"system_admin\": true,\n    \"name\": \"David Johnson\",\n    \"email\": \"demo1@abc.com\",\n    \"email_verification_sent_at\": \"2017-05-16 17:35:16\",\n    \"email_verified_at\": \"2017-05-16 17:35:33\",\n    \"is_api_key\": false,\n    \"acknowledgments\": {\n      \"tutorial\": true,\n      \"godviewWelcome\": true\n    },\n    \"created_at\": \"2016-05-12 15:57:19\",\n    \"updated_at\": \"2018-04-16 18:08:55\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/1cd5aef1d36d07e495abb73061f857d4\",\n    \"team_admin\": null,\n    \"team_enabled\": null,\n    \"team_role\": null,\n    \"merchant_options\": [],\n    \"is_portal\": false\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 4be11b7e-21cb-4c9e-ba8f-5e173d13d7b7
+                  invoice_id:
+                    type: string
+                    example: ''
+                  reference_id:
+                    type: string
+                    example: 5114aea7-5c7f-40ab-8a62-84f239e4b2b1
+                  recurring_transaction_id:
+                    type: string
+                    example: ''
+                  auth_id: {}
+                  type:
+                    type: string
+                    example: refund
+                  source:
+                    type: string
+                    example: terminalservice.dejavoo
+                  is_merchant_present:
+                    type: boolean
+                    example: true
+                    default: true
+                  merchant_id:
+                    type: string
+                    example: 27fad5e4-0210-4c91-9596-417b0ea0dbb1
+                  user_id:
+                    type: string
+                    example: dbc85118-3309-4129-b966-0108c0fb18a0
+                  customer_id:
+                    type: string
+                    example: 2a503ed1-99ea-4b35-a30a-605253f7c05a
+                  payment_method_id:
+                    type: string
+                    example: bf1aee65-dad9-4b74-8800-a75e435e3e7b
+                  is_manual:
+                    type: boolean
+                    example: true
+                    default: true
+                  success:
+                    type: boolean
+                    example: true
+                    default: true
+                  message:
+                    type: string
+                    example: ''
+                  meta:
+                    type: object
+                    properties:
+                      lineItems:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            item:
+                              type: string
+                              example: ''
+                            details:
+                              type: string
+                              example: ''
+                            quantity:
+                              type: integer
+                              example: 1
+                              default: 0
+                            price:
+                              type: string
+                              example: '0.01'
+                      subtotal:
+                        type: number
+                        example: 0.01
+                        default: 0
+                      tax:
+                        type: integer
+                        example: 0
+                        default: 0
+                      taxRate:
+                        type: integer
+                        example: 10
+                        default: 0
+                      isBulkInvoice:
+                        type: boolean
+                        example: false
+                        default: true
+                      taxOverride:
+                        type: boolean
+                        example: false
+                        default: true
+                      update_inventory:
+                        type: boolean
+                        example: true
+                        default: true
+                      reference:
+                        type: integer
+                        example: 2477
+                        default: 0
+                      RegisterId:
+                        type: integer
+                        example: 3594291
+                        default: 0
+                      ResultCode:
+                        type: integer
+                        example: 0
+                        default: 0
+                      RespMSG:
+                        type: string
+                        example: Approved Offline
+                      Message:
+                        type: string
+                        example: Approved
+                      AuthCode:
+                        type: integer
+                        example: 145599
+                        default: 0
+                      PNRef:
+                        type: integer
+                        example: 810618212223
+                        default: 0
+                      PaymentType:
+                        type: string
+                        example: Credit
+                      TransType:
+                        type: string
+                        example: Return
+                      SN:
+                        type: integer
+                        example: 118816524647
+                        default: 0
+                      ExtData:
+                        type: object
+                        properties:
+                          Amount:
+                            type: string
+                            example: '0.01'
+                          InvNum:
+                            type: string
+                            example: '10'
+                          CardType:
+                            type: string
+                            example: VISA
+                          BatchNum:
+                            type: string
+                            example: '56'
+                          Tip:
+                            type: string
+                            example: '0.00'
+                          CashBack:
+                            type: string
+                            example: '0.00'
+                          Fee:
+                            type: string
+                            example: '0.00'
+                          AcntLast4:
+                            type: string
+                            example: 0281
+                          Name:
+                            type: string
+                            example: YOU/A GIFT FOR
+                          SVC:
+                            type: string
+                            example: '0.00'
+                          TotalAmt:
+                            type: string
+                            example: '0.01'
+                          DISC:
+                            type: string
+                            example: '0.00'
+                          Donation:
+                            type: string
+                            example: '0.00'
+                          SHFee:
+                            type: string
+                            example: '0.00'
+                          RwdPoints:
+                            type: string
+                            example: '0'
+                          RwdBalance:
+                            type: string
+                            example: '0'
+                          RwdIssued:
+                            type: string
+                            example: ''
+                          EBTFSLedgerBalance:
+                            type: string
+                            example: ''
+                          EBTFSAvailBalance:
+                            type: string
+                            example: ''
+                          EBTFSBeginBalance:
+                            type: string
+                            example: ''
+                          EBTCashLedgerBalance:
+                            type: string
+                            example: ''
+                          EBTCashAvailBalance:
+                            type: string
+                            example: ''
+                          EBTCashBeginBalance:
+                            type: string
+                            example: ''
+                          RewardCode:
+                            type: string
+                            example: ''
+                          AcqRefData:
+                            type: string
+                            example: ''
+                          ProcessData:
+                            type: string
+                            example: ''
+                          RefNo:
+                            type: string
+                            example: ''
+                          RewardQR:
+                            type: string
+                            example: ''
+                          Language:
+                            type: string
+                            example: English
+                          EntryType:
+                            type: string
+                            example: Swipe
+                          table_num:
+                            type: string
+                            example: '0'
+                          clerk_id:
+                            type: string
+                            example: ''
+                          ticket_num:
+                            type: string
+                            example: ''
+                          ControlNum:
+                            type: string
+                            example: ''
+                          TaxCity:
+                            type: string
+                            example: '0.00'
+                          TaxState:
+                            type: string
+                            example: '0.00'
+                          Cust1:
+                            type: string
+                            example: ''
+                          Cust1Value:
+                            type: string
+                            example: ''
+                          Cust2:
+                            type: string
+                            example: ''
+                          Cust2Value:
+                            type: string
+                            example: ''
+                          Cust3:
+                            type: string
+                            example: ''
+                          Cust3Value:
+                            type: string
+                            example: ''
+                          AcntFirst4:
+                            type: string
+                            example: '4941'
+                      CVMResult:
+                        type: integer
+                        example: 2
+                        default: 0
+                      cancelled:
+                        type: boolean
+                        example: false
+                        default: true
+                      gatewayStatus:
+                        type: integer
+                        example: 200
+                        default: 0
+                      gatewayStatusText:
+                        type: string
+                        example: OK
+                      printReceipt:
+                        type: string
+                        example: Both
+                      paymentType:
+                        type: string
+                        example: Credit
+                      type:
+                        type: string
+                        example: refund
+                      registerId:
+                        type: string
+                        example: 4f1b-f10a
+                      registerStatusPort:
+                        type: string
+                        example: '3594291'
+                      registerNickname:
+                        type: string
+                        example: Tech Area Z8 (3594291)
+                      registerSerial:
+                        type: string
+                        example: '124124'
+                      registerType:
+                        type: string
+                        example: dejavoo
+                  total:
+                    type: number
+                    example: 0.01
+                    default: 0
+                  method:
+                    type: string
+                    example: card
+                  pre_auth:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_captured:
+                    type: integer
+                    example: 0
+                    default: 0
+                  last_four:
+                    type: string
+                    example: '5114'
+                  interchange_code:
+                    type: string
+                    example: ''
+                  interchange_fee: {}
+                  batch_id:
+                    type: string
+                    example: ''
+                  batched_at:
+                    type: string
+                    example: '2018-04-16 19:09:37'
+                  emv_response:
+                    type: string
+                    example: ''
+                  avs_response:
+                    type: string
+                    example: ''
+                  cvv_response:
+                    type: string
+                    example: ''
+                  pos_entry:
+                    type: string
+                    example: ''
+                  pos_salesperson:
+                    type: string
+                    example: ''
+                  receipt_email_at: {}
+                  receipt_sms_at: {}
+                  created_at:
+                    type: string
+                    example: '2018-04-16 19:09:37'
+                  updated_at:
+                    type: string
+                    example: '2018-04-16 19:09:37'
+                  total_refunded:
+                    type: integer
+                    example: 0
+                    default: 0
+                  is_refundable:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_voided:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_voidable:
+                    type: boolean
+                    example: false
+                    default: true
+                  schedule_id: {}
+                  child_captures:
+                    type: array
+                  parent_auth: {}
+                  customer:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 2a503ed1-99ea-4b35-a30a-605253f7c05a
+                      firstname:
+                        type: string
+                        example: A
+                      lastname:
+                        type: string
+                        example: Customer
+                      company:
+                        type: string
+                        example: ''
+                      email:
+                        type: string
+                        example: ''
+                      cc_emails:
+                        type: array
+                      cc_sms: {}
+                      phone:
+                        type: string
+                        example: ''
+                      address_1:
+                        type: string
+                        example: ''
+                      address_2:
+                        type: string
+                        example: ''
+                      address_city:
+                        type: string
+                        example: ''
+                      address_state:
+                        type: string
+                        example: ''
+                      address_zip:
+                        type: string
+                        example: ''
+                      address_country:
+                        type: string
+                        example: USA
+                      notes:
+                        type: string
+                        example: ''
+                      reference:
+                        type: string
+                        example: ''
+                      options:
+                        type: string
+                        example: ''
+                      created_at:
+                        type: string
+                        example: '2018-02-23 22:32:19'
+                      updated_at:
+                        type: string
+                        example: '2018-02-23 22:32:19'
+                      deleted_at: {}
+                      allow_invoice_credit_card_payments:
+                        type: boolean
+                        example: true
+                        default: true
+                      gravatar:
+                        type: boolean
+                        example: false
+                        default: true
+                  child_transactions:
+                    type: array
+                  files:
+                    type: array
+                  payment_method:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: bf1aee65-dad9-4b74-8800-a75e435e3e7b
+                      customer_id:
+                        type: string
+                        example: 2a503ed1-99ea-4b35-a30a-605253f7c05a
+                      merchant_id:
+                        type: string
+                        example: 27fad5e4-0210-4c91-9596-417b0ea0dbb1
+                      user_id:
+                        type: string
+                        example: dbc85118-3309-4129-b966-0108c0fb18a0
+                      nickname:
+                        type: string
+                        example: 'VISA: YOU/A GIFT FOR (ending in: 0281)'
+                      has_cvv:
+                        type: integer
+                        example: 0
+                        default: 0
+                      is_default:
+                        type: integer
+                        example: 1
+                        default: 0
+                      method:
+                        type: string
+                        example: card
+                      person_name:
+                        type: string
+                        example: YOU/A GIFT FOR
+                      card_type:
+                        type: string
+                        example: visa
+                      card_last_four:
+                        type: string
+                        example: 0281
+                      card_exp:
+                        type: string
+                        example: '992099'
+                      bank_name: {}
+                      bank_type: {}
+                      bank_holder_type: {}
+                      address_1: {}
+                      address_2: {}
+                      address_city: {}
+                      address_state: {}
+                      address_zip:
+                        type: string
+                        example: ''
+                      address_country:
+                        type: string
+                        example: ''
+                      purged_at: {}
+                      deleted_at: {}
+                      created_at:
+                        type: string
+                        example: '2018-04-16 19:09:36'
+                      updated_at:
+                        type: string
+                        example: '2018-04-16 19:09:36'
+                      card_exp_datetime:
+                        type: string
+                        example: '2107-03-31 23:59:59'
+                      customer:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            example: 2a503ed1-99ea-4b35-a30a-605253f7c05a
+                          firstname:
+                            type: string
+                            example: A
+                          lastname:
+                            type: string
+                            example: Customer
+                          company:
+                            type: string
+                            example: ''
+                          email:
+                            type: string
+                            example: ''
+                          cc_emails:
+                            type: array
+                          cc_sms: {}
+                          phone:
+                            type: string
+                            example: ''
+                          address_1:
+                            type: string
+                            example: ''
+                          address_2:
+                            type: string
+                            example: ''
+                          address_city:
+                            type: string
+                            example: ''
+                          address_state:
+                            type: string
+                            example: ''
+                          address_zip:
+                            type: string
+                            example: ''
+                          address_country:
+                            type: string
+                            example: USA
+                          notes:
+                            type: string
+                            example: ''
+                          reference:
+                            type: string
+                            example: ''
+                          options:
+                            type: string
+                            example: ''
+                          created_at:
+                            type: string
+                            example: '2018-02-23 22:32:19'
+                          updated_at:
+                            type: string
+                            example: '2018-02-23 22:32:19'
+                          deleted_at: {}
+                          allow_invoice_credit_card_payments:
+                            type: boolean
+                            example: true
+                            default: true
+                          gravatar:
+                            type: boolean
+                            example: false
+                            default: true
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: dbc85118-3309-4129-b966-0108c0fb18a0
+                      system_admin:
+                        type: boolean
+                        example: true
+                        default: true
+                      name:
+                        type: string
+                        example: David Johnson
+                      email:
+                        type: string
+                        example: demo1@abc.com
+                      email_verification_sent_at:
+                        type: string
+                        example: '2017-05-16 17:35:16'
+                      email_verified_at:
+                        type: string
+                        example: '2017-05-16 17:35:33'
+                      is_api_key:
+                        type: boolean
+                        example: false
+                        default: true
+                      acknowledgments:
+                        type: object
+                        properties:
+                          tutorial:
+                            type: boolean
+                            example: true
+                            default: true
+                          godviewWelcome:
+                            type: boolean
+                            example: true
+                            default: true
+                      created_at:
+                        type: string
+                        example: '2016-05-12 15:57:19'
+                      updated_at:
+                        type: string
+                        example: '2018-04-16 18:08:55'
+                      deleted_at: {}
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/1cd5aef1d36d07e495abb73061f857d4
+                      team_admin: {}
+                      team_enabled: {}
+                      team_role: {}
+                      merchant_options:
+                        type: array
+                      is_portal:
+                        type: boolean
+                        example: false
+                        default: true
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"success\": false,\n  \"message\": \"User Cancelled\",\n  \"gatewayStatus\": 200,\n  \"gatewayStatusText\": \"OK\",\n  \"cancelled\": true,\n  \"status\": 400\n}"
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                    default: true
+                  message:
+                    type: string
+                    example: User Cancelled
+                  gatewayStatus:
+                    type: integer
+                    example: 200
+                    default: 0
+                  gatewayStatusText:
+                    type: string
+                    example: OK
+                  cancelled:
+                    type: boolean
+                    example: true
+                    default: true
+                  status:
+                    type: integer
+                    example: 400
+                    default: 0
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"validation\": \"register not found\",\n  \"status\": 422,\n  \"message\": \"Validation Error\"\n}"
+              schema:
+                type: object
+                properties:
+                  validation:
+                    type: string
+                    example: register not found
+                  status:
+                    type: integer
+                    example: 422
+                    default: 0
+                  message:
+                    type: string
+                    example: Validation Error
+      deprecated: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                total:
+                  type: number
+                  description: '(Min: 0.01) Limits the amount that can be voided or refunded. If total is not present, then the full transaction amount will be reversed.'
+                  format: float
+                meta:
+                  type: string
+                  format: json
+                  description: i.e. {"tax":2,"subtotal":10} can contain any json objectwill be blindly stored and returned during a GET operation.values in meta may also appear in an email receipt if the template calls for it.the Stax front-end uses subtotal, tax, memo, lineItems = [].
+                printReceipt:
+                  type: string
+                  enum:
+                  - Both
+                  - Merchant
+                  - Customer
+                  - 'No'
+                  description: 'Possible values: No, Merchant, Customer, Both. Defaults to Both.'
+                  default: Both
+                paymentType:
+                  type: string
+                  enum:
+                  - Credit
+                  - Debit
+                  - Check
+                  - Gift
+                  - Loyalty
+                  description: 'Possible values: Credit, Debit, Check, Gift, Loyalty. Defaults to Credit.'
+                  default: Credit
+                transactionId:
+                  type: string
+                  required: true
+                  description: The id of the transaction being voided or refunded. This endpoint will automatically determine whether to void or refund based on batch timing (typically 8pm EST). Before batch settlement, a void will be executed; after settlement, a refund will be executed.
+                register:
+                  type: string
+                  description: The id of the register performing this operation. This should be the 'id' value returned by GET /terminal/register. For refunds, register is optional as the card will be present. For voids, register is optional but if provided must match the register used for the original transaction.
+              required:
+              - register
+              - total
+              - transactionId
+      tags:
+      - Terminal
+  /terminal/void:
+    post:
+      summary: Void
+      description: Voids a card-present transaction that has not yet batched (open batch reversal).
+      operationId: void
+      parameters: []
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"4be11b7e-21cb-4c9e-ba8f-5e173d13d7b7\",\n  \"invoice_id\": \"\",\n  \"reference_id\": \"5114aea7-5c7f-40ab-8a62-84f239e4b2b1\",\n  \"recurring_transaction_id\": \"\",\n  \"auth_id\": null,\n  \"type\": \"refund\",\n  \"source\": \"terminalservice.dejavoo\",\n  \"is_merchant_present\": true,\n  \"merchant_id\": \"27fad5e4-0210-4c91-9596-417b0ea0dbb1\",\n  \"user_id\": \"dbc85118-3309-4129-b966-0108c0fb18a0\",\n  \"customer_id\": \"2a503ed1-99ea-4b35-a30a-605253f7c05a\",\n  \"payment_method_id\": \"bf1aee65-dad9-4b74-8800-a75e435e3e7b\",\n  \"is_manual\": true,\n  \"success\": true,\n  \"message\": \"\",\n  \"meta\": {\n    \"lineItems\": [\n      {\n        \"item\": \"\",\n        \"details\": \"\",\n        \"quantity\": 1,\n        \"price\": \"0.01\"\n      }\n    ],\n    \"subtotal\": 0.01,\n    \"tax\": 0,\n    \"taxRate\": 10,\n    \"isBulkInvoice\": false,\n    \"taxOverride\": false,\n    \"update_inventory\": true,\n    \"reference\": 2477,\n    \"RegisterId\": 3594291,\n    \"ResultCode\": 0,\n    \"RespMSG\": \"Approved Offline\",\n    \"Message\": \"Approved\",\n    \"AuthCode\": 145599,\n    \"PNRef\": 810618212223,\n    \"PaymentType\": \"Credit\",\n    \"TransType\": \"Return\",\n    \"SN\": 118816524647,\n    \"ExtData\": {\n      \"Amount\": \"0.01\",\n      \"InvNum\": \"10\",\n      \"CardType\": \"VISA\",\n      \"BatchNum\": \"56\",\n      \"Tip\": \"0.00\",\n      \"CashBack\": \"0.00\",\n      \"Fee\": \"0.00\",\n      \"AcntLast4\": \"0281\",\n      \"Name\": \"YOU/A GIFT FOR\",\n      \"SVC\": \"0.00\",\n      \"TotalAmt\": \"0.01\",\n      \"DISC\": \"0.00\",\n      \"Donation\": \"0.00\",\n      \"SHFee\": \"0.00\",\n      \"RwdPoints\": \"0\",\n      \"RwdBalance\": \"0\",\n      \"RwdIssued\": \"\",\n      \"EBTFSLedgerBalance\": \"\",\n      \"EBTFSAvailBalance\": \"\",\n      \"EBTFSBeginBalance\": \"\",\n      \"EBTCashLedgerBalance\": \"\",\n      \"EBTCashAvailBalance\": \"\",\n      \"EBTCashBeginBalance\": \"\",\n      \"RewardCode\": \"\",\n      \"AcqRefData\": \"\",\n      \"ProcessData\": \"\",\n      \"RefNo\": \"\",\n      \"RewardQR\": \"\",\n      \"Language\": \"English\",\n      \"EntryType\": \"Swipe\",\n      \"table_num\": \"0\",\n      \"clerk_id\": \"\",\n      \"ticket_num\": \"\",\n      \"ControlNum\": \"\",\n      \"TaxCity\": \"0.00\",\n      \"TaxState\": \"0.00\",\n      \"Cust1\": \"\",\n      \"Cust1Value\": \"\",\n      \"Cust2\": \"\",\n      \"Cust2Value\": \"\",\n      \"Cust3\": \"\",\n      \"Cust3Value\": \"\",\n      \"AcntFirst4\": \"4941\"\n    },\n    \"CVMResult\": 2,\n    \"cancelled\": false,\n    \"gatewayStatus\": 200,\n    \"gatewayStatusText\": \"OK\",\n    \"printReceipt\": \"Both\",\n    \"paymentType\": \"Credit\",\n    \"type\": \"refund\",\n    \"registerId\": \"4f1b-f10a\",\n    \"registerStatusPort\": \"3594291\",\n    \"registerNickname\": \"Tech Area Z8 (3594291)\",\n    \"registerSerial\": \"124124\",\n    \"registerType\": \"dejavoo\"\n  },\n  \"total\": 0.01,\n  \"method\": \"card\",\n  \"pre_auth\": false,\n  \"is_captured\": 0,\n  \"last_four\": \"5114\",\n  \"interchange_code\": \"\",\n  \"interchange_fee\": null,\n  \"batch_id\": \"\",\n  \"batched_at\": \"2018-04-16 19:09:37\",\n  \"emv_response\": \"\",\n  \"avs_response\": \"\",\n  \"cvv_response\": \"\",\n  \"pos_entry\": \"\",\n  \"pos_salesperson\": \"\",\n  \"receipt_email_at\": null,\n  \"receipt_sms_at\": null,\n  \"created_at\": \"2018-04-16 19:09:37\",\n  \"updated_at\": \"2018-04-16 19:09:37\",\n  \"total_refunded\": 0,\n  \"is_refundable\": false,\n  \"is_voided\": false,\n  \"is_voidable\": false,\n  \"schedule_id\": null,\n  \"child_captures\": [],\n  \"parent_auth\": null,\n  \"customer\": {\n    \"id\": \"2a503ed1-99ea-4b35-a30a-605253f7c05a\",\n    \"firstname\": \"A\",\n    \"lastname\": \"Customer\",\n    \"company\": \"\",\n    \"email\": \"\",\n    \"cc_emails\": [],\n    \"cc_sms\": null,\n    \"phone\": \"\",\n    \"address_1\": \"\",\n    \"address_2\": \"\",\n    \"address_city\": \"\",\n    \"address_state\": \"\",\n    \"address_zip\": \"\",\n    \"address_country\": \"USA\",\n    \"notes\": \"\",\n    \"reference\": \"\",\n    \"options\": \"\",\n    \"created_at\": \"2018-02-23 22:32:19\",\n    \"updated_at\": \"2018-02-23 22:32:19\",\n    \"deleted_at\": null,\n    \"allow_invoice_credit_card_payments\": true,\n    \"gravatar\": false\n  },\n  \"child_transactions\": [],\n  \"files\": [],\n  \"payment_method\": {\n    \"id\": \"bf1aee65-dad9-4b74-8800-a75e435e3e7b\",\n    \"customer_id\": \"2a503ed1-99ea-4b35-a30a-605253f7c05a\",\n    \"merchant_id\": \"27fad5e4-0210-4c91-9596-417b0ea0dbb1\",\n    \"user_id\": \"dbc85118-3309-4129-b966-0108c0fb18a0\",\n    \"nickname\": \"VISA: YOU/A GIFT FOR (ending in: 0281)\",\n    \"has_cvv\": 0,\n    \"is_default\": 1,\n    \"method\": \"card\",\n    \"person_name\": \"YOU/A GIFT FOR\",\n    \"card_type\": \"visa\",\n    \"card_last_four\": \"0281\",\n    \"card_exp\": \"992099\",\n    \"bank_name\": null,\n    \"bank_type\": null,\n    \"bank_holder_type\": null,\n    \"address_1\": null,\n    \"address_2\": null,\n    \"address_city\": null,\n    \"address_state\": null,\n    \"address_zip\": \"\",\n    \"address_country\": \"\",\n    \"purged_at\": null,\n    \"deleted_at\": null,\n    \"created_at\": \"2018-04-16 19:09:36\",\n    \"updated_at\": \"2018-04-16 19:09:36\",\n    \"card_exp_datetime\": \"2107-03-31 23:59:59\",\n    \"customer\": {\n      \"id\": \"2a503ed1-99ea-4b35-a30a-605253f7c05a\",\n      \"firstname\": \"A\",\n      \"lastname\": \"Customer\",\n      \"company\": \"\",\n      \"email\": \"\",\n      \"cc_emails\": [],\n      \"cc_sms\": null,\n      \"phone\": \"\",\n      \"address_1\": \"\",\n      \"address_2\": \"\",\n      \"address_city\": \"\",\n      \"address_state\": \"\",\n      \"address_zip\": \"\",\n      \"address_country\": \"USA\",\n      \"notes\": \"\",\n      \"reference\": \"\",\n      \"options\": \"\",\n      \"created_at\": \"2018-02-23 22:32:19\",\n      \"updated_at\": \"2018-02-23 22:32:19\",\n      \"deleted_at\": null,\n      \"allow_invoice_credit_card_payments\": true,\n      \"gravatar\": false\n    }\n  },\n  \"user\": {\n    \"id\": \"dbc85118-3309-4129-b966-0108c0fb18a0\",\n    \"system_admin\": true,\n    \"name\": \"David Johnson\",\n    \"email\": \"demo1@abc.com\",\n    \"email_verification_sent_at\": \"2017-05-16 17:35:16\",\n    \"email_verified_at\": \"2017-05-16 17:35:33\",\n    \"is_api_key\": false,\n    \"acknowledgments\": {\n      \"tutorial\": true,\n      \"godviewWelcome\": true\n    },\n    \"created_at\": \"2016-05-12 15:57:19\",\n    \"updated_at\": \"2018-04-16 18:08:55\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/1cd5aef1d36d07e495abb73061f857d4\",\n    \"team_admin\": null,\n    \"team_enabled\": null,\n    \"team_role\": null,\n    \"merchant_options\": [],\n    \"is_portal\": false\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 4be11b7e-21cb-4c9e-ba8f-5e173d13d7b7
+                  invoice_id:
+                    type: string
+                    example: ''
+                  reference_id:
+                    type: string
+                    example: 5114aea7-5c7f-40ab-8a62-84f239e4b2b1
+                  recurring_transaction_id:
+                    type: string
+                    example: ''
+                  auth_id: {}
+                  type:
+                    type: string
+                    example: refund
+                  source:
+                    type: string
+                    example: terminalservice.dejavoo
+                  is_merchant_present:
+                    type: boolean
+                    example: true
+                    default: true
+                  merchant_id:
+                    type: string
+                    example: 27fad5e4-0210-4c91-9596-417b0ea0dbb1
+                  user_id:
+                    type: string
+                    example: dbc85118-3309-4129-b966-0108c0fb18a0
+                  customer_id:
+                    type: string
+                    example: 2a503ed1-99ea-4b35-a30a-605253f7c05a
+                  payment_method_id:
+                    type: string
+                    example: bf1aee65-dad9-4b74-8800-a75e435e3e7b
+                  is_manual:
+                    type: boolean
+                    example: true
+                    default: true
+                  success:
+                    type: boolean
+                    example: true
+                    default: true
+                  message:
+                    type: string
+                    example: ''
+                  meta:
+                    type: object
+                    properties:
+                      lineItems:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            item:
+                              type: string
+                              example: ''
+                            details:
+                              type: string
+                              example: ''
+                            quantity:
+                              type: integer
+                              example: 1
+                              default: 0
+                            price:
+                              type: string
+                              example: '0.01'
+                      subtotal:
+                        type: number
+                        example: 0.01
+                        default: 0
+                      tax:
+                        type: integer
+                        example: 0
+                        default: 0
+                      taxRate:
+                        type: integer
+                        example: 10
+                        default: 0
+                      isBulkInvoice:
+                        type: boolean
+                        example: false
+                        default: true
+                      taxOverride:
+                        type: boolean
+                        example: false
+                        default: true
+                      update_inventory:
+                        type: boolean
+                        example: true
+                        default: true
+                      reference:
+                        type: integer
+                        example: 2477
+                        default: 0
+                      RegisterId:
+                        type: integer
+                        example: 3594291
+                        default: 0
+                      ResultCode:
+                        type: integer
+                        example: 0
+                        default: 0
+                      RespMSG:
+                        type: string
+                        example: Approved Offline
+                      Message:
+                        type: string
+                        example: Approved
+                      AuthCode:
+                        type: integer
+                        example: 145599
+                        default: 0
+                      PNRef:
+                        type: integer
+                        example: 810618212223
+                        default: 0
+                      PaymentType:
+                        type: string
+                        example: Credit
+                      TransType:
+                        type: string
+                        example: Return
+                      SN:
+                        type: integer
+                        example: 118816524647
+                        default: 0
+                      ExtData:
+                        type: object
+                        properties:
+                          Amount:
+                            type: string
+                            example: '0.01'
+                          InvNum:
+                            type: string
+                            example: '10'
+                          CardType:
+                            type: string
+                            example: VISA
+                          BatchNum:
+                            type: string
+                            example: '56'
+                          Tip:
+                            type: string
+                            example: '0.00'
+                          CashBack:
+                            type: string
+                            example: '0.00'
+                          Fee:
+                            type: string
+                            example: '0.00'
+                          AcntLast4:
+                            type: string
+                            example: 0281
+                          Name:
+                            type: string
+                            example: YOU/A GIFT FOR
+                          SVC:
+                            type: string
+                            example: '0.00'
+                          TotalAmt:
+                            type: string
+                            example: '0.01'
+                          DISC:
+                            type: string
+                            example: '0.00'
+                          Donation:
+                            type: string
+                            example: '0.00'
+                          SHFee:
+                            type: string
+                            example: '0.00'
+                          RwdPoints:
+                            type: string
+                            example: '0'
+                          RwdBalance:
+                            type: string
+                            example: '0'
+                          RwdIssued:
+                            type: string
+                            example: ''
+                          EBTFSLedgerBalance:
+                            type: string
+                            example: ''
+                          EBTFSAvailBalance:
+                            type: string
+                            example: ''
+                          EBTFSBeginBalance:
+                            type: string
+                            example: ''
+                          EBTCashLedgerBalance:
+                            type: string
+                            example: ''
+                          EBTCashAvailBalance:
+                            type: string
+                            example: ''
+                          EBTCashBeginBalance:
+                            type: string
+                            example: ''
+                          RewardCode:
+                            type: string
+                            example: ''
+                          AcqRefData:
+                            type: string
+                            example: ''
+                          ProcessData:
+                            type: string
+                            example: ''
+                          RefNo:
+                            type: string
+                            example: ''
+                          RewardQR:
+                            type: string
+                            example: ''
+                          Language:
+                            type: string
+                            example: English
+                          EntryType:
+                            type: string
+                            example: Swipe
+                          table_num:
+                            type: string
+                            example: '0'
+                          clerk_id:
+                            type: string
+                            example: ''
+                          ticket_num:
+                            type: string
+                            example: ''
+                          ControlNum:
+                            type: string
+                            example: ''
+                          TaxCity:
+                            type: string
+                            example: '0.00'
+                          TaxState:
+                            type: string
+                            example: '0.00'
+                          Cust1:
+                            type: string
+                            example: ''
+                          Cust1Value:
+                            type: string
+                            example: ''
+                          Cust2:
+                            type: string
+                            example: ''
+                          Cust2Value:
+                            type: string
+                            example: ''
+                          Cust3:
+                            type: string
+                            example: ''
+                          Cust3Value:
+                            type: string
+                            example: ''
+                          AcntFirst4:
+                            type: string
+                            example: '4941'
+                      CVMResult:
+                        type: integer
+                        example: 2
+                        default: 0
+                      cancelled:
+                        type: boolean
+                        example: false
+                        default: true
+                      gatewayStatus:
+                        type: integer
+                        example: 200
+                        default: 0
+                      gatewayStatusText:
+                        type: string
+                        example: OK
+                      printReceipt:
+                        type: string
+                        example: Both
+                      paymentType:
+                        type: string
+                        example: Credit
+                      type:
+                        type: string
+                        example: refund
+                      registerId:
+                        type: string
+                        example: 4f1b-f10a
+                      registerStatusPort:
+                        type: string
+                        example: '3594291'
+                      registerNickname:
+                        type: string
+                        example: Tech Area Z8 (3594291)
+                      registerSerial:
+                        type: string
+                        example: '124124'
+                      registerType:
+                        type: string
+                        example: dejavoo
+                  total:
+                    type: number
+                    example: 0.01
+                    default: 0
+                  method:
+                    type: string
+                    example: card
+                  pre_auth:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_captured:
+                    type: integer
+                    example: 0
+                    default: 0
+                  last_four:
+                    type: string
+                    example: '5114'
+                  interchange_code:
+                    type: string
+                    example: ''
+                  interchange_fee: {}
+                  batch_id:
+                    type: string
+                    example: ''
+                  batched_at:
+                    type: string
+                    example: '2018-04-16 19:09:37'
+                  emv_response:
+                    type: string
+                    example: ''
+                  avs_response:
+                    type: string
+                    example: ''
+                  cvv_response:
+                    type: string
+                    example: ''
+                  pos_entry:
+                    type: string
+                    example: ''
+                  pos_salesperson:
+                    type: string
+                    example: ''
+                  receipt_email_at: {}
+                  receipt_sms_at: {}
+                  created_at:
+                    type: string
+                    example: '2018-04-16 19:09:37'
+                  updated_at:
+                    type: string
+                    example: '2018-04-16 19:09:37'
+                  total_refunded:
+                    type: integer
+                    example: 0
+                    default: 0
+                  is_refundable:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_voided:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_voidable:
+                    type: boolean
+                    example: false
+                    default: true
+                  schedule_id: {}
+                  child_captures:
+                    type: array
+                  parent_auth: {}
+                  customer:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 2a503ed1-99ea-4b35-a30a-605253f7c05a
+                      firstname:
+                        type: string
+                        example: A
+                      lastname:
+                        type: string
+                        example: Customer
+                      company:
+                        type: string
+                        example: ''
+                      email:
+                        type: string
+                        example: ''
+                      cc_emails:
+                        type: array
+                      cc_sms: {}
+                      phone:
+                        type: string
+                        example: ''
+                      address_1:
+                        type: string
+                        example: ''
+                      address_2:
+                        type: string
+                        example: ''
+                      address_city:
+                        type: string
+                        example: ''
+                      address_state:
+                        type: string
+                        example: ''
+                      address_zip:
+                        type: string
+                        example: ''
+                      address_country:
+                        type: string
+                        example: USA
+                      notes:
+                        type: string
+                        example: ''
+                      reference:
+                        type: string
+                        example: ''
+                      options:
+                        type: string
+                        example: ''
+                      created_at:
+                        type: string
+                        example: '2018-02-23 22:32:19'
+                      updated_at:
+                        type: string
+                        example: '2018-02-23 22:32:19'
+                      deleted_at: {}
+                      allow_invoice_credit_card_payments:
+                        type: boolean
+                        example: true
+                        default: true
+                      gravatar:
+                        type: boolean
+                        example: false
+                        default: true
+                  child_transactions:
+                    type: array
+                  files:
+                    type: array
+                  payment_method:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: bf1aee65-dad9-4b74-8800-a75e435e3e7b
+                      customer_id:
+                        type: string
+                        example: 2a503ed1-99ea-4b35-a30a-605253f7c05a
+                      merchant_id:
+                        type: string
+                        example: 27fad5e4-0210-4c91-9596-417b0ea0dbb1
+                      user_id:
+                        type: string
+                        example: dbc85118-3309-4129-b966-0108c0fb18a0
+                      nickname:
+                        type: string
+                        example: 'VISA: YOU/A GIFT FOR (ending in: 0281)'
+                      has_cvv:
+                        type: integer
+                        example: 0
+                        default: 0
+                      is_default:
+                        type: integer
+                        example: 1
+                        default: 0
+                      method:
+                        type: string
+                        example: card
+                      person_name:
+                        type: string
+                        example: YOU/A GIFT FOR
+                      card_type:
+                        type: string
+                        example: visa
+                      card_last_four:
+                        type: string
+                        example: 0281
+                      card_exp:
+                        type: string
+                        example: '992099'
+                      bank_name: {}
+                      bank_type: {}
+                      bank_holder_type: {}
+                      address_1: {}
+                      address_2: {}
+                      address_city: {}
+                      address_state: {}
+                      address_zip:
+                        type: string
+                        example: ''
+                      address_country:
+                        type: string
+                        example: ''
+                      purged_at: {}
+                      deleted_at: {}
+                      created_at:
+                        type: string
+                        example: '2018-04-16 19:09:36'
+                      updated_at:
+                        type: string
+                        example: '2018-04-16 19:09:36'
+                      card_exp_datetime:
+                        type: string
+                        example: '2107-03-31 23:59:59'
+                      customer:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            example: 2a503ed1-99ea-4b35-a30a-605253f7c05a
+                          firstname:
+                            type: string
+                            example: A
+                          lastname:
+                            type: string
+                            example: Customer
+                          company:
+                            type: string
+                            example: ''
+                          email:
+                            type: string
+                            example: ''
+                          cc_emails:
+                            type: array
+                          cc_sms: {}
+                          phone:
+                            type: string
+                            example: ''
+                          address_1:
+                            type: string
+                            example: ''
+                          address_2:
+                            type: string
+                            example: ''
+                          address_city:
+                            type: string
+                            example: ''
+                          address_state:
+                            type: string
+                            example: ''
+                          address_zip:
+                            type: string
+                            example: ''
+                          address_country:
+                            type: string
+                            example: USA
+                          notes:
+                            type: string
+                            example: ''
+                          reference:
+                            type: string
+                            example: ''
+                          options:
+                            type: string
+                            example: ''
+                          created_at:
+                            type: string
+                            example: '2018-02-23 22:32:19'
+                          updated_at:
+                            type: string
+                            example: '2018-02-23 22:32:19'
+                          deleted_at: {}
+                          allow_invoice_credit_card_payments:
+                            type: boolean
+                            example: true
+                            default: true
+                          gravatar:
+                            type: boolean
+                            example: false
+                            default: true
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: dbc85118-3309-4129-b966-0108c0fb18a0
+                      system_admin:
+                        type: boolean
+                        example: true
+                        default: true
+                      name:
+                        type: string
+                        example: David Johnson
+                      email:
+                        type: string
+                        example: demo1@abc.com
+                      email_verification_sent_at:
+                        type: string
+                        example: '2017-05-16 17:35:16'
+                      email_verified_at:
+                        type: string
+                        example: '2017-05-16 17:35:33'
+                      is_api_key:
+                        type: boolean
+                        example: false
+                        default: true
+                      acknowledgments:
+                        type: object
+                        properties:
+                          tutorial:
+                            type: boolean
+                            example: true
+                            default: true
+                          godviewWelcome:
+                            type: boolean
+                            example: true
+                            default: true
+                      created_at:
+                        type: string
+                        example: '2016-05-12 15:57:19'
+                      updated_at:
+                        type: string
+                        example: '2018-04-16 18:08:55'
+                      deleted_at: {}
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/1cd5aef1d36d07e495abb73061f857d4
+                      team_admin: {}
+                      team_enabled: {}
+                      team_role: {}
+                      merchant_options:
+                        type: array
+                      is_portal:
+                        type: boolean
+                        example: false
+                        default: true
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"success\": false,\n  \"message\": \"User Cancelled\",\n  \"gatewayStatus\": 200,\n  \"gatewayStatusText\": \"OK\",\n  \"cancelled\": true,\n  \"status\": 400\n}"
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                    default: true
+                  message:
+                    type: string
+                    example: User Cancelled
+                  gatewayStatus:
+                    type: integer
+                    example: 200
+                    default: 0
+                  gatewayStatusText:
+                    type: string
+                    example: OK
+                  cancelled:
+                    type: boolean
+                    example: true
+                    default: true
+                  status:
+                    type: integer
+                    example: 400
+                    default: 0
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"validation\": \"register not found\",\n  \"status\": 422,\n  \"message\": \"Validation Error\"\n}"
+              schema:
+                type: object
+                properties:
+                  validation:
+                    type: string
+                    example: register not found
+                  status:
+                    type: integer
+                    example: 422
+                    default: 0
+                  message:
+                    type: string
+                    example: Validation Error
+      deprecated: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                total:
+                  type: number
+                  format: float
+                  required: true
+                  description: '(Min: 0.01) The amount of the void. This endpoint should only be used if you are certain the transaction has NOT BEEN batched (still in open batch). For most use cases, use POST /terminal/void-or-refund instead, which will automatically determine whether to void or refund based on batch timing (typically 8pm EST).'
+                meta:
+                  type: string
+                  format: json
+                  required: true
+                  description: (required, json literal) i.e. {"tax":2,"subtotal":10} can contain any json object. Will be blindly stored and returned during a GET operation. Values in meta may also appear in an email receipt if the template calls for it. The Stax front-end uses subtotal, tax, memo, lineItems = [].
+                printReceipt:
+                  type: string
+                  enum:
+                  - Both
+                  - Customer
+                  - Merchant
+                  - 'No'
+                  default: Both
+                  description: 'Possible values: No, Merchant, Customer, Both. Defaults to Both.'
+                paymentType:
+                  type: string
+                  enum:
+                  - Credit
+                  - Debit
+                  - Check
+                  - Gift
+                  - Loyalty
+                  default: Credit
+                  description: 'Possible values: Credit, Debit, Check, Gift, Loyalty. Defaults to Credit.'
+                customerId:
+                  type: string
+                  description: The id of the customer attributed to this credit.
+                invoiceId:
+                  type: string
+                  description: The id of the invoice attributed to this charge.
+                register:
+                  type: string
+                  required: true
+                  description: The id of the register performing this operation. This should be the 'id' value returned by GET /terminal/register, not the serial or status_port. The register must match the register used for the original transaction.
+              required:
+              - total
+              - register
+      tags:
+      - Terminal
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: API key for merchant-level operations. Provides access to merchant-specific endpoints including transactions, payments, customer management, and merchant account settings. This key is scoped to a single merchant account and cannot access partner-level functionality.
+    PartnerApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Partner-level API key with elevated privileges. Grants access to all partner operations including merchant management, portfolio oversight, reporting across multiple merchant accounts, and partner-specific administrative functions. Also provides access to all merchant-level operations for accounts under the partner's management.
+    EphemeralAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Temporary authentication token with limited lifespan. Used for short-term access to specific operations, typically generated for secure one-time actions or time-bounded sessions. Automatically expires after a predefined period for enhanced security.

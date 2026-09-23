@@ -1,0 +1,291 @@
+openapi: 3.2.0
+info:
+  title: stax-api Webhook API
+  version: '0.1'
+servers:
+- url: https://apiprod.fattlabs.com/
+security:
+- ApiKeyAuth: []
+tags:
+- name: Webhook
+paths:
+  /webhook:
+    post:
+      summary: Create a Webhook for All User's Merchants
+      description: ''
+      operationId: create-new-webhook-for-all-of-my-users-merchants
+      parameters:
+      - name: target_url
+        in: query
+        description: The URL which will accept the data when the webhook fires.
+        schema:
+          type: string
+      - name: event
+        in: query
+        description: The event which will trigger the webhook.
+        schema:
+          type: string
+          enum:
+          - create_customer
+          - create_deposit
+          - create_dispute
+          - create_invoice
+          - create_item
+          - create_scheduled_invoice
+          - create_transaction
+          - create_user
+          - create_webhook
+          - delete_item
+          - delete_scheduled_invoice
+          - delete_webhook
+          - update_item
+          - send_invoice
+          - set_branding
+          - set_gateway
+          - set_plan
+          - update_customer
+          - update_dispute
+          - update_invoice
+          - update_scheduled_invoice
+          - update_transaction
+          - update_user
+          - update_payment_method
+          - update_transaction_settled
+          - update_underwriting
+          - update_merchant_status
+          - update_electronic_signature
+          - fee_statement_ready
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"a1069804-48f3-48fe-aa3f-654fbbc395aa\",\n  \"user_id\": \"user1\",\n  \"merchant_id\": null,\n  \"reference_id\": null,\n  \"url\": \"https://requestb.in/13q0j\",\n  \"event\": \"update_transaction\",\n  \"created_at\": \"2020-03-20 02:29:30\",\n  \"updated_at\": \"2020-03-20 02:29:30\",\n  \"deleted_at\": null\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: a1069804-48f3-48fe-aa3f-654fbbc395aa
+                  user_id:
+                    type: string
+                    example: user1
+                  merchant_id: {}
+                  reference_id: {}
+                  url:
+                    type: string
+                    example: https://requestb.in/13q0j
+                  event:
+                    type: string
+                    example: update_transaction
+                  created_at:
+                    type: string
+                    example: '2020-03-20 02:29:30'
+                  updated_at:
+                    type: string
+                    example: '2020-03-20 02:29:30'
+                  deleted_at: {}
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"target_url\": [\n    \"The target url field is required.\"\n  ],\n  \"event\": [\n    \"The event field is required.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  target_url:
+                    type: array
+                    items:
+                      type: string
+                      example: The target url field is required.
+                  event:
+                    type: array
+                    items:
+                      type: string
+                      example: The event field is required.
+      tags:
+      - Webhook
+    get:
+      summary: Get All Webhooks
+      description: Return all webhooks that you created for your merchant(s)
+      operationId: get-all-webhooks
+      parameters:
+      - name: per_page
+        in: query
+        description: How many webhook objects should return per page. Defaults to 20.
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        in: query
+        description: Which page should return. Defaults to return 1st page
+        schema:
+          type: string
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"current_page\": 2,\n  \"data\": [\n    {\n      \"id\": \"25fb488a-c907-4e6c-87db-086150c5fa79\",\n      \"user_id\": \"user1\",\n      \"merchant_id\": \"merchant2\",\n      \"reference_id\": null,\n      \"url\": \"https://requestb.in/13q0jl11\",\n      \"event\": \"create_item\",\n      \"created_at\": \"2020-03-03 15:34:23\",\n      \"updated_at\": \"2020-03-03 15:34:23\",\n      \"deleted_at\": null\n    },\n    {\n      \"id\": \"280e68e6-fe5e-44dc-8b2c-df5bea7e9ac4\",\n      \"user_id\": \"user1\",\n      \"merchant_id\": \"merchant2\",\n      \"reference_id\": null,\n      \"url\": \"https://requestb.in/13q0jl11\",\n      \"event\": \"create_item\",\n      \"created_at\": \"2020-03-04 21:26:19\",\n      \"updated_at\": \"2020-03-04 21:26:19\",\n      \"deleted_at\": null\n    },\n    {\n      \"id\": \"2a43bdef-8577-401b-8ba8-7e195243287e\",\n      \"user_id\": \"user1\",\n      \"merchant_id\": \"merchant2\",\n      \"reference_id\": null,\n      \"url\": \"https://eni6l96xhnaqg.x.pipedream.net/\",\n      \"event\": \"create_transaction\",\n      \"created_at\": \"2020-03-05 19:23:51\",\n      \"updated_at\": \"2020-03-05 19:23:51\",\n      \"deleted_at\": null\n    },\n    {\n      \"id\": \"3158600c-d431-4b9a-9cca-5ad334239997\",\n      \"user_id\": \"user1\",\n      \"merchant_id\": null,\n      \"reference_id\": null,\n      \"url\": \"https://requestb.in/13q0jl11\",\n      \"event\": \"create_item\",\n      \"created_at\": \"2020-03-02 23:18:58\",\n      \"updated_at\": \"2020-03-02 23:18:58\",\n      \"deleted_at\": null\n    },\n    {\n      \"id\": \"34bf75ab-7906-468c-a636-4381fbe318c0\",\n      \"user_id\": \"user1\",\n      \"merchant_id\": \"merchant1\",\n      \"reference_id\": \"8994e803-2e16-4bb0-b5ba-47fd9b447a0a\",\n      \"url\": \"http://localhost:3006/fm/webhook/update_invoice/8994e803-2e16-4bb0-b5ba-47fd9b447a0a\",\n      \"event\": \"update_invoice\",\n      \"created_at\": \"2019-09-11 14:52:30\",\n      \"updated_at\": \"2019-09-11 14:52:30\",\n      \"deleted_at\": null\n    }\n  ],\n  \"first_page_url\": \"https://apiprod.fattlabs.com/webhook?page=1\",\n  \"from\": 6,\n  \"last_page\": 8,\n  \"last_page_url\": \"https://apiprod.fattlabs.com/webhook?page=8\",\n  \"next_page_url\": \"https://apiprod.fattlabs.com/webhook?page=3\",\n  \"path\": \"https://apiprod.fattlabs.com\",\n  \"per_page\": \"5\",\n  \"prev_page_url\": \"https://apiprod.fattlabs.com/webhook?page=1\",\n  \"to\": 10,\n  \"total\": 39\n}"
+              schema:
+                type: object
+                properties:
+                  current_page:
+                    type: integer
+                    example: 2
+                    default: 0
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: 25fb488a-c907-4e6c-87db-086150c5fa79
+                        user_id:
+                          type: string
+                          example: user1
+                        merchant_id:
+                          type: string
+                          example: merchant2
+                        reference_id: {}
+                        url:
+                          type: string
+                          example: https://requestb.in/13q0jl11
+                        event:
+                          type: string
+                          example: create_item
+                        created_at:
+                          type: string
+                          example: '2020-03-03 15:34:23'
+                        updated_at:
+                          type: string
+                          example: '2020-03-03 15:34:23'
+                        deleted_at: {}
+                  first_page_url:
+                    type: string
+                    example: https://apiprod.fattlabs.com/webhook?page=1
+                  from:
+                    type: integer
+                    example: 6
+                    default: 0
+                  last_page:
+                    type: integer
+                    example: 8
+                    default: 0
+                  last_page_url:
+                    type: string
+                    example: https://apiprod.fattlabs.com/webhook?page=8
+                  next_page_url:
+                    type: string
+                    example: https://apiprod.fattlabs.com/webhook?page=3
+                  path:
+                    type: string
+                    example: https://apiprod.fattlabs.com
+                  per_page:
+                    type: string
+                    example: '5'
+                  prev_page_url:
+                    type: string
+                    example: https://apiprod.fattlabs.com/webhook?page=1
+                  to:
+                    type: integer
+                    example: 10
+                    default: 0
+                  total:
+                    type: integer
+                    example: 39
+                    default: 0
+      deprecated: false
+      tags:
+      - Webhook
+  /webhook/{id}:
+    delete:
+      summary: Delete a Webhook
+      description: This resource will soft delete a webhook
+      operationId: delete-a-webhook
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"cf1c6275-ff7c-4c23-ae70-4740b2ca2d32\",\n  \"user_id\": \"user1\",\n  \"merchant_id\": \"merchant1\",\n  \"reference_id\": \"8994e803-2e16-4bb0-b5ba-47fd9b447a0a\",\n  \"url\": \"http://localhost:3006/fm/webhook/update_item/8994e803-2e16-4bb0-b5ba-47fd9b447a0a\",\n  \"event\": \"update_item\",\n  \"created_at\": \"2019-09-11 14:52:30\",\n  \"updated_at\": \"2020-05-01 14:32:55\",\n  \"deleted_at\": \"2020-05-01 14:32:55\"\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: cf1c6275-ff7c-4c23-ae70-4740b2ca2d32
+                  user_id:
+                    type: string
+                    example: user1
+                  merchant_id:
+                    type: string
+                    example: merchant1
+                  reference_id:
+                    type: string
+                    example: 8994e803-2e16-4bb0-b5ba-47fd9b447a0a
+                  url:
+                    type: string
+                    example: http://localhost:3006/fm/webhook/update_item/8994e803-2e16-4bb0-b5ba-47fd9b447a0a
+                  event:
+                    type: string
+                    example: update_item
+                  created_at:
+                    type: string
+                    example: '2019-09-11 14:52:30'
+                  updated_at:
+                    type: string
+                    example: '2020-05-01 14:32:55'
+                  deleted_at:
+                    type: string
+                    example: '2020-05-01 14:32:55'
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": [\n    \"Webhook could not be found\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: array
+                    items:
+                      type: string
+                      example: Webhook could not be found
+      deprecated: false
+      tags:
+      - Webhook
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: API key for merchant-level operations. Provides access to merchant-specific endpoints including transactions, payments, customer management, and merchant account settings. This key is scoped to a single merchant account and cannot access partner-level functionality.
+    PartnerApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Partner-level API key with elevated privileges. Grants access to all partner operations including merchant management, portfolio oversight, reporting across multiple merchant accounts, and partner-specific administrative functions. Also provides access to all merchant-level operations for accounts under the partner's management.
+    EphemeralAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Temporary authentication token with limited lifespan. Used for short-term access to specific operations, typically generated for secure one-time actions or time-bounded sessions. Automatically expires after a predefined period for enhanced security.

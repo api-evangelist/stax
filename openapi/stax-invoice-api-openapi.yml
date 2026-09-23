@@ -1,0 +1,3340 @@
+openapi: 3.2.0
+info:
+  title: stax-api Invoice API
+  version: '0.1'
+servers:
+- url: https://apiprod.fattlabs.com/
+security:
+- ApiKeyAuth: []
+tags:
+- name: Invoice
+paths:
+  /invoice/schedule/:
+    post:
+      summary: Create a Scheduled Invoice
+      description: Creates a new scheduled invoice for automated recurring or one-time billing.
+      operationId: createScheduledInvoice
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - url
+              - total
+              properties:
+                url:
+                  type: string
+                  description: The URL for the hosted invoice page.
+                total:
+                  type: number
+                  description: The total amount for the invoice.
+                rule:
+                  type: string
+                  description: The iCalendar RRule recurrence rule string (e.g., DTSTART=20231101T120000Z;FREQ=MONTHLY;COUNT=12).
+                customer_id:
+                  type: string
+                  description: The ID of the customer to associate with the schedule.
+                payment_method_id:
+                  type: string
+                  description: The ID of the payment method for autopay. If omitted, the customer will pay manually.
+                email_notification:
+                  type: boolean
+                  description: Whether to send email notifications when invoices are generated. Defaults to true.
+                  default: true
+                files:
+                  type: array
+                  description: Array of file IDs to attach to the schedule.
+                  items:
+                    type: string
+                meta:
+                  type: object
+                  description: Metadata for the invoice, including line items, tax, and other details.
+                  properties:
+                    subtotal:
+                      type: number
+                      description: The subtotal amount before tax and fees.
+                    tax:
+                      type: number
+                      description: The tax amount applied to the invoice.
+                    fee:
+                      type: number
+                      description: An optional fee amount in dollars (not cents).
+                      minimum: 0
+                    poNumber:
+                      type: string
+                      nullable: true
+                      description: An optional purchase order number.
+                    shippingAmount:
+                      type: number
+                      description: The shipping amount for the invoice.
+                      minimum: 0
+                    hideCustomerLineItems:
+                      type: boolean
+                      nullable: true
+                      description: When set to true, line item details are hidden from customer-facing emails and receipts. Line items remain stored on the invoice and are passed to the payment gateway.
+                    lineItems:
+                      type: array
+                      description: Array of line items for the invoice.
+                      items:
+                        type: object
+                        properties:
+                          item:
+                            type: string
+                            description: The name or description of the item.
+                          quantity:
+                            type: number
+                            description: The quantity of the item.
+                          price:
+                            type: number
+                            description: The price per unit of the item.
+      responses:
+        '201':
+          description: Schedule successfully created.
+        '400':
+          description: Bad Request - Invalid parameters or missing required fields.
+        '422':
+          description: Validation Error - DTSTART is in the past, recurrence rules are incorrectly formatted, or invalid field values.
+        '500':
+          description: Internal Server Error.
+      tags:
+      - Invoice
+  /invoice:
+    post:
+      summary: Create an Invoice
+      description: Creates an invoice
+      operationId: create-an-invoice
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer_id:
+                  type: string
+                  description: If provided, it auto-assigns the invoice to a specific customer. If not, the invoice requires manual assignment before payment.
+                url:
+                  type: string
+                  description: Set it to https://app.staxpayments.com/#/bill/ to enable a clickable button in the invoice email, directing customers to our Stax bill pay page. Use a different URL only if you have a custom domain configured with Stax Connect.
+                  default: https://app.staxpayments.com/#/bill/
+                invoice_date_at:
+                  type: string
+                  description: Optional field. Defaults to current timestamp if blank. Used to track the date of service or work provided by the merchant.
+                due_at:
+                  type: string
+                  format: date-time
+                  description: Invoice due date.
+                meta:
+                  properties:
+                    subtotal:
+                      type: string
+                      description: The subtotal amount of the invoice, excluding taxes and additional charges.
+                    tax:
+                      type: string
+                      description: The tax amount applied to the invoice.
+                    lineItems:
+                      type: array
+                      items:
+                        properties:
+                          item:
+                            type: string
+                            description: Name of item.
+                          price:
+                            type: number
+                            description: Price of the item.
+                          quantity:
+                            type: number
+                            description: Amount of the item.
+                          details:
+                            type: string
+                            description: Description of item.
+                          id:
+                            type: string
+                            description: ID is optional and corresponds to the Stax Catalog Item Id.
+                          productCode:
+                            type: string
+                            description: Unique product code.
+                          commodityCode:
+                            type: string
+                            description: Merchant defined code that categorizes a line item.
+                          unitOfMeasure:
+                            type: string
+                            description: Unit in which the item is sold. e.g., feet, each, litre, GB.
+                          tax:
+                            type: number
+                            description: Tax amount applied to the line item.
+                          taxRate:
+                            type: number
+                            description: Tax Rate for this line item or service.
+                          discountRate:
+                            type: number
+                            description: Discount applied to this specific line item.
+                          total:
+                            type: number
+                            description: Total amount for the line item.
+                        type: object
+                    memo:
+                      type: string
+                      description: Use this string field to set a customer-facing memo on the Hosted Invoice Page.
+                    reference:
+                      type: string
+                      description: An optional reference field that can be used for internal tracking or customer reference purposes.
+                    internalMemo:
+                      type: string
+                      description: Optional string field to set an internal memo on the invoice, viewable within Stax Pay by the merchant.
+                    isCCPaymentEnabled:
+                      type: boolean
+                      description: Boolean field that determines if customers can pay with a credit card on the Hosted Invoice Page.
+                    isACHPaymentEnabled:
+                      type: boolean
+                      description: Determines whether the customer can pay with ACH(bank) on the Hosted Invoice Page.
+                    isTipEnabled:
+                      type: string
+                      description: Determines if the customer can add a tip on the hosted invoice page, which will add to the transaction's total.
+                    successRedirect:
+                      type: string
+                      description: If provided, and if the invoice is paid on the hosted bill payment page at app.staxpayments.com/#/bill, the user will be redirected to the supplied URL after a successful payment.
+                    iscnpdigitalwallet:
+                      type: boolean
+                      description: 'Set to True if this is a digital wallet payment. '
+                  required: []
+                  type: object
+                  description: Within this JSON object, certain fields are recognized by the Stax Pay web platform and are used for emailed receipts.
+                is_partial_payment_enabled:
+                  type: boolean
+                  description: Determines whether the customer can make a partial payment in the Stax Pay user interface. Set to true to allow partial payments, or false to disallow partial payments.
+                funding:
+                  type: array
+                  description: An array specifying funding instructions for payments made to this invoice. Each element should include an account_id that identifies the destination account and an amount specifying the portion of the payment to be allocated to that account. This feature requires Instructed Funding to be enabled.
+                  items:
+                    type: string
+                total:
+                  type: number
+                  format: float
+                  description: The total of the invoice.
+              required:
+              - url
+              - customer_id
+              - total
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n    \"id\": \"9ddcf02b-c2be-4f27-b758-dbc12b2aa924\",\n    \"merchant_id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n    \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n    \"customer_id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n  \"total\": 12,\n\t\"due_at\": \"2025-12-19 23:59:59\",\n\n    \"meta\": {\n        \"tax\":2,\n        \"subtotal\":10,\n        \"lineItems\": [\n            {\n                \"id\": \"optional-fm-catalog-item-id\",\n                \"item\":\"Demo Item\",\n                \"details\":\"this is a regular demo item\",\n                \"quantity\":10,\n                \"price\": 1\n            }\n        ],\n        \"isCCPaymentEnabled\": true,\n        \"isACHPaymentEnabled\": true,\n        \"isTipEnabled\": true,\n        \"internalMemo\": \"internalMemo\",\n        \"memo\": \"customer facing memo\"\n    },\n    \"status\": \"DRAFT\",\n    \"sent_at\": null,\n    \"viewed_at\": null,\n    \"paid_at\": null,\n    \"schedule_id\": null,\n    \"reminder_id\": null,\n    \"payment_method_id\": \"\",\n    \"url\": \"https://app.staxpayments.com/#/bill/\",\n    \"is_webpayment\": false,\n    \"is_partial_payment_enabled\": true\n    \"deleted_at\": null,\n    \"created_at\": \"2017-05-08 21:32:51\",\n    \"updated_at\": \"2017-05-08 21:32:51\",\n    \"payment_attempt_failed\": false,\n    \"payment_attempt_message\": \"\",\n    \"balance_due\": 10,\n    \"total_paid\": 0,\n    \"payment_meta\": [],\n    \"customer\": {\n    \"id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n    \"firstname\": \"John\",\n    \"lastname\": \"Smith\",\n    \"company\": \"ABC INC\",\n    \"email\": \"demo@abc.com\",\n    \"cc_emails\": [\n      \"demo1@abc.com\",\n      \"demo2@abc.com\"\n    ],\n    \"phone\": \"1234567898\",\n    \"address_1\": \"123 Rite Way\",\n    \"address_2\": \"Unit 12\",\n    \"address_city\": \"Orlando\",\n    \"address_state\": \"FL\",\n    \"address_zip\": \"32801\",\n    \"address_country\": \"USA\",\n    \"notes\": null,\n    \"reference\": \"BARTLE\",\n    \"options\": \"\",\n    \"created_at\": \"2017-05-08 19:22:51\",\n    \"updated_at\": \"2017-05-08 19:23:46\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061\"\n    },\n    \"user\": {\n        \"id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n        \"system_admin\": false,\n        \"name\": \"Demo\",\n        \"email\": \"contact@example.com\",\n        \"email_verification_sent_at\": \"2017-03-29 15:27:19\",\n        \"email_verified_at\": \"2017-03-29 15:27:21\",\n        \"is_api_key\": false,\n        \"created_at\": \"2017-01-11 21:44:02\",\n        \"updated_at\": \"2017-04-24 15:41:58\",\n        \"deleted_at\": null,\n        \"gravatar\": \"//www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650\",\n        \"team_admin\": null,\n        \"team_enabled\": null,\n        \"team_role\": null\n    },\n    \"files\": [],\n    \"child_transactions\": [],\n    \"reminder\": null\n}"
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n    \"customer_id\": [\"The customer id field is required.\"],\n    \"url\": [\"The url field is required.\"],\n    \"meta\": [\"The meta field is required.\"],\n    \"meta\": [\"The meta field should not contain more than 60.000 characters\"]\n    \"total\": [\"The total field is required.\"],\n    \"files.0\": [\"The selected files.0 is invalid.\"]\n\n}"
+      tags:
+      - Invoice
+    get:
+      summary: Get All Invoices
+      description: ''
+      operationId: get-all-invoices
+      parameters:
+      - name: id
+        in: query
+        schema:
+          type: string
+      - name: name
+        in: query
+        schema:
+          type: string
+      - name: keywords[]
+        in: query
+        schema:
+          type: string
+      - name: company_name
+        in: query
+        schema:
+          type: string
+      - name: email
+        in: query
+        schema:
+          type: string
+      - name: address
+        in: query
+        schema:
+          type: string
+      - name: price
+        in: query
+        schema:
+          type: string
+      - name: schedule_id
+        in: query
+        schema:
+          type: string
+      - name: payment_method
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value:
+                    total: 2
+                    per_page: 25
+                    current_page: 1
+                    last_page: 4
+                    next_page_url: null
+                    prev_page_url: null
+                    from: 1
+                    to: 25
+                    data:
+                    - id: 8cbb929d-55d9-43b5-8d90-af3cab04ce17
+                      merchant_id: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                      user_id: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                      customer_id: 17a51927-312e-47e3-9b23-412f298888e3
+                      total: 10
+                      meta:
+                        tax: 0
+                        subtotal: 10
+                        lineItems:
+                        - id: optional-fm-catalog-item-id
+                          item: Demo Item
+                          details: This is a demo item
+                          quantity: 1
+                          price: 10
+                      status: SENT
+                      sent_at: '2025-04-24 15:16:15'
+                      viewed_at: null
+                      paid_at: null
+                      schedule_id: e70c126c-f7b7-4673-a129-5b650f00f84a
+                      reminder_id: a6411419-0e95-4380-9d4e-94bdaced9d14
+                      payment_method_id: ''
+                      url: https://app.staxpayments.com/#/bill/
+                      is_webpayment: false
+                      deleted_at: null
+                      created_at: '2025-04-08 20:49:04'
+                      updated_at: '2025-04-24 15:16:15'
+                      payment_attempt_failed: false
+                      payment_attempt_message: ''
+                      balance_due: 12
+                      total_paid: 0
+                      payment_meta: []
+                      customer:
+                        id: 17a51927-312e-47e3-9b23-412f298888e3
+                        firstname: David
+                        lastname: Bowie
+                        company: Your Company Demo
+                        email: staxdemo@demo.com
+                        cc_emails: null
+                        phone: '5555555555'
+                        address_1: 608 Orange Ave.
+                        address_2: Unit 12
+                        address_city: Orlando
+                        address_state: FL
+                        address_zip: '32801'
+                        address_country: USA
+                        notes: null
+                        reference: ''
+                        options: ''
+                        created_at: '2024-12-01 16:44:33'
+                        updated_at: '2024-12-01 16:44:33'
+                        deleted_at: null
+                        gravatar: //www.gravatar.com/avatar/144fa42eb34883ecb00cbc3f81a060a1
+                      user:
+                        id: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                        system_admin: false
+                        name: Demo User
+                        email: contact@example.com
+                        email_verification_sent_at: '2025-03-29 15:27:19'
+                        email_verified_at: '2025-03-29 15:27:21'
+                        is_api_key: false
+                        created_at: '2025-01-11 21:44:02'
+                        updated_at: '2025-04-24 15:41:58'
+                        deleted_at: null
+                        gravatar: //www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650
+                        team_admin: null
+                        team_enabled: null
+                        team_role: null
+                      files: []
+                      child_transactions: []
+                      reminder:
+                        id: a6411419-0e95-4380-9d4e-94bdaced9d14
+                        merchant_id: ''
+                        user_id: ''
+                        active: true
+                        count: 3
+                        rule: FREQ=DAILY;COUNT=3;INTERVAL=5;WKST=MO;DTSTART=20250413T204904Z
+                        last_run_at: '2025-04-24 15:16:15'
+                        next_run_at: null
+                        event: InvoiceReminder
+                        meta: null
+                        payment_method_id: ''
+                        customer_id: 17a51927-312e-47e3-9b23-412f298888e3
+                        created_at: '2025-04-08 20:49:04'
+                        updated_at: '2025-04-24 15:16:15'
+                        deleted_at: null
+                        rule_text: every 5 days for 3 times
+                        future_occurrences: []
+                        max: 3
+                        end_at: null
+                        status: COMPLETED
+                    - id: 2744a7fd-d354-47a0-a99e-f6f3e96bffe1
+                      merchant_id: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                      user_id: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                      customer_id: ffed4fd2-977e-412f-9048-293bb5e46c68
+                      total: 77
+                      meta:
+                        lineItems:
+                        - item: ''
+                          details: ''
+                          quantity: 1
+                          price: '77'
+                        memo: ''
+                        subtotal: 77
+                        tax: ''
+                        type: invoice/schedule
+                      status: VIEWED
+                      sent_at: '2025-04-08 20:49:03'
+                      viewed_at: null
+                      paid_at: '2025-04-08 20:49:03'
+                      schedule_id: 85211708-5995-4e2f-83c3-7017cdbee25f
+                      reminder_id: null
+                      payment_method_id: ad03da14-4f2b-4b43-8e12-e8d784018d79
+                      url: https://app.staxpayments.com/#/bill/
+                      is_webpayment: false
+                      deleted_at: null
+                      created_at: '2025-04-08 20:49:02'
+                      updated_at: '2025-04-24 19:38:42'
+                      payment_attempt_failed: false
+                      payment_attempt_message: ''
+                      balance_due: 77
+                      total_paid: 0
+                      payment_meta:
+                        lineItems:
+                        - item: ''
+                          details: ''
+                          quantity: 1
+                          price: '77'
+                        memo: ''
+                        subtotal: 77
+                        tax: ''
+                        type: invoice/schedule
+                      customer:
+                        id: ffed4fd2-977e-412f-9048-293bb5e46c68
+                        firstname: STAX
+                        lastname: USER
+                        company: Demo Company Name
+                        email: staxdemo@demo.com
+                        cc_emails: null
+                        phone: '5555555555'
+                        address_1: 608 Orange Ave.
+                        address_2: Unit 12
+                        address_city: Orlando
+                        address_state: FL
+                        address_zip: '32801'
+                        address_country: USA
+                        notes: null
+                        reference: BARTLE
+                        options: ''
+                        created_at: '2025-03-31 17:04:27'
+                        updated_at: '2025-03-31 17:04:27'
+                        deleted_at: null
+                        gravatar: //www.gravatar.com/avatar/144fa42eb34883ecb00cbc3f81a060a1
+                      user:
+                        id: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                        system_admin: false
+                        name: Demo
+                        email: contact@example.com
+                        email_verification_sent_at: '2025-03-29 15:27:19'
+                        email_verified_at: '2025-03-29 15:27:21'
+                        is_api_key: false
+                        created_at: '2025-01-11 21:44:02'
+                        updated_at: '2025-04-24 15:41:58'
+                        deleted_at: null
+                        gravatar: //www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650
+                        team_admin: null
+                        team_enabled: null
+                        team_role: null
+                      files: []
+                      child_transactions:
+                      - id: 61b4a861-446f-45f8-b319-2ce98876751b
+                        invoice_id: 2744a7fd-d354-47a0-a99e-f6f3e96bffe1
+                        reference_id: 16427f4d-f33c-4e07-bfd3-beb2dfa55ca2
+                        recurring_transaction_id: ''
+                        type: refund
+                        source: null
+                        merchant_id: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                        user_id: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                        customer_id: ffed4fd2-977e-412f-9048-293bb5e46c68
+                        payment_method_id: ad03da14-4f2b-4b43-8e12-e8d784018d79
+                        is_manual: null
+                        success: true
+                        message: null
+                        meta:
+                          lineItems:
+                          - item: ''
+                            details: ''
+                            quantity: 1
+                            price: '77'
+                          memo: ''
+                          subtotal: 77
+                          tax: ''
+                          type: invoice/schedule
+                        total: 77
+                        method: card
+                        pre_auth: false
+                        last_four: '1111'
+                        receipt_email_at: null
+                        receipt_sms_at: null
+                        created_at: '2025-04-24 19:38:41'
+                        updated_at: '2025-04-24 19:38:41'
+                        total_refunded: null
+                        is_refundable: false
+                        is_voided: null
+                        is_voidable: false
+                        schedule_id: 85211708-5995-4e2f-83c3-7017cdbee25f
+                        customer:
+                          id: ffed4fd2-977e-412f-9048-293bb5e46c68
+                          firstname: STAX
+                          lastname: USER
+                          company: Demo Company Name
+                          email: staxdemo@demo.com
+                          cc_emails: null
+                          phone: '5555555555'
+                          address_1: 608 Orange Ave.
+                          address_2: Unit 12
+                          address_city: Orlando
+                          address_state: FL
+                          address_zip: '32801'
+                          address_country: USA
+                          notes: null
+                          reference: BARTLE
+                          options: ''
+                          created_at: '2025-03-31 17:04:27'
+                          updated_at: '2025-03-31 17:04:27'
+                          deleted_at: null
+                          gravatar: //www.gravatar.com/avatar/144fa42eb34883ecb00cbc3f81a060a1
+                        child_transactions: []
+                        files: []
+                        payment_method:
+                          id: ad03da14-4f2b-4b43-8e12-e8d784018d79
+                          customer_id: ffed4fd2-977e-412f-9048-293bb5e46c68
+                          merchant_id: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                          user_id: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                          nickname: 'VISA: STAX USER (ending in: 1111)'
+                          is_default: 0
+                          method: card
+                          person_name: STAX USER
+                          card_type: visa
+                          card_last_four: '1111'
+                          card_exp: '022020'
+                          bank_name: null
+                          bank_type: null
+                          bank_holder_type: null
+                          address_1: null
+                          address_2: null
+                          address_city: null
+                          address_state: null
+                          address_zip: null
+                          address_country: USA
+                          purged_at: null
+                          deleted_at: null
+                          created_at: '2025-04-05 15:30:05'
+                          updated_at: '2025-04-05 15:30:05'
+                          card_exp_datetime: '2020-02-29 23:59:59'
+                          customer:
+                            id: ffed4fd2-977e-412f-9048-293bb5e46c68
+                            firstname: STAX
+                            lastname: USER
+                            company: Demo Company Name
+                            email: staxdemo@demo.com
+                            cc_emails: null
+                            phone: '5555555555'
+                            address_1: 608 Orange Ave.
+                            address_2: Unit 12
+                            address_city: Orlando
+                            address_state: FL
+                            address_zip: '32801'
+                            address_country: USA
+                            notes: null
+                            reference: BARTLE
+                            options: ''
+                            created_at: '2025-03-31 17:04:27'
+                            updated_at: '2025-03-31 17:04:27'
+                            deleted_at: null
+                            gravatar: //www.gravatar.com/avatar/144fa42eb34883ecb00cbc3f81a060a1
+                        user:
+                          id: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                          system_admin: false
+                          name: Demo
+                          email: contact@example.com
+                          email_verification_sent_at: '2025-03-29 15:27:19'
+                          email_verified_at: '2025-03-29 15:27:21'
+                          is_api_key: false
+                          created_at: '2025-01-11 21:44:02'
+                          updated_at: '2025-04-24 15:41:58'
+                          deleted_at: null
+                          gravatar: //www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650
+                          team_admin: null
+                          team_enabled: null
+                          team_role: null
+                      - id: 16427f4d-f33c-4e07-bfd3-beb2dfa55ca2
+                        invoice_id: 2744a7fd-d354-47a0-a99e-f6f3e96bffe1
+                        reference_id: ''
+                        recurring_transaction_id: ''
+                        type: charge
+                        source: null
+                        merchant_id: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                        user_id: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                        customer_id: ffed4fd2-977e-412f-9048-293bb5e46c68
+                        payment_method_id: ad03da14-4f2b-4b43-8e12-e8d784018d79
+                        is_manual: null
+                        success: true
+                        message: null
+                        meta:
+                          lineItems:
+                          - item: ''
+                            details: ''
+                            quantity: 1
+                            price: '77'
+                          memo: ''
+                          subtotal: 77
+                          tax: ''
+                          type: invoice/schedule
+                        total: 77
+                        method: card
+                        pre_auth: false
+                        last_four: '1111'
+                        receipt_email_at: null
+                        receipt_sms_at: null
+                        created_at: '2025-04-08 20:49:02'
+                        updated_at: '2025-04-08 20:49:02'
+                        total_refunded: 77
+                        is_refundable: false
+                        is_voided: false
+                        is_voidable: false
+                        schedule_id: 85211708-5995-4e2f-83c3-7017cdbee25f
+                        customer:
+                          id: ffed4fd2-977e-412f-9048-293bb5e46c68
+                          firstname: STAX
+                          lastname: USER
+                          company: Demo Company Name
+                          email: staxdemo@demo.com
+                          cc_emails: null
+                          phone: '5555555555'
+                          address_1: 608 Orange Ave.
+                          address_2: Unit 12
+                          address_city: Orlando
+                          address_state: FL
+                          address_zip: '32801'
+                          address_country: USA
+                          notes: null
+                          reference: BARTLE
+                          options: ''
+                          created_at: '2025-03-31 17:04:27'
+                          updated_at: '2025-03-31 17:04:27'
+                          deleted_at: null
+                          gravatar: //www.gravatar.com/avatar/144fa42eb34883ecb00cbc3f81a060a1
+                        child_transactions:
+                        - id: 61b4a861-446f-45f8-b319-2ce98876751b
+                          invoice_id: 2744a7fd-d354-47a0-a99e-f6f3e96bffe1
+                          reference_id: 16427f4d-f33c-4e07-bfd3-beb2dfa55ca2
+                          recurring_transaction_id: ''
+                          type: refund
+                          source: null
+                          merchant_id: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                          user_id: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                          customer_id: ffed4fd2-977e-412f-9048-293bb5e46c68
+                          payment_method_id: ad03da14-4f2b-4b43-8e12-e8d784018d79
+                          is_manual: null
+                          success: true
+                          message: null
+                          meta:
+                            lineItems:
+                            - item: ''
+                              details: ''
+                              quantity: 1
+                              price: '77'
+                            memo: ''
+                            subtotal: 77
+                            tax: ''
+                            type: invoice/schedule
+                          total: 77
+                          method: card
+                          pre_auth: false
+                          last_four: '1111'
+                          receipt_email_at: null
+                          receipt_sms_at: null
+                          created_at: '2025-04-24 19:38:41'
+                          updated_at: '2025-04-24 19:38:41'
+                          total_refunded: null
+                          is_refundable: false
+                          is_voided: null
+                          is_voidable: false
+                          schedule_id: 85211708-5995-4e2f-83c3-7017cdbee25f
+                          customer:
+                            id: ffed4fd2-977e-412f-9048-293bb5e46c68
+                            firstname: STAX
+                            lastname: USER
+                            company: Demo Company Name
+                            email: staxdemo@demo.com
+                            cc_emails: null
+                            phone: '5555555555'
+                            address_1: 608 Orange Ave.
+                            address_2: Unit 12
+                            address_city: Orlando
+                            address_state: FL
+                            address_zip: '32801'
+                            address_country: USA
+                            notes: null
+                            reference: BARTLE
+                            options: ''
+                            created_at: '2025-03-31 17:04:27'
+                            updated_at: '2025-03-31 17:04:27'
+                            deleted_at: null
+                            gravatar: //www.gravatar.com/avatar/144fa42eb34883ecb00cbc3f81a060a1
+                          child_transactions: []
+                          files: []
+                          payment_method:
+                            id: ad03da14-4f2b-4b43-8e12-e8d784018d79
+                            customer_id: ffed4fd2-977e-412f-9048-293bb5e46c68
+                            merchant_id: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                            user_id: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                            nickname: 'VISA: STAX USER (ending in: 1111)'
+                            is_default: 0
+                            method: card
+                            person_name: STAX USER
+                            card_type: visa
+                            card_last_four: '1111'
+                            card_exp: '022020'
+                            bank_name: null
+                            bank_type: null
+                            bank_holder_type: null
+                            address_1: null
+                            address_2: null
+                            address_city: null
+                            address_state: null
+                            address_zip: null
+                            address_country: USA
+                            purged_at: null
+                            deleted_at: null
+                            created_at: '2025-04-05 15:30:05'
+                            updated_at: '2025-04-05 15:30:05'
+                            card_exp_datetime: '2020-02-29 23:59:59'
+                            customer:
+                              id: ffed4fd2-977e-412f-9048-293bb5e46c68
+                              firstname: STAX
+                              lastname: USER
+                              company: Demo Company Name
+                              email: staxdemo@demo.com
+                              cc_emails: null
+                              phone: '5555555555'
+                              address_1: 608 Orange Ave.
+                              address_2: Unit 12
+                              address_city: Orlando
+                              address_state: FL
+                              address_zip: '32801'
+                              address_country: USA
+                              notes: null
+                              reference: BARTLE
+                              options: ''
+                              created_at: '2025-03-31 17:04:27'
+                              updated_at: '2025-03-31 17:04:27'
+                              deleted_at: null
+                              gravatar: //www.gravatar.com/avatar/144fa42eb34883ecb00cbc3f81a060a1
+                          user:
+                            id: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                            system_admin: false
+                            name: Demo
+                            email: contact@example.com
+                            email_verification_sent_at: '2025-03-29 15:27:19'
+                            email_verified_at: '2025-03-29 15:27:21'
+                            is_api_key: false
+                            created_at: '2025-01-11 21:44:02'
+                            updated_at: '2025-04-24 15:41:58'
+                            deleted_at: null
+                            gravatar: //www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650
+                            team_admin: null
+                            team_enabled: null
+                            team_role: null
+                        files: []
+                        payment_method:
+                          id: ad03da14-4f2b-4b43-8e12-e8d784018d79
+                          customer_id: ffed4fd2-977e-412f-9048-293bb5e46c68
+                          merchant_id: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                          user_id: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                          nickname: 'VISA: STAX USER (ending in: 1111)'
+                          is_default: 0
+                          method: card
+                          person_name: STAX USER
+                          card_type: visa
+                          card_last_four: '1111'
+                          card_exp: '022020'
+                          bank_name: null
+                          bank_type: null
+                          bank_holder_type: null
+                          address_1: null
+                          address_2: null
+                          address_city: null
+                          address_state: null
+                          address_zip: null
+                          address_country: USA
+                          purged_at: null
+                          deleted_at: null
+                          created_at: '2025-04-05 15:30:05'
+                          updated_at: '2025-04-05 15:30:05'
+                          card_exp_datetime: '2020-02-29 23:59:59'
+                          customer:
+                            id: ffed4fd2-977e-412f-9048-293bb5e46c68
+                            firstname: STAX
+                            lastname: USER
+                            company: Demo Company Name
+                            email: staxdemo@demo.com
+                            cc_emails: null
+                            phone: '5555555555'
+                            address_1: 608 Orange Ave.
+                            address_2: Unit 12
+                            address_city: Orlando
+                            address_state: FL
+                            address_zip: '32801'
+                            address_country: USA
+                            notes: null
+                            reference: BARTLE
+                            options: ''
+                            created_at: '2025-03-31 17:04:27'
+                            updated_at: '2025-03-31 17:04:27'
+                            deleted_at: null
+                            gravatar: //www.gravatar.com/avatar/144fa42eb34883ecb00cbc3f81a060a1
+                        user:
+                          id: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                          system_admin: false
+                          name: Demo
+                          email: contact@example.com
+                          email_verification_sent_at: '2025-03-29 15:27:19'
+                          email_verified_at: '2025-03-29 15:27:21'
+                          is_api_key: false
+                          created_at: '2025-01-11 21:44:02'
+                          updated_at: '2025-04-24 15:41:58'
+                          deleted_at: null
+                          gravatar: //www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650
+                          team_admin: null
+                          team_enabled: null
+                          team_role: null
+                      reminder: null
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      tags:
+      - Invoice
+  /invoice/{id}:
+    delete:
+      summary: Delete an Invoice
+      description: ''
+      operationId: delete-an-invoice
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"9ddcf02b-c2be-4f27-b758-dbc12b2aa924\",\n  \"merchant_id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n  \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n  \"customer_id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n  \"total\": 100,\n  \"meta\": {\n    \"tax\": 0,\n    \"subtotal\": 10,\n    \"lineItems\": [\n      {\n        \"id\": \"optional-fm-catalog-item-id\",\n        \"item\": \"Demo Item\",\n        \"details\": \"this is a regular demo item\",\n        \"quantity\": 1,\n        \"price\": 100\n      }\n    ]\n  },\n  \"status\": \"DELETED\",\n  \"sent_at\": null,\n  \"viewed_at\": null,\n  \"paid_at\": null,\n  \"schedule_id\": null,\n  \"reminder_id\": null,\n  \"payment_method_id\": \"d3050b19-77d9-44ac-9851-b1d1680a7684\",\n  \"url\": \"https://app.staxpayments.com/#/bill/\",\n  \"is_webpayment\": false,\n  \"deleted_at\": \"2017-05-08 21:43:19\",\n  \"created_at\": \"2017-05-08 21:32:51\",\n  \"updated_at\": \"2017-05-08 21:43:19\",\n  \"payment_attempt_failed\": false,\n  \"payment_attempt_message\": \"\",\n  \"balance_due\": 100,\n  \"total_paid\": 0,\n  \"payment_meta\": [],\n  \"customer\": {\n    \"id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n    \"firstname\": \"John\",\n    \"lastname\": \"Smith\",\n    \"company\": \"ABC INC\",\n    \"email\": \"demo@abc.com\",\n    \"cc_emails\": [\n      \"demo1@abc.com\",\n      \"demo2@abc.com\"\n    ],\n    \"phone\": \"1234567898\",\n    \"address_1\": \"123 Rite Way\",\n    \"address_2\": \"Unit 12\",\n    \"address_city\": \"Orlando\",\n    \"address_state\": \"FL\",\n    \"address_zip\": \"32801\",\n    \"address_country\": \"USA\",\n    \"notes\": null,\n    \"reference\": \"BARTLE\",\n    \"options\": \"\",\n    \"created_at\": \"2017-05-08 19:22:51\",\n    \"updated_at\": \"2017-05-08 19:23:46\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061\"\n  },\n  \"user\": {\n    \"id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n    \"system_admin\": false,\n    \"name\": \"Demo\",\n    \"email\": \"contact@example.com\",\n    \"email_verification_sent_at\": \"2017-03-29 15:27:19\",\n    \"email_verified_at\": \"2017-03-29 15:27:21\",\n    \"is_api_key\": false,\n    \"created_at\": \"2017-01-11 21:44:02\",\n    \"updated_at\": \"2017-04-24 15:41:58\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650\",\n    \"team_admin\": null,\n    \"team_enabled\": null,\n    \"team_role\": null\n  },\n  \"files\": [],\n  \"child_transactions\": [],\n  \"reminder\": null\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 9ddcf02b-c2be-4f27-b758-dbc12b2aa924
+                  merchant_id:
+                    type: string
+                    example: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                  user_id:
+                    type: string
+                    example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                  customer_id:
+                    type: string
+                    example: d45ee88c-8b27-4be8-8d81-77dda1b81826
+                  total:
+                    type: integer
+                    example: 100
+                    default: 0
+                  meta:
+                    type: object
+                    properties:
+                      tax:
+                        type: integer
+                        example: 0
+                        default: 0
+                      subtotal:
+                        type: integer
+                        example: 10
+                        default: 0
+                      lineItems:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: optional-fm-catalog-item-id
+                            item:
+                              type: string
+                              example: Demo Item
+                            details:
+                              type: string
+                              example: this is a regular demo item
+                            quantity:
+                              type: integer
+                              example: 1
+                              default: 0
+                            price:
+                              type: integer
+                              example: 100
+                              default: 0
+                  status:
+                    type: string
+                    example: DELETED
+                  sent_at: {}
+                  viewed_at: {}
+                  paid_at: {}
+                  schedule_id: {}
+                  reminder_id: {}
+                  payment_method_id:
+                    type: string
+                    example: d3050b19-77d9-44ac-9851-b1d1680a7684
+                  url:
+                    type: string
+                    example: https://app.staxpayments.com/#/bill/
+                  is_webpayment:
+                    type: boolean
+                    example: false
+                    default: true
+                  deleted_at:
+                    type: string
+                    example: '2017-05-08 21:43:19'
+                  created_at:
+                    type: string
+                    example: '2017-05-08 21:32:51'
+                  updated_at:
+                    type: string
+                    example: '2017-05-08 21:43:19'
+                  payment_attempt_failed:
+                    type: boolean
+                    example: false
+                    default: true
+                  payment_attempt_message:
+                    type: string
+                    example: ''
+                  balance_due:
+                    type: integer
+                    example: 100
+                    default: 0
+                  total_paid:
+                    type: integer
+                    example: 0
+                    default: 0
+                  payment_meta:
+                    type: array
+                  customer:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: d45ee88c-8b27-4be8-8d81-77dda1b81826
+                      firstname:
+                        type: string
+                        example: John
+                      lastname:
+                        type: string
+                        example: Smith
+                      company:
+                        type: string
+                        example: ABC INC
+                      email:
+                        type: string
+                        example: demo@abc.com
+                      cc_emails:
+                        type: array
+                        items:
+                          type: string
+                          example: demo1@abc.com
+                      phone:
+                        type: string
+                        example: '1234567898'
+                      address_1:
+                        type: string
+                        example: 123 Rite Way
+                      address_2:
+                        type: string
+                        example: Unit 12
+                      address_city:
+                        type: string
+                        example: Orlando
+                      address_state:
+                        type: string
+                        example: FL
+                      address_zip:
+                        type: string
+                        example: '32801'
+                      address_country:
+                        type: string
+                        example: USA
+                      notes: {}
+                      reference:
+                        type: string
+                        example: BARTLE
+                      options:
+                        type: string
+                        example: ''
+                      created_at:
+                        type: string
+                        example: '2017-05-08 19:22:51'
+                      updated_at:
+                        type: string
+                        example: '2017-05-08 19:23:46'
+                      deleted_at: {}
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                      system_admin:
+                        type: boolean
+                        example: false
+                        default: true
+                      name:
+                        type: string
+                        example: Demo
+                      email:
+                        type: string
+                        example: contact@example.com
+                      email_verification_sent_at:
+                        type: string
+                        example: '2017-03-29 15:27:19'
+                      email_verified_at:
+                        type: string
+                        example: '2017-03-29 15:27:21'
+                      is_api_key:
+                        type: boolean
+                        example: false
+                        default: true
+                      created_at:
+                        type: string
+                        example: '2017-01-11 21:44:02'
+                      updated_at:
+                        type: string
+                        example: '2017-04-24 15:41:58'
+                      deleted_at: {}
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650
+                      team_admin: {}
+                      team_enabled: {}
+                      team_role: {}
+                  files:
+                    type: array
+                  child_transactions:
+                    type: array
+                  reminder: {}
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"deleted_at\": [\n    \"The invoice is already deleted.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  deleted_at:
+                    type: array
+                    items:
+                      type: string
+                      example: The invoice is already deleted.
+      deprecated: false
+      tags:
+      - Invoice
+    get:
+      summary: Get an Invoice
+      description: Retrieves the invoice matching the given id.
+      operationId: get-an-invoice
+      parameters:
+      - name: keyword[]
+        in: query
+        schema:
+          type: string
+      - name: id
+        in: path
+        schema:
+          type: string
+          default: the invoice id.
+        required: true
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value:
+                    id: e40bd293-f754-4d15-a6cb-56514757b73b
+                    status: PAID
+                    total: 1
+                    created_at: '2025-06-25 18:00:03'
+                    sent_at: null
+                    viewed_at: null
+                    paid_at: '2025-06-25 18:08:27'
+                    due_at: null
+                    invoice_date_at: '2025-06-25 18:00:03'
+                    payment_attempt_failed: false
+                    payment_attempt_message: ''
+                    balance_due: 0
+                    total_paid: 1
+                    url: https://app.staxpayments.com/#/bill/
+                    is_partial_payment_enabled: true
+                    merchant:
+                      id: 003b87f7-f4ed-43fc-b1b8-82604c8d1821
+                      company_name: Sandbox Gateway Test Account
+                      display_name: Sandbox Gateway Test Account
+                      contact_phone: ''
+                      contact_email: testemail@staxpayments.com
+                      address_1: ''
+                      address_2: ''
+                      address_city: ''
+                      address_state: ''
+                      address_zip: ''
+                      branding: null
+                      options:
+                        social: null
+                        brand:
+                          logo:
+                          - id: staxconnect-sandbox_logoPngWideWhite
+                            url: https://fattpaydocuments.s3.us-west-2.amazonaws.com/logo/staxconnect-sandbox_logoPngWideWhite.png?1709312609426
+                            filename: Stax - with X Brandmark - White (5).png
+                            size: 52735
+                            type: image/png
+                            thumbnails:
+                              small:
+                                url: https://dl.airtable.com/.attachmentThumbnails/7780470946d0da3dd26e2569c605b1ea/6b93d9f9
+                                width: 72
+                                height: 36
+                              large:
+                                url: https://dl.airtable.com/.attachmentThumbnails/ef736fa9fc4df641986299dd58c00aec/761118fa
+                                width: 1019
+                                height: 512
+                              full:
+                                url: https://dl.airtable.com/.attachmentThumbnails/e05ef3e015bcf603932fb9d06a9e6872/80f30247
+                                width: 3000
+                                height: 3000
+                          background_color: '101634'
+                          primary_color: '101634'
+                          platform_name: Stax Connect Demo Sandbox
+                        advanced_customization: null
+                        invoice_display_data: null
+                        are_invoice_credit_card_payments_allowed_by_default: null
+                        hosted_hideCompanyName: null
+                        invoice_payment_methods: null
+                      allow_ach: true
+                      hosted_payments_token: Sandbox-Hosted-Payments-Token
+                      is_enterprise: false
+                      is_advanced_customization_enabled: false
+                      cnp_credit_surcharge_rate: null
+                      allow_paypal: true
+                      is_surcharge_enabled: false
+                      require_address: false
+                    customer:
+                      id: 257833da-1a8f-4f3f-af5d-191cad3f9275
+                      phone: '5555555555'
+                      email: ''
+                      firstname: Stax
+                      lastname: Testuser
+                      company: Your Company Here
+                      allow_invoice_credit_card_payments: true
+                    payment_method:
+                      id: 1789f7da-eb8e-4b83-9b12-498b6ee1c947
+                      method: card
+                      card_type: visa
+                      card_last_four: '1111'
+                      card_exp: '022027'
+                      nickname: 'VISA: Stax Testuser (ending in: 1111)'
+                      created_at: '2025-06-25 18:08:24'
+                    schedule: null
+                    transactions:
+                    - id: 23616b07-3c2b-4d8b-a20c-3d8b747d2272
+                      invoice_id: e40bd293-f754-4d15-a6cb-56514757b73b
+                      success: true
+                      message: null
+                      type: charge
+                      created_at: '2025-06-25 18:08:25'
+                      last_four: '1111'
+                      issuer_auth_code: null
+                      total: 1
+                      method: card
+                      payment_method_id: 1789f7da-eb8e-4b83-9b12-498b6ee1c947
+                      total_refunded: 0
+                      is_refundable: false
+                      is_voided: false
+                      is_voidable: false
+                      schedule_id: null
+                      child_captures: []
+                      parent_auth: null
+                      customer: null
+                      child_transactions: []
+                      files: []
+                      payment_method:
+                        id: 1789f7da-eb8e-4b83-9b12-498b6ee1c947
+                        method: card
+                        card_type: visa
+                        bank_type: null
+                        card_exp: '022027'
+                        card_last_four: '1111'
+                        nickname: 'VISA: Stax Testuser (ending in: 1111)'
+                        person_name: Stax Testuser
+                        created_at: '2025-06-25 18:08:24'
+                        customer: null
+                      user: null
+                    files: []
+                    meta:
+                      memo: ''
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: '400'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    default: ' "id": [     "The selected id is invalid."'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                required:
+                - id
+              examples:
+                New Example:
+                  summary: New Example
+                  value: "{ \"id\": [\n    \"The selected id is invalid.\"}"
+      deprecated: false
+      tags:
+      - Invoice
+    put:
+      summary: Update an Invoice
+      description: Alter or update an invoice.
+      operationId: update-an-invoice
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: invoice_date_at
+        in: query
+        description: If left blank when the invoice was created, the value will have defaulted to the current timestamp of creation. This field is used for the date the work was done, service was provided, or any other date the merchant wishes to track.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"9ddcf02b-c2be-4f27-b758-dbc12b2aa924\",\n  \"merchant_id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n  \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n  \"customer_id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n  \"total\": 100,\n  \"meta\": {\n    \"tax\": 0,\n    \"subtotal\": 10,\n    \"lineItems\": [\n      {\n        \"id\": \"optional-fm-catalog-item-id\",\n        \"item\": \"Demo Item\",\n        \"details\": \"this is a regular demo item\",\n        \"quantity\": 1,\n        \"price\": 100\n      }\n    ]\n  },\n  \"status\": \"DRAFT\",\n  \"sent_at\": null,\n  \"viewed_at\": null,\n  \"paid_at\": null,\n  \"schedule_id\": null,\n  \"reminder_id\": null,\n  \"payment_method_id\": \"d3050b19-77d9-44ac-9851-b1d1680a7684\",\n  \"url\": \"https://app.staxpayments.com/#/bill/\",\n  \"is_webpayment\": false,\n  \"deleted_at\": null,\n  \"created_at\": \"2017-05-08 21:32:51\",\n  \"updated_at\": \"2017-05-08 21:42:50\",\n  \"payment_attempt_failed\": false,\n  \"payment_attempt_message\": \"\",\n  \"balance_due\": 100,\n  \"total_paid\": 0,\n  \"payment_meta\": [],\n  \"customer\": {\n    \"id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n    \"firstname\": \"John\",\n    \"lastname\": \"Smith\",\n    \"company\": \"ABC INC\",\n    \"email\": \"demo@abc.com\",\n    \"cc_emails\": [\n      \"demo1@abc.com\",\n      \"demo2@abc.com\"\n    ],\n    \"phone\": \"1234567898\",\n    \"address_1\": \"123 Rite Way\",\n    \"address_2\": \"Unit 12\",\n    \"address_city\": \"Orlando\",\n    \"address_state\": \"FL\",\n    \"address_zip\": \"32801\",\n    \"address_country\": \"USA\",\n    \"notes\": null,\n    \"reference\": \"BARTLE\",\n    \"options\": \"\",\n    \"created_at\": \"2017-05-08 19:22:51\",\n    \"updated_at\": \"2017-05-08 19:23:46\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061\"\n  },\n  \"user\": {\n    \"id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n    \"system_admin\": false,\n    \"name\": \"Demo\",\n    \"email\": \"contact@example.com\",\n    \"email_verification_sent_at\": \"2017-03-29 15:27:19\",\n    \"email_verified_at\": \"2017-03-29 15:27:21\",\n    \"is_api_key\": false,\n    \"created_at\": \"2017-01-11 21:44:02\",\n    \"updated_at\": \"2017-04-24 15:41:58\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650\",\n    \"team_admin\": null,\n    \"team_enabled\": null,\n    \"team_role\": null\n  },\n  \"files\": [],\n  \"child_transactions\": [],\n  \"reminder\": null\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 9ddcf02b-c2be-4f27-b758-dbc12b2aa924
+                  merchant_id:
+                    type: string
+                    example: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                  user_id:
+                    type: string
+                    example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                  customer_id:
+                    type: string
+                    example: d45ee88c-8b27-4be8-8d81-77dda1b81826
+                  total:
+                    type: integer
+                    example: 100
+                    default: 0
+                  meta:
+                    type: object
+                    properties:
+                      tax:
+                        type: integer
+                        example: 0
+                        default: 0
+                      subtotal:
+                        type: integer
+                        example: 10
+                        default: 0
+                      lineItems:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: optional-fm-catalog-item-id
+                            item:
+                              type: string
+                              example: Demo Item
+                            details:
+                              type: string
+                              example: this is a regular demo item
+                            quantity:
+                              type: integer
+                              example: 1
+                              default: 0
+                            price:
+                              type: integer
+                              example: 100
+                              default: 0
+                  status:
+                    type: string
+                    example: DRAFT
+                  sent_at: {}
+                  viewed_at: {}
+                  paid_at: {}
+                  schedule_id: {}
+                  reminder_id: {}
+                  payment_method_id:
+                    type: string
+                    example: d3050b19-77d9-44ac-9851-b1d1680a7684
+                  url:
+                    type: string
+                    example: https://app.staxpayments.com/#/bill/
+                  is_webpayment:
+                    type: boolean
+                    example: false
+                    default: true
+                  deleted_at: {}
+                  created_at:
+                    type: string
+                    example: '2017-05-08 21:32:51'
+                  updated_at:
+                    type: string
+                    example: '2017-05-08 21:42:50'
+                  payment_attempt_failed:
+                    type: boolean
+                    example: false
+                    default: true
+                  payment_attempt_message:
+                    type: string
+                    example: ''
+                  balance_due:
+                    type: integer
+                    example: 100
+                    default: 0
+                  total_paid:
+                    type: integer
+                    example: 0
+                    default: 0
+                  payment_meta:
+                    type: array
+                  customer:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: d45ee88c-8b27-4be8-8d81-77dda1b81826
+                      firstname:
+                        type: string
+                        example: John
+                      lastname:
+                        type: string
+                        example: Smith
+                      company:
+                        type: string
+                        example: ABC INC
+                      email:
+                        type: string
+                        example: demo@abc.com
+                      cc_emails:
+                        type: array
+                        items:
+                          type: string
+                          example: demo1@abc.com
+                      phone:
+                        type: string
+                        example: '1234567898'
+                      address_1:
+                        type: string
+                        example: 123 Rite Way
+                      address_2:
+                        type: string
+                        example: Unit 12
+                      address_city:
+                        type: string
+                        example: Orlando
+                      address_state:
+                        type: string
+                        example: FL
+                      address_zip:
+                        type: string
+                        example: '32801'
+                      address_country:
+                        type: string
+                        example: USA
+                      notes: {}
+                      reference:
+                        type: string
+                        example: BARTLE
+                      options:
+                        type: string
+                        example: ''
+                      created_at:
+                        type: string
+                        example: '2017-05-08 19:22:51'
+                      updated_at:
+                        type: string
+                        example: '2017-05-08 19:23:46'
+                      deleted_at: {}
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                      system_admin:
+                        type: boolean
+                        example: false
+                        default: true
+                      name:
+                        type: string
+                        example: Demo
+                      email:
+                        type: string
+                        example: contact@example.com
+                      email_verification_sent_at:
+                        type: string
+                        example: '2017-03-29 15:27:19'
+                      email_verified_at:
+                        type: string
+                        example: '2017-03-29 15:27:21'
+                      is_api_key:
+                        type: boolean
+                        example: false
+                        default: true
+                      created_at:
+                        type: string
+                        example: '2017-01-11 21:44:02'
+                      updated_at:
+                        type: string
+                        example: '2017-04-24 15:41:58'
+                      deleted_at: {}
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650
+                      team_admin: {}
+                      team_enabled: {}
+                      team_role: {}
+                  files:
+                    type: array
+                  child_transactions:
+                    type: array
+                  reminder: {}
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Invalid ID:
+                  value: "{\n  \"id\": [\n    \"The selected id is invalid.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: array
+                    items:
+                      type: string
+                      example: The selected id is invalid.
+      tags:
+      - Invoice
+  /invoice/schedule/{id}:
+    delete:
+      summary: Delete an Invoice Schedule
+      description: Deletes a recurring invoice schedule. This operation requires merchant authentication.
+      operationId: delete-invoice-schedule
+      security:
+      - ApiKeyAuth: []
+      - EphemeralAuth: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              examples:
+                New Example:
+                  summary: New Example
+                  value:
+                    id: 320c909f-7808-465f-b519-5d906bf615f8
+                    merchant_id: f2010d6f-dc3c-40bb-bf13-8646c018ba38
+                    user_id: 41402d23-92d7-4be2-b3c4-5752ead46632
+                    active: true
+                    count: 0
+                    rule: FREQ=MONTHLY;INTERVAL=1;DTSTART=20250703T140000Z
+                    last_run_at: null
+                    next_run_at: null
+                    event: InvoiceGenerator
+                    payment_method_id: null
+                    customer_id: cafe3d35-1128-44bc-bd49-b6587662544f
+                    created_at: '2025-07-02 18:38:00'
+                    updated_at: '2025-07-02 19:03:38'
+                    deleted_at: '2025-07-02 19:03:38'
+                    last_invoice_status: null
+                    rule_text: monthly
+                    future_occurrences: []
+                    max: null
+                    end_at: null
+                    status: DELETED
+                    customer:
+                      id: cafe3d35-1128-44bc-bd49-b6587662544f
+                      firstname: Ayr
+                      lastname: Kartingy
+                      company: Testing Company
+                      email: ''
+                      cc_emails: []
+                      cc_sms: null
+                      phone: '5555555555'
+                      address_1: 2555 Adelia Blvd.
+                      address_2: ''
+                      address_city: Orlando
+                      address_state: ''
+                      address_zip: '32725'
+                      address_country: USA
+                      notes: ''
+                      reference: ''
+                      options:
+                        customer_custom_fields: []
+                      created_at: '2025-06-23 18:26:53'
+                      updated_at: '2025-06-23 18:26:53'
+                      deleted_at: null
+                      allow_invoice_credit_card_payments: true
+                      gravatar: false
+                      has_address: true
+                      missing_address_components: []
+                    files: []
+                    payment_method: null
+                    meta:
+                      isVenmoPaymentEnabled: false
+                      isCnpDigitalWalletPaymentEnabled: false
+                      isCCPaymentEnabled: true
+                      tax: 0
+                      discountAfterTax: 0
+                      discountBeforeTax: 0
+                      surcharge: 0
+                      isTipEnabled: false
+                      type: invoice/schedule
+                      update_inventory: true
+                      taxOverride: false
+                      isBulkInvoice: false
+                      shippingAmount: 0
+                      subtotal: 100
+                      internalMemo: ''
+                      memo: Test Memo
+                      lineItems:
+                      - id: generated-id-d36c-54b0-6515-bca5-fc53
+                        item: Test Item
+                        details: ''
+                        quantity: 1
+                        price: '100.00'
+                      isACHPaymentEnabled: true
+                      isPaypalPaymentEnabled: false
+                      isPaypalBnplPaymentEnabled: false
+                    channel: advanced-payment
+                    url: https://app.staxpayments.com/#/bill/
+                    total: 100
+                    email_notification: true
+                    is_partial_payment_enabled: true
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Invoice
+    put:
+      summary: Edit an Invoice Schedule
+      description: Update an existing invoice schedule, allowing changes to metadata, recurrence rules, or the schedule's active status.
+      operationId: editInvoiceSchedule
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the invoice schedule to update.
+        schema:
+          type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                total:
+                  type: number
+                  description: The total amount for the invoice.
+                rule:
+                  type: string
+                  description: The iCalendar RRule recurrence rule string.
+                active:
+                  type: boolean
+                  description: Whether the schedule is active. Set to false to pause.
+                email_notification:
+                  type: boolean
+                  description: Whether to send email notifications when invoices are generated.
+                files:
+                  type: array
+                  description: Array of file IDs to attach to the schedule.
+                  items:
+                    type: string
+                meta:
+                  type: object
+                  description: Metadata for the invoice, including line items, tax, and other details.
+                  properties:
+                    subtotal:
+                      type: number
+                      description: The subtotal amount before tax and fees.
+                    tax:
+                      type: number
+                      description: The tax amount applied to the invoice.
+                    fee:
+                      type: number
+                      description: An optional fee amount in dollars (not cents).
+                      minimum: 0
+                    poNumber:
+                      type: string
+                      nullable: true
+                      description: An optional purchase order number.
+                    shippingAmount:
+                      type: number
+                      description: The shipping amount for the invoice.
+                      minimum: 0
+                    hideCustomerLineItems:
+                      type: boolean
+                      nullable: true
+                      description: When set to true, line item details are hidden from customer-facing emails and receipts. Line items remain stored on the invoice and are passed to the payment gateway.
+                    lineItems:
+                      type: array
+                      description: Array of line items for the invoice.
+                      items:
+                        type: object
+                        properties:
+                          item:
+                            type: string
+                            description: The name or description of the item.
+                          quantity:
+                            type: number
+                            description: The quantity of the item.
+                          price:
+                            type: number
+                            description: The price per unit of the item.
+      responses:
+        '200':
+          description: Schedule successfully updated.
+        '400':
+          description: Bad Request - Invalid fields or missing required parameters.
+        '422':
+          description: Validation Error - DTSTART or next_run_at is in the past, or invalid field values.
+        '500':
+          description: Internal Server Error.
+      tags:
+      - Invoice
+  /invoice/{id}/pay/{method}:
+    post:
+      summary: Mark an Invoice Paid in Cash or Check
+      description: This marks an invoice as paid manually, meaning not a processed payment, but cash, check or giftcard
+      operationId: mark-an-invoice-paid-in-cash-or-check
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: method
+        in: path
+        schema:
+          type: string
+          enum:
+          - cash
+          - check
+          - giftcard
+        required: true
+      - name: apply_balance
+        in: query
+        description: For doing a partial payment. Amount must be less that the invoice total
+        schema:
+          type: integer
+          format: int32
+      - name: email_receipt
+        in: query
+        description: Send the receipt email to the customer attached to the invoice
+        schema:
+          type: boolean
+      - name: check_number
+        in: query
+        description: 'Max length: 25'
+        schema:
+          type: string
+      - name: driver_license
+        in: query
+        description: 'Max length: 45'
+        schema:
+          type: string
+      - name: driver_license_state
+        in: query
+        description: 'Max length: 20'
+        schema:
+          type: string
+      - name: payment_phone
+        in: query
+        description: 'Max length: 20'
+        schema:
+          type: string
+      - name: payment_note
+        in: query
+        description: 'Max length: 255'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"eb1ff2cc-edaf-4261-b1d2-f4ba24d49076\",\n  \"merchant_id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n  \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n  \"customer_id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n  \"total\": 10000,\n    \"meta\": {\n        \"tax\":0,\n        \"subtotal\":10000,\n        \"lineItems\": [\n            {\n                \"id\": \"optional-fm-catalog-item-id\",\n                \"item\":\"Demo Item\",\n                \"details\":\"this is a regular demo item\",\n                \"quantity\":1,\n                \"price\": 10000\n            }\n        ]\n    },\n  \"status\": \"PARTIALLY APPLIED\",\n  \"sent_at\": null,\n  \"viewed_at\": null,\n  \"paid_at\": null,\n  \"schedule_id\": null,\n  \"reminder_id\": null,\n  \"payment_method_id\": \"d3050b19-77d9-44ac-9851-b1d1680a7684\",\n  \"url\": \"https://app.staxpayments.com/#/bill/\",\n  \"is_webpayment\": false,\n  \"deleted_at\": null,\n  \"created_at\": \"2017-05-10 16:05:10\",\n  \"updated_at\": \"2017-05-10 16:05:26\",\n  \"payment_attempt_failed\": false,\n  \"payment_attempt_message\": \"\",\n  \"balance_due\": 9000,\n  \"total_paid\": 1000,\n  \"payment_meta\": {\n    \"check_number\": null,\n    \"driver_license\": null,\n    \"driver_license_state\": null,\n    \"payment_phone\": null,\n    \"payment_note\": \"Customer walked in and handed me a huge stack of cash on Thursday\",\n    \"tax\":0,\n    \"subtotal\":10000,\n    \"lineItems\": [\n        {\n            \"id\": \"optional-fm-catalog-item-id\",\n            \"item\":\"Demo Item\",\n            \"details\":\"this is a regular demo item\",\n            \"quantity\":1,\n            \"price\": 10000\n        }\n    ]\n  },\n  \"customer\": {\n    \"id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n    \"firstname\": \"John\",\n    \"lastname\": \"Smith\",\n    \"company\": \"ABC INC\",\n    \"email\": \"demo@abc.com\",\n    \"cc_emails\": [\n      \"demo1@abc.com\",\n      \"demo2@abc.com\"\n    ],\n    \"phone\": \"1234567898\",\n    \"address_1\": \"123 Rite Way\",\n    \"address_2\": \"Unit 12\",\n    \"address_city\": \"Orlando\",\n    \"address_state\": \"FL\",\n    \"address_zip\": \"32801\",\n    \"address_country\": \"USA\",\n    \"notes\": null,\n    \"reference\": \"BARTLE\",\n    \"options\": \"\",\n    \"created_at\": \"2017-05-08 19:22:51\",\n    \"updated_at\": \"2017-05-08 19:23:46\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061\"\n  },\n  \"user\": {\n    \"id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n    \"system_admin\": false,\n    \"name\": \"Demo\",\n    \"email\": \"contact@example.com\",\n    \"email_verification_sent_at\": \"2017-03-29 15:27:19\",\n    \"email_verified_at\": \"2017-03-29 15:27:21\",\n    \"is_api_key\": false,\n    \"created_at\": \"2017-01-11 21:44:02\",\n    \"updated_at\": \"2017-04-24 15:41:58\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650\",\n    \"team_admin\": null,\n    \"team_enabled\": null,\n    \"team_role\": null\n  },\n  \"files\": [],\n  \"child_transactions\": [\n    {\n      \"id\": \"0292381d-412e-4911-8e6e-e4a314401f5b\",\n      \"invoice_id\": \"eb1ff2cc-edaf-4261-b1d2-f4ba24d49076\",\n      \"reference_id\": \"\",\n      \"recurring_transaction_id\": \"\",\n      \"type\": \"charge\",\n      \"source\": null,\n      \"merchant_id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n      \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n      \"customer_id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n      \"payment_method_id\": \"cash\",\n      \"is_manual\": true,\n      \"success\": true,\n      \"message\": null,\n        \"meta\": {\n            \"check_number\": null,\n            \"driver_license\": null,\n            \"driver_license_state\": null,\n            \"payment_phone\": null,\n            \"payment_note\": \"Customer walked in and handed me a huge stack of cash on Thursday\",,\n            \"tax\":0,\n            \"subtotal\":10000,\n            \"lineItems\": [\n                {\n                    \"id\": \"optional-fm-catalog-item-id\",\n                    \"item\":\"Demo Item\",\n                    \"details\":\"this is a regular demo item\",\n                    \"quantity\":1,\n                    \"price\": 10000\n                }\n            ]\n        },\n      \"total\": 1000,\n      \"method\": \"cash\",\n      \"pre_auth\": false,\n      \"last_four\": null,\n      \"receipt_email_at\": \"2017-05-10 16:05:26\",\n      \"receipt_sms_at\": null,\n      \"created_at\": \"2017-05-10 16:05:26\",\n      \"updated_at\": \"2017-05-10 16:05:26\",\n      \"total_refunded\": null,\n      \"is_refundable\": false,\n      \"is_voided\": false,\n      \"is_voidable\": false,\n      \"schedule_id\": null,\n      \"customer\": {\n        \"id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n        \"firstname\": \"John\",\n        \"lastname\": \"Smith\",\n        \"company\": \"ABC INC\",\n        \"email\": \"demo@abc.com\",\n        \"cc_emails\": [\n          \"demo1@abc.com\",\n          \"demo2@abc.com\"\n        ],\n        \"phone\": \"1234567898\",\n        \"address_1\": \"123 Rite Way\",\n        \"address_2\": \"Unit 12\",\n        \"address_city\": \"Orlando\",\n        \"address_state\": \"FL\",\n        \"address_zip\": \"32801\",\n        \"address_country\": \"USA\",\n        \"notes\": null,\n        \"reference\": \"BARTLE\",\n        \"options\": \"\",\n        \"created_at\": \"2017-05-08 19:22:51\",\n        \"updated_at\": \"2017-05-08 19:23:46\",\n        \"deleted_at\": null,\n        \"gravatar\": \"//www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061\"\n      },\n      \"child_transactions\": [],\n      \"files\": [],\n      \"payment_method\": {\n        \"id\": \"cash\",\n        \"customer_id\": \"\",\n        \"merchant_id\": \"\",\n        \"user_id\": \"\",\n        \"nickname\": \"CASH (MANUAL ENTRY)\",\n        \"is_default\": 0,\n        \"method\": \"cash\",\n        \"person_name\": null,\n        \"card_type\": null,\n        \"card_last_four\": null,\n        \"card_exp\": null,\n        \"bank_name\": null,\n        \"bank_type\": null,\n        \"bank_holder_type\": null,\n        \"address_1\": null,\n        \"address_2\": null,\n        \"address_city\": null,\n        \"address_state\": null,\n        \"address_zip\": null,\n        \"address_country\": null,\n        \"purged_at\": null,\n        \"deleted_at\": \"2017-01-18 20:41:21\",\n        \"created_at\": \"2015-12-01 16:18:45\",\n        \"updated_at\": \"2016-12-01 16:18:45\",\n        \"card_exp_datetime\": [],\n        \"customer\": null\n      },\n      \"user\": {\n        \"id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n        \"system_admin\": false,\n        \"name\": \"Demo\",\n        \"email\": \"contact@example.com\",\n        \"email_verification_sent_at\": \"2017-03-29 15:27:19\",\n        \"email_verified_at\": \"2017-03-29 15:27:21\",\n        \"is_api_key\": false,\n        \"created_at\": \"2017-01-11 21:44:02\",\n        \"updated_at\": \"2017-04-24 15:41:58\",\n        \"deleted_at\": null,\n        \"gravatar\": \"//www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650\",\n        \"team_admin\": null,\n        \"team_enabled\": null,\n        \"team_role\": null\n      }\n    }\n  ],\n  \"reminder\": null\n}"
+        '404':
+          description: '404'
+          content:
+            application/json:
+              examples:
+                ID not found:
+                  value: "{\n  \"invoice_id\": [\n    \"id not found\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  invoice_id:
+                    type: array
+                    items:
+                      type: string
+                      example: id not found
+        '422':
+          description: '422'
+          content:
+            text/plain:
+              examples:
+                Result:
+                  value: "[\n  \"A paid invoice can't be paid again.\"\n]"
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: A paid invoice can't be paid again.
+      deprecated: false
+      tags:
+      - Invoice
+  /invoice/{id}/pay:
+    post:
+      summary: Pay an Invoice
+      description: ''
+      operationId: pay-an-invoice
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: apply_balance
+        in: query
+        schema:
+          type: number
+          format: float
+      - name: email_receipt
+        in: query
+        schema:
+          type: boolean
+          default: false
+      - name: payment_method_id
+        in: query
+        schema:
+          type: string
+      - name: idempotency_id
+        in: query
+        schema:
+          type: string
+      - name: funding
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"990117ce-b31f-4e76-b027-52e90b32e465\",\n  \"merchant_id\": \"c8143a7b-11f0-43b9-9258-9b1f6459d0c3\",\n  \"user_id\": \"a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8\",\n  \"customer_id\": \"76e81366-a900-4fff-9f6b-5f30b06c2a1d\",\n  \"total\": 10,\n  \"meta\": {\n    \"tax\": 0,\n    \"subtotal\": 10,\n    \"lineItems\": [\n      {\n        \"id\": \"optional-fm-catalog-item-id\",\n        \"item\": \"Demo Item\",\n        \"details\": \"this is a regular demo item\",\n        \"quantity\": 1,\n        \"price\": 10\n      }\n    ]\n  },\n  \"status\": \"PAID\",\n  \"is_merchant_present\": true,\n  \"sent_at\": null,\n  \"viewed_at\": null,\n  \"paid_at\": \"2018-08-22 01:48:27\",\n  \"schedule_id\": null,\n  \"reminder_id\": null,\n  \"payment_method_id\": \"f27192f5-c170-451c-a45e-397acb870b15\",\n  \"url\": \"http://127.0.0.1:5432/#/bill/\",\n  \"is_webpayment\": false,\n  \"deleted_at\": null,\n  \"created_at\": \"2018-08-22 01:48:05\",\n  \"updated_at\": \"2018-08-22 01:48:27\",\n  \"due_at\": null,\n  \"payment_attempt_failed\": false,\n  \"payment_attempt_message\": \"\",\n  \"balance_due\": 0,\n  \"total_paid\": 10,\n  \"payment_meta\": {\n    \"tax\": 0,\n    \"subtotal\": 10\n  },\n  \"customer\": {\n    \"id\": \"76e81366-a900-4fff-9f6b-5f30b06c2a1d\",\n    \"firstname\": \"John\",\n    \"lastname\": \"Smith\",\n    \"company\": \"ABC INC\",\n    \"email\": \"contact@example.com\",\n    \"cc_emails\": [],\n    \"cc_sms\": null,\n    \"phone\": \"1234567898\",\n    \"address_1\": \"123 Rite Way\",\n    \"address_2\": \"Unit 12\",\n    \"address_city\": \"Orlando\",\n    \"address_state\": \"FL\",\n    \"address_zip\": \"32801\",\n    \"address_country\": \"USA\",\n    \"notes\": null,\n    \"reference\": \"\",\n    \"options\": null,\n    \"created_at\": \"2018-08-22 01:47:52\",\n    \"updated_at\": \"2018-08-22 01:47:52\",\n    \"deleted_at\": null,\n    \"allow_invoice_credit_card_payments\": true,\n    \"gravatar\": \"//www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061\"\n  },\n  \"user\": {\n    \"id\": \"a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8\",\n    \"system_admin\": true,\n    \"name\": \"Bob Stevenson\",\n    \"email\": \"contact@example.com\",\n    \"email_verification_sent_at\": \"2018-05-31 21:22:05\",\n    \"email_verified_at\": \"2017-12-14 18:34:57\",\n    \"is_api_key\": false,\n    \"acknowledgments\": {\n      \"tutorial\": true,\n      \"editedOnboardingInformation\": true,\n      \"signedApplicationPowerform\": true,\n      \"godviewOmniSearchTooltip\": true,\n      \"godviewWelcome\": true\n    },\n    \"created_at\": \"2017-12-14 18:34:57\",\n    \"updated_at\": \"2018-07-02 22:51:45\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/772cbf95746d7da86789cc3634c46ba8\",\n    \"team_admin\": null,\n    \"team_enabled\": null,\n    \"team_role\": null,\n    \"merchant_options\": [],\n    \"is_default\": false\n  },\n  \"files\": [],\n  \"child_transactions\": [\n    {\n      \"id\": \"a4fb512c-55ee-49ef-bef9-ce45969d39c9\",\n      \"invoice_id\": \"990117ce-b31f-4e76-b027-52e90b32e465\",\n      \"reference_id\": \"\",\n      \"recurring_transaction_id\": \"\",\n      \"auth_id\": null,\n      \"type\": \"charge\",\n      \"source\": null,\n      \"is_merchant_present\": true,\n      \"merchant_id\": \"c8143a7b-11f0-43b9-9258-9b1f6459d0c3\",\n      \"user_id\": \"a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8\",\n      \"customer_id\": \"76e81366-a900-4fff-9f6b-5f30b06c2a1d\",\n      \"payment_method_id\": \"f27192f5-c170-451c-a45e-397acb870b15\",\n      \"is_manual\": false,\n      \"success\": true,\n      \"message\": null,\n      \"meta\": {\n        \"tax\": 0,\n        \"subtotal\": 10,\n        \"lineItems\": [\n          {\n            \"id\": \"optional-fm-catalog-item-id\",\n            \"item\": \"Demo Item\",\n            \"details\": \"this is a regular demo item\",\n            \"quantity\": 1,\n            \"price\": 10\n          }\n        ]\n      },\n      \"total\": 10,\n      \"method\": \"card\",\n      \"pre_auth\": false,\n      \"is_captured\": 0,\n      \"last_four\": \"8888\",\n      \"interchange_code\": \"\",\n      \"interchange_fee\": null,\n      \"batch_id\": \"\",\n      \"batched_at\": \"2018-08-21 21:48:27\",\n      \"emv_response\": \"\",\n      \"avs_response\": \"\",\n      \"cvv_response\": \"\",\n      \"pos_entry\": \"\",\n      \"pos_salesperson\": \"\",\n      \"receipt_email_at\": \"2018-08-22 01:48:27\",\n      \"receipt_sms_at\": null,\n      \"created_at\": \"2018-08-22 01:48:25\",\n      \"updated_at\": \"2018-08-22 01:48:27\",\n      \"total_refunded\": 0,\n      \"is_refundable\": false,\n      \"is_voided\": false,\n      \"is_voidable\": true,\n      \"currency\": \"USD\",\n      \"schedule_id\": null,\n      \"child_captures\": [],\n      \"parent_auth\": null,\n      \"customer\": {\n        \"id\": \"76e81366-a900-4fff-9f6b-5f30b06c2a1d\",\n        \"firstname\": \"John\",\n        \"lastname\": \"Smith\",\n        \"company\": \"ABC INC\",\n        \"email\": \"demo@abc.com\",\n        \"cc_emails\": [],\n        \"cc_sms\": null,\n        \"phone\": \"1234567898\",\n        \"address_1\": \"123 Rite Way\",\n        \"address_2\": \"Unit 12\",\n        \"address_city\": \"Orlando\",\n        \"address_state\": \"FL\",\n        \"address_zip\": \"32801\",\n        \"address_country\": \"USA\",\n        \"notes\": null,\n        \"reference\": \"\",\n        \"options\": null,\n        \"created_at\": \"2018-08-22 01:47:52\",\n        \"updated_at\": \"2018-08-22 01:47:52\",\n        \"deleted_at\": null,\n        \"allow_invoice_credit_card_payments\": true,\n        \"gravatar\": \"//www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061\"\n      },\n      \"child_transactions\": [],\n      \"files\": [],\n      \"payment_method\": {\n        \"id\": \"f27192f5-c170-451c-a45e-397acb870b15\",\n        \"customer_id\": \"76e81366-a900-4fff-9f6b-5f30b06c2a1d\",\n        \"merchant_id\": \"c8143a7b-11f0-43b9-9258-9b1f6459d0c3\",\n        \"user_id\": \"a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8\",\n        \"nickname\": \"VISA: Steven Smith Jr. (ending in: 8888)\",\n        \"has_cvv\": 1,\n        \"is_default\": 1,\n        \"method\": \"card\",\n        \"person_name\": \"Steven Smith Jr.\",\n        \"card_type\": \"visa\",\n        \"card_last_four\": \"8888\",\n        \"card_exp\": \"042019\",\n        \"bank_name\": null,\n        \"bank_type\": null,\n        \"bank_holder_type\": null,\n        \"address_1\": null,\n        \"address_2\": null,\n        \"address_city\": null,\n        \"address_state\": null,\n        \"address_zip\": \"32944\",\n        \"address_country\": \"USA\",\n        \"purged_at\": null,\n        \"deleted_at\": null,\n        \"created_at\": \"2018-08-22 01:47:59\",\n        \"updated_at\": \"2018-08-22 01:47:59\",\n        \"card_exp_datetime\": \"2019-04-30 23:59:59\",\n        \"is_usable_in_vt\": true,\n        \"customer\": {\n          \"id\": \"76e81366-a900-4fff-9f6b-5f30b06c2a1d\",\n          \"firstname\": \"John\",\n          \"lastname\": \"Smith\",\n          \"company\": \"ABC INC\",\n          \"email\": \"contact@example.com\",\n          \"cc_emails\": [],\n          \"cc_sms\": null,\n          \"phone\": \"1234567898\",\n          \"address_1\": \"123 Rite Way\",\n          \"address_2\": \"Unit 12\",\n          \"address_city\": \"Orlando\",\n          \"address_state\": \"FL\",\n          \"address_zip\": \"32801\",\n          \"address_country\": \"USA\",\n          \"notes\": null,\n          \"reference\": \"\",\n          \"options\": null,\n          \"created_at\": \"2018-08-22 01:47:52\",\n          \"updated_at\": \"2018-08-22 01:47:52\",\n          \"deleted_at\": null,\n          \"allow_invoice_credit_card_payments\": true,\n          \"gravatar\": \"//www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061\"\n        }\n      },\n      \"user\": {\n        \"id\": \"a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8\",\n        \"system_admin\": true,\n        \"name\": \"Bob Stevenson\",\n        \"email\": \"contact@example.com\",\n        \"email_verification_sent_at\": \"2018-05-31 21:22:05\",\n        \"email_verified_at\": \"2017-12-14 18:34:57\",\n        \"is_api_key\": false,\n        \"acknowledgments\": {\n          \"tutorial\": true,\n          \"editedOnboardingInformation\": true,\n          \"signedApplicationPowerform\": true,\n          \"godviewOmniSearchTooltip\": true,\n          \"godviewWelcome\": true\n        },\n        \"created_at\": \"2017-12-14 18:34:57\",\n        \"updated_at\": \"2018-07-02 22:51:45\",\n        \"deleted_at\": null,\n        \"gravatar\": \"\",\n        \"team_admin\": null,\n        \"team_enabled\": null,\n        \"team_role\": null,\n        \"merchant_options\": [],\n        \"is_default\": false\n      }\n    }\n  ],\n  \"reminder\": null\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 990117ce-b31f-4e76-b027-52e90b32e465
+                  merchant_id:
+                    type: string
+                    example: c8143a7b-11f0-43b9-9258-9b1f6459d0c3
+                  user_id:
+                    type: string
+                    example: a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8
+                  customer_id:
+                    type: string
+                    example: 76e81366-a900-4fff-9f6b-5f30b06c2a1d
+                  total:
+                    type: integer
+                    example: 10
+                    default: 0
+                  meta:
+                    type: object
+                    properties:
+                      tax:
+                        type: integer
+                        example: 0
+                        default: 0
+                      subtotal:
+                        type: integer
+                        example: 10
+                        default: 0
+                      lineItems:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: optional-fm-catalog-item-id
+                            item:
+                              type: string
+                              example: Demo Item
+                            details:
+                              type: string
+                              example: this is a regular demo item
+                            quantity:
+                              type: integer
+                              example: 1
+                              default: 0
+                            price:
+                              type: integer
+                              example: 10
+                              default: 0
+                  status:
+                    type: string
+                    example: PAID
+                  is_merchant_present:
+                    type: boolean
+                    example: true
+                    default: true
+                  sent_at: {}
+                  viewed_at: {}
+                  paid_at:
+                    type: string
+                    example: '2018-08-22 01:48:27'
+                  schedule_id: {}
+                  reminder_id: {}
+                  payment_method_id:
+                    type: string
+                    example: f27192f5-c170-451c-a45e-397acb870b15
+                  url:
+                    type: string
+                    example: http://127.0.0.1:5432/#/bill/
+                  is_webpayment:
+                    type: boolean
+                    example: false
+                    default: true
+                  deleted_at: {}
+                  created_at:
+                    type: string
+                    example: '2018-08-22 01:48:05'
+                  updated_at:
+                    type: string
+                    example: '2018-08-22 01:48:27'
+                  due_at: {}
+                  payment_attempt_failed:
+                    type: boolean
+                    example: false
+                    default: true
+                  payment_attempt_message:
+                    type: string
+                    example: ''
+                  balance_due:
+                    type: integer
+                    example: 0
+                    default: 0
+                  total_paid:
+                    type: integer
+                    example: 10
+                    default: 0
+                  payment_meta:
+                    type: object
+                    properties:
+                      tax:
+                        type: integer
+                        example: 0
+                        default: 0
+                      subtotal:
+                        type: integer
+                        example: 10
+                        default: 0
+                  customer:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 76e81366-a900-4fff-9f6b-5f30b06c2a1d
+                      firstname:
+                        type: string
+                        example: John
+                      lastname:
+                        type: string
+                        example: Smith
+                      company:
+                        type: string
+                        example: ABC INC
+                      email:
+                        type: string
+                        example: contact@example.com
+                      cc_emails:
+                        type: array
+                      cc_sms: {}
+                      phone:
+                        type: string
+                        example: '1234567898'
+                      address_1:
+                        type: string
+                        example: 123 Rite Way
+                      address_2:
+                        type: string
+                        example: Unit 12
+                      address_city:
+                        type: string
+                        example: Orlando
+                      address_state:
+                        type: string
+                        example: FL
+                      address_zip:
+                        type: string
+                        example: '32801'
+                      address_country:
+                        type: string
+                        example: USA
+                      notes: {}
+                      reference:
+                        type: string
+                        example: ''
+                      options: {}
+                      created_at:
+                        type: string
+                        example: '2018-08-22 01:47:52'
+                      updated_at:
+                        type: string
+                        example: '2018-08-22 01:47:52'
+                      deleted_at: {}
+                      allow_invoice_credit_card_payments:
+                        type: boolean
+                        example: true
+                        default: true
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8
+                      system_admin:
+                        type: boolean
+                        example: true
+                        default: true
+                      name:
+                        type: string
+                        example: Bob Stevenson
+                      email:
+                        type: string
+                        example: contact@example.com
+                      email_verification_sent_at:
+                        type: string
+                        example: '2018-05-31 21:22:05'
+                      email_verified_at:
+                        type: string
+                        example: '2017-12-14 18:34:57'
+                      is_api_key:
+                        type: boolean
+                        example: false
+                        default: true
+                      acknowledgments:
+                        type: object
+                        properties:
+                          tutorial:
+                            type: boolean
+                            example: true
+                            default: true
+                          editedOnboardingInformation:
+                            type: boolean
+                            example: true
+                            default: true
+                          signedApplicationPowerform:
+                            type: boolean
+                            example: true
+                            default: true
+                          godviewOmniSearchTooltip:
+                            type: boolean
+                            example: true
+                            default: true
+                          godviewWelcome:
+                            type: boolean
+                            example: true
+                            default: true
+                      created_at:
+                        type: string
+                        example: '2017-12-14 18:34:57'
+                      updated_at:
+                        type: string
+                        example: '2018-07-02 22:51:45'
+                      deleted_at: {}
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/772cbf95746d7da86789cc3634c46ba8
+                      team_admin: {}
+                      team_enabled: {}
+                      team_role: {}
+                      merchant_options:
+                        type: array
+                      is_default:
+                        type: boolean
+                        example: false
+                        default: true
+                  files:
+                    type: array
+                  child_transactions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: a4fb512c-55ee-49ef-bef9-ce45969d39c9
+                        invoice_id:
+                          type: string
+                          example: 990117ce-b31f-4e76-b027-52e90b32e465
+                        reference_id:
+                          type: string
+                          example: ''
+                        recurring_transaction_id:
+                          type: string
+                          example: ''
+                        auth_id: {}
+                        type:
+                          type: string
+                          example: charge
+                        source: {}
+                        is_merchant_present:
+                          type: boolean
+                          example: true
+                          default: true
+                        merchant_id:
+                          type: string
+                          example: c8143a7b-11f0-43b9-9258-9b1f6459d0c3
+                        user_id:
+                          type: string
+                          example: a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8
+                        customer_id:
+                          type: string
+                          example: 76e81366-a900-4fff-9f6b-5f30b06c2a1d
+                        payment_method_id:
+                          type: string
+                          example: f27192f5-c170-451c-a45e-397acb870b15
+                        is_manual:
+                          type: boolean
+                          example: false
+                          default: true
+                        success:
+                          type: boolean
+                          example: true
+                          default: true
+                        message: {}
+                        meta:
+                          type: object
+                          properties:
+                            tax:
+                              type: integer
+                              example: 0
+                              default: 0
+                            subtotal:
+                              type: integer
+                              example: 10
+                              default: 0
+                            lineItems:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                    example: optional-fm-catalog-item-id
+                                  item:
+                                    type: string
+                                    example: Demo Item
+                                  details:
+                                    type: string
+                                    example: this is a regular demo item
+                                  quantity:
+                                    type: integer
+                                    example: 1
+                                    default: 0
+                                  price:
+                                    type: integer
+                                    example: 10
+                                    default: 0
+                        total:
+                          type: integer
+                          example: 10
+                          default: 0
+                        method:
+                          type: string
+                          example: card
+                        pre_auth:
+                          type: boolean
+                          example: false
+                          default: true
+                        is_captured:
+                          type: integer
+                          example: 0
+                          default: 0
+                        last_four:
+                          type: string
+                          example: '8888'
+                        interchange_code:
+                          type: string
+                          example: ''
+                        interchange_fee: {}
+                        batch_id:
+                          type: string
+                          example: ''
+                        batched_at:
+                          type: string
+                          example: '2018-08-21 21:48:27'
+                        emv_response:
+                          type: string
+                          example: ''
+                        avs_response:
+                          type: string
+                          example: ''
+                        cvv_response:
+                          type: string
+                          example: ''
+                        pos_entry:
+                          type: string
+                          example: ''
+                        pos_salesperson:
+                          type: string
+                          example: ''
+                        receipt_email_at:
+                          type: string
+                          example: '2018-08-22 01:48:27'
+                        receipt_sms_at: {}
+                        created_at:
+                          type: string
+                          example: '2018-08-22 01:48:25'
+                        updated_at:
+                          type: string
+                          example: '2018-08-22 01:48:27'
+                        total_refunded:
+                          type: integer
+                          example: 0
+                          default: 0
+                        is_refundable:
+                          type: boolean
+                          example: false
+                          default: true
+                        is_voided:
+                          type: boolean
+                          example: false
+                          default: true
+                        is_voidable:
+                          type: boolean
+                          example: true
+                          default: true
+                        currency:
+                          type: string
+                          example: USD
+                        schedule_id: {}
+                        child_captures:
+                          type: array
+                        parent_auth: {}
+                        customer:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: 76e81366-a900-4fff-9f6b-5f30b06c2a1d
+                            firstname:
+                              type: string
+                              example: John
+                            lastname:
+                              type: string
+                              example: Smith
+                            company:
+                              type: string
+                              example: ABC INC
+                            email:
+                              type: string
+                              example: demo@abc.com
+                            cc_emails:
+                              type: array
+                            cc_sms: {}
+                            phone:
+                              type: string
+                              example: '1234567898'
+                            address_1:
+                              type: string
+                              example: 123 Rite Way
+                            address_2:
+                              type: string
+                              example: Unit 12
+                            address_city:
+                              type: string
+                              example: Orlando
+                            address_state:
+                              type: string
+                              example: FL
+                            address_zip:
+                              type: string
+                              example: '32801'
+                            address_country:
+                              type: string
+                              example: USA
+                            notes: {}
+                            reference:
+                              type: string
+                              example: ''
+                            options: {}
+                            created_at:
+                              type: string
+                              example: '2018-08-22 01:47:52'
+                            updated_at:
+                              type: string
+                              example: '2018-08-22 01:47:52'
+                            deleted_at: {}
+                            allow_invoice_credit_card_payments:
+                              type: boolean
+                              example: true
+                              default: true
+                            gravatar:
+                              type: string
+                              example: //www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061
+                        child_transactions:
+                          type: array
+                        files:
+                          type: array
+                        payment_method:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: f27192f5-c170-451c-a45e-397acb870b15
+                            customer_id:
+                              type: string
+                              example: 76e81366-a900-4fff-9f6b-5f30b06c2a1d
+                            merchant_id:
+                              type: string
+                              example: c8143a7b-11f0-43b9-9258-9b1f6459d0c3
+                            user_id:
+                              type: string
+                              example: a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8
+                            nickname:
+                              type: string
+                              example: 'VISA: Steven Smith Jr. (ending in: 8888)'
+                            has_cvv:
+                              type: integer
+                              example: 1
+                              default: 0
+                            is_default:
+                              type: integer
+                              example: 1
+                              default: 0
+                            method:
+                              type: string
+                              example: card
+                            person_name:
+                              type: string
+                              example: Steven Smith Jr.
+                            card_type:
+                              type: string
+                              example: visa
+                            card_last_four:
+                              type: string
+                              example: '8888'
+                            card_exp:
+                              type: string
+                              example: 042019
+                            bank_name: {}
+                            bank_type: {}
+                            bank_holder_type: {}
+                            address_1: {}
+                            address_2: {}
+                            address_city: {}
+                            address_state: {}
+                            address_zip:
+                              type: string
+                              example: '32944'
+                            address_country:
+                              type: string
+                              example: USA
+                            purged_at: {}
+                            deleted_at: {}
+                            created_at:
+                              type: string
+                              example: '2018-08-22 01:47:59'
+                            updated_at:
+                              type: string
+                              example: '2018-08-22 01:47:59'
+                            card_exp_datetime:
+                              type: string
+                              example: '2019-04-30 23:59:59'
+                            is_usable_in_vt:
+                              type: boolean
+                              example: true
+                              default: true
+                            customer:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                  example: 76e81366-a900-4fff-9f6b-5f30b06c2a1d
+                                firstname:
+                                  type: string
+                                  example: John
+                                lastname:
+                                  type: string
+                                  example: Smith
+                                company:
+                                  type: string
+                                  example: ABC INC
+                                email:
+                                  type: string
+                                  example: contact@example.com
+                                cc_emails:
+                                  type: array
+                                cc_sms: {}
+                                phone:
+                                  type: string
+                                  example: '1234567898'
+                                address_1:
+                                  type: string
+                                  example: 123 Rite Way
+                                address_2:
+                                  type: string
+                                  example: Unit 12
+                                address_city:
+                                  type: string
+                                  example: Orlando
+                                address_state:
+                                  type: string
+                                  example: FL
+                                address_zip:
+                                  type: string
+                                  example: '32801'
+                                address_country:
+                                  type: string
+                                  example: USA
+                                notes: {}
+                                reference:
+                                  type: string
+                                  example: ''
+                                options: {}
+                                created_at:
+                                  type: string
+                                  example: '2018-08-22 01:47:52'
+                                updated_at:
+                                  type: string
+                                  example: '2018-08-22 01:47:52'
+                                deleted_at: {}
+                                allow_invoice_credit_card_payments:
+                                  type: boolean
+                                  example: true
+                                  default: true
+                                gravatar:
+                                  type: string
+                                  example: //www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061
+                        user:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8
+                            system_admin:
+                              type: boolean
+                              example: true
+                              default: true
+                            name:
+                              type: string
+                              example: Bob Stevenson
+                            email:
+                              type: string
+                              example: contact@example.com
+                            email_verification_sent_at:
+                              type: string
+                              example: '2018-05-31 21:22:05'
+                            email_verified_at:
+                              type: string
+                              example: '2017-12-14 18:34:57'
+                            is_api_key:
+                              type: boolean
+                              example: false
+                              default: true
+                            acknowledgments:
+                              type: object
+                              properties:
+                                tutorial:
+                                  type: boolean
+                                  example: true
+                                  default: true
+                                editedOnboardingInformation:
+                                  type: boolean
+                                  example: true
+                                  default: true
+                                signedApplicationPowerform:
+                                  type: boolean
+                                  example: true
+                                  default: true
+                                godviewOmniSearchTooltip:
+                                  type: boolean
+                                  example: true
+                                  default: true
+                                godviewWelcome:
+                                  type: boolean
+                                  example: true
+                                  default: true
+                            created_at:
+                              type: string
+                              example: '2017-12-14 18:34:57'
+                            updated_at:
+                              type: string
+                              example: '2018-07-02 22:51:45'
+                            deleted_at: {}
+                            gravatar:
+                              type: string
+                              example: ''
+                            team_admin: {}
+                            team_enabled: {}
+                            team_role: {}
+                            merchant_options:
+                              type: array
+                            is_default:
+                              type: boolean
+                              example: false
+                              default: true
+                  reminder: {}
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"payment_method_id\": [\n    \"The selected payment method id is invalid.\"\n  ],\n  \"email_receipt\": [\n    \"The email receipt field must be true or false.\"\n  ],\n  \"apply_balance\": [\n    \"The apply balance must be a number.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  payment_method_id:
+                    type: array
+                    items:
+                      type: string
+                      example: The selected payment method id is invalid.
+                  email_receipt:
+                    type: array
+                    items:
+                      type: string
+                      example: The email receipt field must be true or false.
+                  apply_balance:
+                    type: array
+                    items:
+                      type: string
+                      example: The apply balance must be a number.
+      deprecated: false
+      tags:
+      - Invoice
+  /invoice/schedule:
+    get:
+      summary: Retrieve All Scheduled Invoices
+      description: Finds and lists all scheduled invoices under a merchant's account.
+      operationId: retrieve-all-scheduled-invoices
+      parameters:
+      - name: customer_id
+        in: query
+        description: Used to filter results by customer
+        schema:
+          type: string
+      - name: sort
+        in: query
+        schema:
+          type: string
+          enum:
+          - last_run_at
+          - next_run_at
+          - count
+          - created_at
+          - updated_at
+      - name: order
+        in: query
+        schema:
+          type: string
+          enum:
+          - DESC
+          - ASC
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n   \"current_page\": 1,\n    \"data\": [\n        {\n            \"id\": \"320c909f-7808-465f-b519-5d906bf615f8\",\n            \"merchant_id\": \"f2010d6f-dc3c-40bb-bf13-8646c018ba38\",\n            \"user_id\": \"41402d23-92d7-4be2-b3c4-5752ead46632\",\n            \"active\": true,\n            \"count\": 0,\n            \"rule\": \"FREQ=MONTHLY;INTERVAL=1;DTSTART=20250703T140000Z\",\n            \"last_run_at\": null,\n            \"next_run_at\": \"2025-07-03 14:00:00\",\n            \"event\": \"InvoiceGenerator\",\n            \"payment_method_id\": null,\n            \"customer_id\": \"cafe3d35-1128-44bc-bd49-b6587662544f\",\n            \"created_at\": \"2025-07-02 18:38:00\",\n            \"updated_at\": \"2025-07-02 18:38:00\",\n            \"deleted_at\": null,\n            \"last_invoice_status\": null,\n            \"rule_text\": \"monthly\",\n            \"future_occurrences\": [\n                \"2025-07-03 14:00:00\",\n                \"2025-08-03 14:00:00\",\n                \"2025-09-03 14:00:00\",\n                \"2025-10-03 14:00:00\",\n                \"2025-11-03 14:00:00\",\n                \"2025-12-03 14:00:00\",\n                \"2026-01-03 14:00:00\",\n                \"2026-02-03 14:00:00\",\n                \"2026-03-03 14:00:00\",\n                \"2026-04-03 14:00:00\",\n                \"2026-05-03 14:00:00\",\n                \"2026-06-03 14:00:00\",\n                \"2026-07-03 14:00:00\"\n            ],\n            \"max\": null,\n            \"end_at\": null,\n            \"status\": \"NOT STARTED\",\n            \"customer\": {\n                \"id\": \"cafe3d35-1128-44bc-bd49-b6587662544f\",\n                \"firstname\": \"Stax\",\n                \"lastname\": \"Tester\",\n                \"company\": \"Testing Company\",\n                \"email\": \"staxtester@staxpayments.com\",\n                \"cc_emails\": [],\n                \"cc_sms\": null,\n                \"phone\": \"5555555555\",\n                \"address_1\": \"2455 Adelia Blvd.\",\n                \"address_2\": \"\",\n                \"address_city\": \"Orlando\",\n                \"address_state\": \"FL\",\n                \"address_zip\": \"32725\",\n                \"address_country\": \"USA\",\n                \"notes\": \"\",\n                \"reference\": \"\",\n                \"options\": {\n                    \"customer_custom_fields\": []\n                },\n                \"created_at\": \"2025-06-23 18:26:53\",\n                \"updated_at\": \"2025-06-23 18:26:53\",\n                \"deleted_at\": null,\n                \"allow_invoice_credit_card_payments\": true,\n                \"gravatar\": false,\n                \"has_address\": true,\n                \"missing_address_components\": []\n            },\n            \"files\": [],\n            \"payment_method\": null,\n            \"meta\": {\n                \"isVenmoPaymentEnabled\": false,\n                \"isCnpDigitalWalletPaymentEnabled\": false,\n                \"isCCPaymentEnabled\": true,\n                \"tax\": 0,\n                \"discountAfterTax\": 0,\n                \"discountBeforeTax\": 0,\n                \"surcharge\": 0,\n                \"isTipEnabled\": false,\n                \"type\": \"invoice\\/schedule\",\n                \"update_inventory\": true,\n                \"taxOverride\": false,\n                \"isBulkInvoice\": false,\n                \"shippingAmount\": 0,\n                \"subtotal\": 100,\n                \"internalMemo\": \"\",\n                \"memo\": \"Test Memo\",\n                \"lineItems\": [\n                    {\n                        \"id\": \"generated-id-d36c-54b0-6515-bca5-fc53\",\n                        \"item\": \"Test Item\",\n                        \"details\": \"\",\n                        \"quantity\": 1,\n                        \"price\": \"100.00\"\n                    }\n                ],\n                \"isACHPaymentEnabled\": true,\n                \"isPaypalPaymentEnabled\": false,\n                \"isPaypalBnplPaymentEnabled\": false\n            },\n            \"channel\": \"advanced-payment\",\n            \"url\": \"https://app.staxpayments.com/#/bill/\",\n            \"total\": 100,\n            \"email_notification\": true,\n            \"is_partial_payment_enabled\": true\n        }\n    ],\n    \"first_page_url\": \"http://apiprod.fattlabs.com/invoice/schedule?page=1\",\n    \"from\": 1,\n    \"last_page\": 1,\n    \"last_page_url\": \"http://apiprod.fattlabs.com/invoice/schedule?page=1\",\n    \"links\": [\n        {\n            \"url\": null,\n            \"label\": \"&laquo; Previous\",\n            \"active\": false\n        },\n        {\n            \"url\": \"http://apiprod.fattlabs.com/invoice/schedule?page=1\",\n            \"label\": \"1\",\n            \"active\": true\n        },\n        {\n            \"url\": null,\n            \"label\": \"Next &raquo;\",\n            \"active\": false\n        }\n    ],\n    \"next_page_url\": null,\n    \"path\": \"http://apiprod.fattlabs.com/invoice/schedule\",\n    \"per_page\": 20,\n    \"prev_page_url\": null,\n    \"to\": 1,\n    \"total\": 1\n          }\n        ]\n      },\n      \"url\": \"https://app.staxpayments.com/#/bill/\",\n      \"total\": \"2.00\",\n      \"email_notification\": false\n    },\n    {\n      \"id\": \"af8d5ac4-ac2b-484f-8b97-3db7d8f79e35\",\n      \"merchant_id\": \"26492104-dbd0-49f7-918a-a4dcf9b2df1b\",\n      \"user_id\": \"41e60252-4f23-48de-a64f-e5a1e8a9359c\",\n      \"active\": true,\n      \"count\": 0,\n      \"rule\": \"FREQ=DAILY;COUNT=3;DTSTART=20181126T000000Z\",\n      \"last_run_at\": null,\n      \"next_run_at\": \"2018-11-26 00:00:00\",\n      \"event\": \"InvoiceGenerator\",\n      \"payment_method_id\": null,\n      \"customer_id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n      \"created_at\": \"2017-05-10 17:36:23\",\n      \"updated_at\": \"2017-05-10 17:36:23\",\n      \"deleted_at\": null,\n      \"rule_text\": \"daily for 3 times\",\n      \"future_occurrences\": [\n        \"2018-11-26 00:00:00\",\n        \"2018-11-27 00:00:00\",\n        \"2018-11-28 00:00:00\"\n      ],\n      \"max\": 3,\n      \"end_at\": null,\n      \"status\": \"NOT STARTED\",\n      \"customer\": {\n        \"id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n        \"firstname\": \"John\",\n        \"lastname\": \"Smith\",\n        \"company\": \"ABC INC\",\n        \"email\": \"demo@abc.com\",\n        \"cc_emails\": [\n          \"demo1@abc.com\",\n          \"demo2@abc.com\"\n        ],\n        \"phone\": \"1234567898\",\n        \"address_1\": \"123 Rite Way\",\n        \"address_2\": \"Unit 12\",\n        \"address_city\": \"Orlando\",\n        \"address_state\": \"FL\",\n        \"address_zip\": \"32801\",\n        \"address_country\": \"USA\",\n        \"notes\": null,\n        \"reference\": \"BARTLE\",\n        \"options\": \"\",\n        \"created_at\": \"2017-05-08 19:22:51\",\n        \"updated_at\": \"2017-05-08 19:23:46\",\n        \"deleted_at\": null,\n        \"gravatar\": \"//www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061\"\n      },\n      \"files\": [],\n      \"invoices\": [],\n      \"payment_method\": null,\n      \"meta\": {\n        \"tax\": 0,\n        \"subtotal\": 2,\n        \"lineItems\": [\n          {\n            \"id\": \"optional-fm-catalog-item-id\",\n            \"item\": \"Demo Item\",\n            \"details\": \"this is a regular demo item\",\n            \"quantity\": 1,\n            \"price\": 2\n          }\n        ]\n      },\n      \"url\": \"https://app.staxpayments.com/#/bill/\",\n      \"total\": \"2.00\",\n      \"email_notification\": false\n    }\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 2
+                    default: 0
+                  per_page:
+                    type: integer
+                    example: 25
+                    default: 0
+                  current_page:
+                    type: integer
+                    example: 1
+                    default: 0
+                  last_page:
+                    type: integer
+                    example: 1
+                    default: 0
+                  next_page_url: {}
+                  prev_page_url: {}
+                  from:
+                    type: integer
+                    example: 1
+                    default: 0
+                  to:
+                    type: integer
+                    example: 2
+                    default: 0
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: 53ad71d4-b85f-4efc-9ae1-579ff6eeb206
+                        merchant_id:
+                          type: string
+                          example: 26492104-dbd0-49f7-918a-a4dcf9b2df1b
+                        user_id:
+                          type: string
+                          example: 41e60252-4f23-48de-a64f-e5a1e8a9359c
+                        active:
+                          type: boolean
+                          example: true
+                          default: true
+                        count:
+                          type: integer
+                          example: 0
+                          default: 0
+                        rule:
+                          type: string
+                          example: FREQ=DAILY;COUNT=3;DTSTART=20181126T000000Z
+                        last_run_at: {}
+                        next_run_at:
+                          type: string
+                          example: '2018-11-26 00:00:00'
+                        event:
+                          type: string
+                          example: InvoiceGenerator
+                        payment_method_id: {}
+                        customer_id:
+                          type: string
+                          example: d45ee88c-8b27-4be8-8d81-77dda1b81826
+                        created_at:
+                          type: string
+                          example: '2017-05-10 17:37:50'
+                        updated_at:
+                          type: string
+                          example: '2017-05-10 17:37:50'
+                        deleted_at: {}
+                        rule_text:
+                          type: string
+                          example: daily for 3 times
+                        future_occurrences:
+                          type: array
+                          items:
+                            type: string
+                            example: '2018-11-26 00:00:00'
+                        max:
+                          type: integer
+                          example: 3
+                          default: 0
+                        end_at: {}
+                        status:
+                          type: string
+                          example: NOT STARTED
+                        customer:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: d45ee88c-8b27-4be8-8d81-77dda1b81826
+                            firstname:
+                              type: string
+                              example: John
+                            lastname:
+                              type: string
+                              example: Smith
+                            company:
+                              type: string
+                              example: ABC INC
+                            email:
+                              type: string
+                              example: demo@abc.com
+                            cc_emails:
+                              type: array
+                              items:
+                                type: string
+                                example: demo1@abc.com
+                            phone:
+                              type: string
+                              example: '1234567898'
+                            address_1:
+                              type: string
+                              example: 123 Rite Way
+                            address_2:
+                              type: string
+                              example: Unit 12
+                            address_city:
+                              type: string
+                              example: Orlando
+                            address_state:
+                              type: string
+                              example: FL
+                            address_zip:
+                              type: string
+                              example: '32801'
+                            address_country:
+                              type: string
+                              example: USA
+                            notes: {}
+                            reference:
+                              type: string
+                              example: BARTLE
+                            options:
+                              type: string
+                              example: ''
+                            created_at:
+                              type: string
+                              example: '2017-05-08 19:22:51'
+                            updated_at:
+                              type: string
+                              example: '2017-05-08 19:23:46'
+                            deleted_at: {}
+                            gravatar:
+                              type: string
+                              example: //www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061
+                        files:
+                          type: array
+                        invoices:
+                          type: array
+                        payment_method: {}
+                        meta:
+                          type: object
+                          properties:
+                            tax:
+                              type: integer
+                              example: 0
+                              default: 0
+                            subtotal:
+                              type: integer
+                              example: 2
+                              default: 0
+                            lineItems:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                    example: optional-fm-catalog-item-id
+                                  item:
+                                    type: string
+                                    example: Demo Item
+                                  details:
+                                    type: string
+                                    example: this is a regular demo item
+                                  quantity:
+                                    type: integer
+                                    example: 1
+                                    default: 0
+                                  price:
+                                    type: integer
+                                    example: 2
+                                    default: 0
+                        url:
+                          type: string
+                          example: https://app.staxpayments.com/#/bill/
+                        total:
+                          type: string
+                          example: '2.00'
+                        email_notification:
+                          type: boolean
+                          example: false
+                          default: true
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      tags:
+      - Invoice
+  /invoice/{id}/send/email:
+    put:
+      summary: Send an Invoice via Email
+      description: Sends the invoice to the customer's e-mail and other CC e-mails provided in the request.
+      operationId: send-an-invoice-via-email
+      parameters:
+      - name: id
+        in: path
+        description: The id of the invoice that should be sent
+        schema:
+          type: string
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ccEmails:
+                  type: array
+                  description: List of CC email addresses
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"4bbd1a64-7472-44ed-afef-02b82d3eae24\",\n  \"merchant_id\": \"dee75215-b3bc-4e44-9bc5-75d0fb498b61\",\n  \"user_id\": \"7c30a7f6-eabc-4355-b530-d351f8f0a4f1\",\n  \"customer_id\": \"a41c93d0-e45d-4d41-b46c-f781a02019f5\",\n  \"total\": 12,\n  \"meta\": {\n    \"tax\": 2,\n    \"subtotal\": 10,\n    \"lineItems\": [\n      {\n        \"id\": \"optional-fm-catalog-item-id\",\n        \"item\": \"Demo Item\",\n        \"details\": \"this is a regular demo item\",\n        \"quantity\": 1,\n        \"price\": 10\n      }\n    ]\n  },\n  \"status\": \"SENT\",\n  \"sent_at\": \"2016-05-09 17:10:43\",\n  \"viewed_at\": null,\n  \"paid_at\": null,\n  \"url\": \"http://127.0.0.1:5477/#/bill/\",\n  \"deleted_at\": null,\n  \"created_at\": \"2016-05-09 17:10:37\",\n  \"updated_at\": \"2016-05-09 17:10:43\",\n  \"customer\": {\n    \"id\": \"a41c93d0-e45d-4d41-b46c-f781a02019f5\",\n    \"firstname\": \"Jason\",\n    \"lastname\": \"Mann\",\n    \"company\": \"CIA\",\n    \"email\": \"JasonGuy@CIA.com\",\n    \"phone\": \"1234567898\",\n    \"address_1\": \"123 Rite Way\",\n    \"address_2\": \"Unit 12\",\n    \"address_city\": \"Orlando\",\n    \"address_state\": \"FL\",\n    \"address_zip\": \"32801\",\n    \"notes\": \"\",\n    \"options\": \"\",\n    \"created_at\": \"2016-04-26 13:55:21\",\n    \"updated_at\": \"2016-04-26 13:55:21\",\n    \"deleted_at\": null,\n    \"payment_attempt_failed\": false,\n    \"payment_attempt_message\": \"\",\n    \"gravatar\": \"//www.gravatar.com/avatar/1b91155f027795b2d36a08b1e5e8e9df\"\n  },\n  \"user\": {\n    \"id\": \"7c30a7f6-eabc-4355-b530-d351f8f0a4f1\",\n    \"system_admin\": true,\n    \"name\": \"DANIEL WALKER\",\n    \"email\": \"contact@example.com\",\n    \"created_at\": \"2016-04-12 13:52:26\",\n    \"updated_at\": \"2016-04-25 16:46:42\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/772cbf95746d7da86789cc3634c46ba8\"\n  },\n  \"child_transactions\": [],\n  \"merchant\": {\n    \"id\": \"dee75215-b3bc-4e44-9bc5-75d0fb498b61\",\n    \"mid\": \"520000294774\",\n    \"status\": \"ACTIVE\",\n    \"subdomain\": \"demo\",\n    \"company_name\": \"Stax\",\n    \"contact_name\": \"Stax\",\n    \"contact_email\": \"contact@example.com\",\n    \"contact_phone\": \"8555503288\",\n    \"address_1\": \"25 Wall Street\",\n    \"address_2\": \"Suite 1\",\n    \"address_city\": \"Orlando\",\n    \"address_state\": \"FL\",\n    \"address_zip\": \"32801\",\n    \"hosted_payments_token\": \"gfdbfed\",\n    \"currency\": [\n      \"USD\"\n    ],\n    \"branding\": \"https://s3-us-west-2.amazonaws.com/fattpaydocuments/avatars/0624acc8-c0be-45dc-a153-134da1990218.jpeg\",\n    \"options\": {\n      \"hosted_payments_success_note\": \"Thank you for your payment! It's gladly appreciated!\",\n      \"hosted_payments_url_long\": \"http://localhost.app:5477/#/pay/t___-_\",\n      \"hosted_payments_url_short\": \"http://bit.ly/1K34yKV\",\n      \"hosted_payments_note\": \"Thank you for your payment\"\n    },\n    \"notes\": \"\",\n    \"gateway_type\": null,\n    \"gateway_name\": null,\n    \"vendor_keys\": {},\n    \"created_at\": \"2016-04-12 13:52:26\",\n    \"updated_at\": \"2016-04-27 15:12:51\",\n    \"deleted_at\": null\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 4bbd1a64-7472-44ed-afef-02b82d3eae24
+                  merchant_id:
+                    type: string
+                    example: dee75215-b3bc-4e44-9bc5-75d0fb498b61
+                  user_id:
+                    type: string
+                    example: 7c30a7f6-eabc-4355-b530-d351f8f0a4f1
+                  customer_id:
+                    type: string
+                    example: a41c93d0-e45d-4d41-b46c-f781a02019f5
+                  total:
+                    type: integer
+                    example: 12
+                    default: 0
+                  meta:
+                    type: object
+                    properties:
+                      tax:
+                        type: integer
+                        example: 2
+                        default: 0
+                      subtotal:
+                        type: integer
+                        example: 10
+                        default: 0
+                      lineItems:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: optional-fm-catalog-item-id
+                            item:
+                              type: string
+                              example: Demo Item
+                            details:
+                              type: string
+                              example: this is a regular demo item
+                            quantity:
+                              type: integer
+                              example: 1
+                              default: 0
+                            price:
+                              type: integer
+                              example: 10
+                              default: 0
+                  status:
+                    type: string
+                    example: SENT
+                  sent_at:
+                    type: string
+                    example: '2016-05-09 17:10:43'
+                  viewed_at: {}
+                  paid_at: {}
+                  url:
+                    type: string
+                    example: http://127.0.0.1:5477/#/bill/
+                  deleted_at: {}
+                  created_at:
+                    type: string
+                    example: '2016-05-09 17:10:37'
+                  updated_at:
+                    type: string
+                    example: '2016-05-09 17:10:43'
+                  customer:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: a41c93d0-e45d-4d41-b46c-f781a02019f5
+                      firstname:
+                        type: string
+                        example: Jason
+                      lastname:
+                        type: string
+                        example: Mann
+                      company:
+                        type: string
+                        example: CIA
+                      email:
+                        type: string
+                        example: JasonGuy@CIA.com
+                      phone:
+                        type: string
+                        example: '1234567898'
+                      address_1:
+                        type: string
+                        example: 123 Rite Way
+                      address_2:
+                        type: string
+                        example: Unit 12
+                      address_city:
+                        type: string
+                        example: Orlando
+                      address_state:
+                        type: string
+                        example: FL
+                      address_zip:
+                        type: string
+                        example: '32801'
+                      notes:
+                        type: string
+                        example: ''
+                      options:
+                        type: string
+                        example: ''
+                      created_at:
+                        type: string
+                        example: '2016-04-26 13:55:21'
+                      updated_at:
+                        type: string
+                        example: '2016-04-26 13:55:21'
+                      deleted_at: {}
+                      payment_attempt_failed:
+                        type: boolean
+                        example: false
+                        default: true
+                      payment_attempt_message:
+                        type: string
+                        example: ''
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/1b91155f027795b2d36a08b1e5e8e9df
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 7c30a7f6-eabc-4355-b530-d351f8f0a4f1
+                      system_admin:
+                        type: boolean
+                        example: true
+                        default: true
+                      name:
+                        type: string
+                        example: DANIEL WALKER
+                      email:
+                        type: string
+                        example: contact@example.com
+                      created_at:
+                        type: string
+                        example: '2016-04-12 13:52:26'
+                      updated_at:
+                        type: string
+                        example: '2016-04-25 16:46:42'
+                      deleted_at: {}
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/772cbf95746d7da86789cc3634c46ba8
+                  child_transactions:
+                    type: array
+                  merchant:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: dee75215-b3bc-4e44-9bc5-75d0fb498b61
+                      mid:
+                        type: string
+                        example: '520000294774'
+                      status:
+                        type: string
+                        example: ACTIVE
+                      subdomain:
+                        type: string
+                        example: demo
+                      company_name:
+                        type: string
+                        example: Stax
+                      contact_name:
+                        type: string
+                        example: Stax
+                      contact_email:
+                        type: string
+                        example: contact@example.com
+                      contact_phone:
+                        type: string
+                        example: '8555503288'
+                      address_1:
+                        type: string
+                        example: 25 Wall Street
+                      address_2:
+                        type: string
+                        example: Suite 1
+                      address_city:
+                        type: string
+                        example: Orlando
+                      address_state:
+                        type: string
+                        example: FL
+                      address_zip:
+                        type: string
+                        example: '32801'
+                      hosted_payments_token:
+                        type: string
+                        example: gfdbfed
+                      currency:
+                        type: array
+                        items:
+                          type: string
+                          example: USD
+                      branding:
+                        type: string
+                        example: https://s3-us-west-2.amazonaws.com/fattpaydocuments/avatars/0624acc8-c0be-45dc-a153-134da1990218.jpeg
+                      options:
+                        type: object
+                        properties:
+                          hosted_payments_success_note:
+                            type: string
+                            example: Thank you for your payment! It's gladly appreciated!
+                          hosted_payments_url_long:
+                            type: string
+                            example: http://localhost.app:5477/#/pay/t___-_
+                          hosted_payments_url_short:
+                            type: string
+                            example: http://bit.ly/1K34yKV
+                          hosted_payments_note:
+                            type: string
+                            example: Thank you for your payment
+                      notes:
+                        type: string
+                        example: ''
+                      gateway_type: {}
+                      gateway_name: {}
+                      vendor_keys:
+                        type: object
+                        properties: {}
+                      created_at:
+                        type: string
+                        example: '2016-04-12 13:52:26'
+                      updated_at:
+                        type: string
+                        example: '2016-04-27 15:12:51'
+                      deleted_at: {}
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": [\n    \"Invoice could not be found\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: array
+                    items:
+                      type: string
+                      example: Invoice could not be found
+      deprecated: false
+      tags:
+      - Invoice
+  /invoice/{id}/send/sms:
+    put:
+      summary: Send an Invoice via SMS
+      description: Sends the invoice to the customer's phone number and other CC phone numbers.
+      operationId: send-an-invoice-via-sms
+      parameters:
+      - name: id
+        in: path
+        description: The id of the invoice that should be sent
+        schema:
+          type: string
+        required: true
+      - name: message
+        in: query
+        description: Message which will show in the sms message
+        schema:
+          type: string
+      - name: phone
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"4bbd1a64-7472-44ed-afef-02b82d3eae24\",\n  \"merchant_id\": \"dee75215-b3bc-4e44-9bc5-75d0fb498b61\",\n  \"user_id\": \"7c30a7f6-eabc-4355-b530-d351f8f0a4f1\",\n  \"customer_id\": \"a41c93d0-e45d-4d41-b46c-f781a02019f5\",\n  \"total\": 12,\n  \"meta\": {\n    \"tax\": 2,\n    \"subtotal\": 10,\n    \"lineItems\": [\n      {\n        \"id\": \"optional-fm-catalog-item-id\",\n        \"item\": \"Demo Item\",\n        \"details\": \"this is a regular demo item\",\n        \"quantity\": 1,\n        \"price\": 10\n      }\n    ]\n  },\n  \"status\": \"SENT\",\n  \"sent_at\": \"2016-05-09 17:10:43\",\n  \"viewed_at\": null,\n  \"paid_at\": null,\n  \"url\": \"http://127.0.0.1:5477/#/bill/\",\n  \"deleted_at\": null,\n  \"created_at\": \"2016-05-09 17:10:37\",\n  \"updated_at\": \"2016-05-09 17:10:43\",\n  \"customer\": {\n    \"id\": \"a41c93d0-e45d-4d41-b46c-f781a02019f5\",\n    \"firstname\": \"Jason\",\n    \"lastname\": \"Mann\",\n    \"company\": \"CIA\",\n    \"email\": \"JasonGuy@CIA.com\",\n    \"phone\": \"1234567898\",\n    \"address_1\": \"123 Rite Way\",\n    \"address_2\": \"Unit 12\",\n    \"address_city\": \"Orlando\",\n    \"address_state\": \"FL\",\n    \"address_zip\": \"32801\",\n    \"notes\": \"\",\n    \"options\": \"\",\n    \"created_at\": \"2016-04-26 13:55:21\",\n    \"updated_at\": \"2016-04-26 13:55:21\",\n    \"deleted_at\": null,\n    \"payment_attempt_failed\": false,\n    \"payment_attempt_message\": \"\",\n    \"gravatar\": \"//www.gravatar.com/avatar/1b91155f027795b2d36a08b1e5e8e9df\"\n  },\n  \"user\": {\n    \"id\": \"7c30a7f6-eabc-4355-b530-d351f8f0a4f1\",\n    \"system_admin\": true,\n    \"name\": \"DANIEL WALKER\",\n    \"email\": \"contact@example.com\",\n    \"created_at\": \"2016-04-12 13:52:26\",\n    \"updated_at\": \"2016-04-25 16:46:42\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/772cbf95746d7da86789cc3634c46ba8\"\n  },\n  \"child_transactions\": [],\n  \"merchant\": {\n    \"id\": \"dee75215-b3bc-4e44-9bc5-75d0fb498b61\",\n    \"mid\": \"520000294774\",\n    \"status\": \"ACTIVE\",\n    \"subdomain\": \"demo\",\n    \"company_name\": \"Stax\",\n    \"contact_name\": \"Stax\",\n    \"contact_email\": \"contact@example.com\",\n    \"contact_phone\": \"8555503288\",\n    \"address_1\": \"25 Wall Street\",\n    \"address_2\": \"Suite 1\",\n    \"address_city\": \"Orlando\",\n    \"address_state\": \"FL\",\n    \"address_zip\": \"32801\",\n    \"hosted_payments_token\": \"gfdbfed\",\n    \"currency\": [\n      \"USD\"\n    ],\n    \"branding\": \"https://s3-us-west-2.amazonaws.com/fattpaydocuments/avatars/0624acc8-c0be-45dc-a153-134da1990218.jpeg\",\n    \"options\": {\n      \"hosted_payments_success_note\": \"Thank you for your payment! It's gladly appreciated!\",\n      \"hosted_payments_url_long\": \"http://localhost.app:5477/#/pay/t___-_\",\n      \"hosted_payments_url_short\": \"http://bit.ly/1K34yKV\",\n      \"hosted_payments_note\": \"Thank you for your payment\"\n    },\n    \"notes\": \"\",\n    \"gateway_type\": null,\n    \"gateway_name\": null,\n    \"vendor_keys\": {},\n    \"created_at\": \"2016-04-12 13:52:26\",\n    \"updated_at\": \"2016-04-27 15:12:51\",\n    \"deleted_at\": null\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 4bbd1a64-7472-44ed-afef-02b82d3eae24
+                  merchant_id:
+                    type: string
+                    example: dee75215-b3bc-4e44-9bc5-75d0fb498b61
+                  user_id:
+                    type: string
+                    example: 7c30a7f6-eabc-4355-b530-d351f8f0a4f1
+                  customer_id:
+                    type: string
+                    example: a41c93d0-e45d-4d41-b46c-f781a02019f5
+                  total:
+                    type: integer
+                    example: 12
+                    default: 0
+                  meta:
+                    type: object
+                    properties:
+                      tax:
+                        type: integer
+                        example: 2
+                        default: 0
+                      subtotal:
+                        type: integer
+                        example: 10
+                        default: 0
+                      lineItems:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: optional-fm-catalog-item-id
+                            item:
+                              type: string
+                              example: Demo Item
+                            details:
+                              type: string
+                              example: this is a regular demo item
+                            quantity:
+                              type: integer
+                              example: 1
+                              default: 0
+                            price:
+                              type: integer
+                              example: 10
+                              default: 0
+                  status:
+                    type: string
+                    example: SENT
+                  sent_at:
+                    type: string
+                    example: '2016-05-09 17:10:43'
+                  viewed_at: {}
+                  paid_at: {}
+                  url:
+                    type: string
+                    example: http://127.0.0.1:5477/#/bill/
+                  deleted_at: {}
+                  created_at:
+                    type: string
+                    example: '2016-05-09 17:10:37'
+                  updated_at:
+                    type: string
+                    example: '2016-05-09 17:10:43'
+                  customer:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: a41c93d0-e45d-4d41-b46c-f781a02019f5
+                      firstname:
+                        type: string
+                        example: Jason
+                      lastname:
+                        type: string
+                        example: Mann
+                      company:
+                        type: string
+                        example: CIA
+                      email:
+                        type: string
+                        example: JasonGuy@CIA.com
+                      phone:
+                        type: string
+                        example: '1234567898'
+                      address_1:
+                        type: string
+                        example: 123 Rite Way
+                      address_2:
+                        type: string
+                        example: Unit 12
+                      address_city:
+                        type: string
+                        example: Orlando
+                      address_state:
+                        type: string
+                        example: FL
+                      address_zip:
+                        type: string
+                        example: '32801'
+                      notes:
+                        type: string
+                        example: ''
+                      options:
+                        type: string
+                        example: ''
+                      created_at:
+                        type: string
+                        example: '2016-04-26 13:55:21'
+                      updated_at:
+                        type: string
+                        example: '2016-04-26 13:55:21'
+                      deleted_at: {}
+                      payment_attempt_failed:
+                        type: boolean
+                        example: false
+                        default: true
+                      payment_attempt_message:
+                        type: string
+                        example: ''
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/1b91155f027795b2d36a08b1e5e8e9df
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 7c30a7f6-eabc-4355-b530-d351f8f0a4f1
+                      system_admin:
+                        type: boolean
+                        example: true
+                        default: true
+                      name:
+                        type: string
+                        example: DANIEL WALKER
+                      email:
+                        type: string
+                        example: contact@example.com
+                      created_at:
+                        type: string
+                        example: '2016-04-12 13:52:26'
+                      updated_at:
+                        type: string
+                        example: '2016-04-25 16:46:42'
+                      deleted_at: {}
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/772cbf95746d7da86789cc3634c46ba8
+                  child_transactions:
+                    type: array
+                  merchant:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: dee75215-b3bc-4e44-9bc5-75d0fb498b61
+                      mid:
+                        type: string
+                        example: '520000294774'
+                      status:
+                        type: string
+                        example: ACTIVE
+                      subdomain:
+                        type: string
+                        example: demo
+                      company_name:
+                        type: string
+                        example: Stax
+                      contact_name:
+                        type: string
+                        example: Stax
+                      contact_email:
+                        type: string
+                        example: contact@example.com
+                      contact_phone:
+                        type: string
+                        example: '8555503288'
+                      address_1:
+                        type: string
+                        example: 25 Wall Street
+                      address_2:
+                        type: string
+                        example: Suite 1
+                      address_city:
+                        type: string
+                        example: Orlando
+                      address_state:
+                        type: string
+                        example: FL
+                      address_zip:
+                        type: string
+                        example: '32801'
+                      hosted_payments_token:
+                        type: string
+                        example: gfdbfed
+                      currency:
+                        type: array
+                        items:
+                          type: string
+                          example: USD
+                      branding:
+                        type: string
+                        example: https://s3-us-west-2.amazonaws.com/fattpaydocuments/avatars/0624acc8-c0be-45dc-a153-134da1990218.jpeg
+                      options:
+                        type: object
+                        properties:
+                          hosted_payments_success_note:
+                            type: string
+                            example: Thank you for your payment! It's gladly appreciated!
+                          hosted_payments_url_long:
+                            type: string
+                            example: http://localhost.app:5477/#/pay/t___-_
+                          hosted_payments_url_short:
+                            type: string
+                            example: http://bit.ly/1K34yKV
+                          hosted_payments_note:
+                            type: string
+                            example: Thank you for your payment
+                      notes:
+                        type: string
+                        example: ''
+                      gateway_type: {}
+                      gateway_name: {}
+                      vendor_keys:
+                        type: object
+                        properties: {}
+                      created_at:
+                        type: string
+                        example: '2016-04-12 13:52:26'
+                      updated_at:
+                        type: string
+                        example: '2016-04-27 15:12:51'
+                      deleted_at: {}
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "[\n  {\n    \"id\": [\n      \"Invoice could not be found\"\n    ]\n  },\n  {\n    \"phoneNumber\": \"111111111111111\",\n    \"status\": \"failure\",\n    \"message\": \"please contact your customer for a valid phone number to use.\"\n  }\n]"
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: array
+                      items:
+                        type: string
+                        example: Invoice could not be found
+      deprecated: false
+      tags:
+      - Invoice
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: API key for merchant-level operations. Provides access to merchant-specific endpoints including transactions, payments, customer management, and merchant account settings. This key is scoped to a single merchant account and cannot access partner-level functionality.
+    PartnerApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Partner-level API key with elevated privileges. Grants access to all partner operations including merchant management, portfolio oversight, reporting across multiple merchant accounts, and partner-specific administrative functions. Also provides access to all merchant-level operations for accounts under the partner's management.
+    EphemeralAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Temporary authentication token with limited lifespan. Used for short-term access to specific operations, typically generated for secure one-time actions or time-bounded sessions. Automatically expires after a predefined period for enhanced security.

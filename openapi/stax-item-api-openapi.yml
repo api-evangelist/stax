@@ -1,0 +1,1275 @@
+openapi: 3.2.0
+info:
+  title: stax-api Item API
+  version: '0.1'
+servers:
+- url: https://apiprod.fattlabs.com/
+security:
+- ApiKeyAuth: []
+tags:
+- name: Item
+paths:
+  /item:
+    post:
+      summary: Create a Catalog Item
+      description: Creates an item to be stored in a merchant's catalog.
+      operationId: create-catalog-item
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - item
+              properties:
+                item:
+                  type: string
+                code:
+                  type: string
+                  description: Internal code for the item.
+                details:
+                  type: string
+                  description: Provides a description of the item.
+                category:
+                  type: string
+                  description: Provide a description or category to organize items.
+                price:
+                  type: number
+                  description: Price of the item.
+                  format: float
+                in_stock:
+                  type: integer
+                  description: Set exact quantity.
+                  format: int32
+                is_service:
+                  type: boolean
+                  description: Determine if it is a service or product.
+                is_active:
+                  type: boolean
+                  description: Sets whether this item is active or inactive.
+                is_taxable:
+                  type: boolean
+                  description: Sets whether the item is taxable or not.
+                is_discount:
+                  type: boolean
+                  description: Sets the item to a discount. If true, this will override the is_service variable.
+                user_id:
+                  type: string
+                meta:
+                  type: string
+                thumbnail_id:
+                  type: string
+                files:
+                  type: string
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value:
+                    id: 9cf3bd88-da1b-4f35-a5a1-74153c8e7f28
+                    user_id: 2d089742-6aca-462d-8db3-c2966e1f9e68
+                    merchant_id: a61d78cc-cde9-44ac-8a18-30c39be05879
+                    thumbnail_id: null
+                    item: test item
+                    code: aaaa
+                    category: essential items
+                    details: just a test item
+                    is_active: true
+                    is_taxable: false
+                    is_service: false
+                    is_discount: false
+                    price: 7.11
+                    in_stock: 0
+                    low_stock_alert: 3
+                    meta: []
+                    created_at: '2018-10-02 14:28:50'
+                    updated_at: '2018-10-02 14:28:50'
+                    deleted_at: null
+                    user:
+                      id: 2d089742-6aca-462d-8db3-c2966e1f9e68
+                      system_admin: true
+                      name: Morty Junior
+                      email: contact@example.com
+                      email_verification_sent_at: '2018-09-26 18:24:21'
+                      email_verified_at: '2016-05-11 17:13:33'
+                      is_api_key: false
+                      acknowledgments:
+                        signedApplication: true
+                        editedOnboardingInformation: false
+                        tutorial: true
+                        godviewWelcome: true
+                      created_at: '2016-05-18 14:11:46'
+                      updated_at: '2018-09-26 18:24:21'
+                      deleted_at: null
+                      gravatar: //www.gravatar.com/avatar/772cbf95746d7da86789cc3634c46ba8
+                      team_admin: null
+                      team_enabled: null
+                      team_role: null
+                      merchant_options: []
+                      is_default: false
+                    files: []
+                    thumbnail: null
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 9cf3bd88-da1b-4f35-a5a1-74153c8e7f28
+                  user_id:
+                    type: string
+                    example: 2d089742-6aca-462d-8db3-c2966e1f9e68
+                  merchant_id:
+                    type: string
+                    example: a61d78cc-cde9-44ac-8a18-30c39be05879
+                  thumbnail_id:
+                    type: string
+                  item:
+                    type: string
+                    example: test item
+                  code:
+                    type: string
+                    example: aaaa
+                  category:
+                    type: string
+                    example: essential items
+                  details:
+                    type: string
+                    example: just a test item
+                  is_active:
+                    type: boolean
+                    example: true
+                    default: true
+                  is_taxable:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_service:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_subscription:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_discount:
+                    type: boolean
+                    example: false
+                    default: true
+                  price:
+                    type: number
+                    example: 7.11
+                    default: 0
+                  in_stock:
+                    type: integer
+                    example: 0
+                    default: 0
+                  low_stock_alert:
+                    type: integer
+                    example: 3
+                    default: 0
+                  meta:
+                    type: array
+                  created_at:
+                    type: string
+                    example: '2018-10-02 14:28:50'
+                  updated_at:
+                    type: string
+                    example: '2018-10-02 14:28:50'
+                  deleted_at: {}
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 2d089742-6aca-462d-8db3-c2966e1f9e68
+                      system_admin:
+                        type: boolean
+                        example: true
+                        default: true
+                      name:
+                        type: string
+                        example: Morty Junior
+                      email:
+                        type: string
+                        example: contact@example.com
+                      email_verification_sent_at:
+                        type: string
+                        example: '2018-09-26 18:24:21'
+                      email_verified_at:
+                        type: string
+                        example: '2016-05-11 17:13:33'
+                      is_api_key:
+                        type: boolean
+                        example: false
+                        default: true
+                      acknowledgments:
+                        type: object
+                        properties:
+                          signedApplication:
+                            type: boolean
+                            example: true
+                            default: true
+                          editedOnboardingInformation:
+                            type: boolean
+                            example: false
+                            default: true
+                          tutorial:
+                            type: boolean
+                            example: true
+                            default: true
+                          godviewWelcome:
+                            type: boolean
+                            example: true
+                            default: true
+                      created_at:
+                        type: string
+                        example: '2016-05-18 14:11:46'
+                      updated_at:
+                        type: string
+                        example: '2018-09-26 18:24:21'
+                      deleted_at: {}
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/772cbf95746d7da86789cc3634c46ba8
+                      team_admin: {}
+                      team_enabled: {}
+                      team_role: {}
+                      merchant_options:
+                        type: array
+                      is_default:
+                        type: boolean
+                        example: false
+                        default: true
+                  files:
+                    type: array
+                  thumbnail: {}
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"sort\": [\n    \"The selected sort is invalid.\"\n  ],\n  \"order\": [\n    \"The selected order is invalid.\"\n  ],\n  \"is_active\": [\n    \"The is active field must be true or false.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  sort:
+                    type: array
+                    items:
+                      type: string
+                      example: The selected sort is invalid.
+                  order:
+                    type: array
+                    items:
+                      type: string
+                      example: The selected order is invalid.
+                  is_active:
+                    type: array
+                    items:
+                      type: string
+                      example: The is active field must be true or false.
+      deprecated: false
+      tags:
+      - Item
+    get:
+      summary: Retrieve All Catalog Items
+      description: Retrieves all the items saved under a merchant's catalog.
+      operationId: retrieve-all-catalog-items
+      parameters:
+      - name: code
+        in: query
+        description: Filter by items of the exact code
+        schema:
+          type: string
+      - name: price
+        in: query
+        description: Filters by items of the exact price.
+        schema:
+          type: number
+          format: float
+      - name: quantity
+        in: query
+        description: Filters by items of the exact quantity.
+        schema:
+          type: string
+      - name: is_service
+        in: query
+        description: Filters for services.
+        schema:
+          type: boolean
+      - name: is_active
+        in: query
+        description: Filters for active items.
+        schema:
+          type: boolean
+      - name: is_taxable
+        in: query
+        description: Filters for taxable items.
+        schema:
+          type: boolean
+      - name: is_discount
+        in: query
+        description: Filters if the item is discounted or not.
+        schema:
+          type: boolean
+      - name: user_id
+        in: query
+        schema:
+          type: string
+        description: Filters by user id.
+      - name: name
+        in: query
+        schema:
+          type: string
+        description: Filters out any items that don't share the inputted name. Does not have to be exact.
+      - name: description
+        in: query
+        schema:
+          type: string
+        description: Filters by part of description.
+      - name: meta
+        in: query
+        schema:
+          type: string
+        description: Filters by meta. Does not have to be exact.
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"total\": 2,\n  \"per_page\": 25,\n  \"current_page\": 1,\n  \"last_page\": 1,\n  \"next_page_url\": null,\n  \"prev_page_url\": null,\n  \"from\": 1,\n  \"to\": 2,\n  \"data\": [\n    {\n      \"id\": \"79256d84-3930-4e4b-bc71-9c6587cfc65c\",\n      \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n      \"merchant_id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n      \"thumbnail_id\": null,\n      \"item\": \"meeseeks\",\n      \"code\": \"aaaa\",\n      \"details\": \"just a test item\",\n      \"is_active\": true,\n      \"is_taxable\": false,\n      \"is_service\": false,\n      \"is_discount\": false,\n      \"price\": 7.11,\n      \"in_stock\": 0,\n      \"meta\": [],\n      \"created_at\": \"2017-05-05 19:49:21\",\n      \"updated_at\": \"2017-05-05 19:49:21\",\n      \"deleted_at\": null,\n      \"deprecation_warning\": \"The name and decription fiels will be deprecated on 7/1/17\",\n      \"user\": {\n        \"id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n        \"system_admin\": false,\n        \"name\": \"Test Guy\",\n        \"email\": \"contact@example.com\",\n        \"email_verification_sent_at\": \"2017-03-29 15:27:19\",\n        \"email_verified_at\": \"2017-03-29 15:27:21\",\n        \"is_api_key\": false,\n        \"created_at\": \"2017-01-11 21:44:02\",\n        \"updated_at\": \"2017-04-24 15:41:58\",\n        \"deleted_at\": null,\n        \"gravatar\": \"//www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650\",\n        \"team_admin\": null,\n        \"team_enabled\": null,\n        \"team_role\": null\n      },\n      \"files\": [],\n      \"thumbnail\": null\n    },\n    {\n      \"id\": \"62c6c812-36e6-4037-9569-caa1dfe968de\",\n      \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n      \"merchant_id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n      \"thumbnail_id\": null,\n      \"item\": \"Meeseeks Box\",\n      \"code\": null,\n      \"details\": null,\n      \"is_active\": true,\n      \"is_taxable\": false,\n      \"is_service\": true,\n      \"is_discount\": true,\n      \"price\": 55,\n      \"in_stock\": 0,\n      \"meta\": [],\n      \"created_at\": \"2017-05-05 19:55:05\",\n      \"updated_at\": \"2017-05-05 19:55:06\",\n      \"deleted_at\": null,\n      \"deprecation_warning\": \"The name and decription fiels will be deprecated on 7/1/17\",\n      \"user\": {\n        \"id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n        \"system_admin\": false,\n        \"name\": \"test guy\",\n        \"email\": \"contact@example.com\",\n        \"email_verification_sent_at\": \"2017-03-29 15:27:19\",\n        \"email_verified_at\": \"2017-03-29 15:27:21\",\n        \"is_api_key\": false,\n        \"created_at\": \"2017-01-11 21:44:02\",\n        \"updated_at\": \"2017-04-24 15:41:58\",\n        \"deleted_at\": null,\n        \"gravatar\": \"//www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650\",\n        \"team_admin\": null,\n        \"team_enabled\": null,\n        \"team_role\": null\n      },\n      \"files\": [\n        {\n          \"id\": \"cc5d4376-8a76-4de1-8fc1-b9135be5f26f\",\n          \"merchant_id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n          \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n          \"name\": \"meeseeks.png\",\n          \"public_url\": \"https://s3-us-west-2.amazonaws.com/fattpaydocuments/cc5d4376-8a76-4de1-8fc1-b9135be5f26f.png\",\n          \"tag\": null,\n          \"meta\": {\n            \"filesize_bytes\": 14181,\n            \"filesize\": \"0.14 kB\",\n            \"extension\": \"png\",\n            \"size\": {\n              \"width\": 128,\n              \"height\": 128\n            },\n            \"mime\": \"image/png\"\n          },\n          \"created_at\": \"2017-05-05 19:55:00\",\n          \"updated_at\": \"2017-05-05 19:55:01\",\n          \"deleted_at\": null\n        }\n      ],\n      \"thumbnail\": null\n    }\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 2
+                    default: 0
+                  per_page:
+                    type: integer
+                    example: 25
+                    default: 0
+                  current_page:
+                    type: integer
+                    example: 1
+                    default: 0
+                  last_page:
+                    type: integer
+                    example: 1
+                    default: 0
+                  next_page_url: {}
+                  prev_page_url: {}
+                  from:
+                    type: integer
+                    example: 1
+                    default: 0
+                  to:
+                    type: integer
+                    example: 2
+                    default: 0
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: 79256d84-3930-4e4b-bc71-9c6587cfc65c
+                        user_id:
+                          type: string
+                          example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                        merchant_id:
+                          type: string
+                          example: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                        thumbnail_id: {}
+                        item:
+                          type: string
+                          example: meeseeks
+                        code:
+                          type: string
+                          example: aaaa
+                        details:
+                          type: string
+                          example: just a test item
+                        is_active:
+                          type: boolean
+                          example: true
+                          default: true
+                        is_taxable:
+                          type: boolean
+                          example: false
+                          default: true
+                        is_service:
+                          type: boolean
+                          example: false
+                          default: true
+                        is_discount:
+                          type: boolean
+                          example: false
+                          default: true
+                        price:
+                          type: number
+                          example: 7.11
+                          default: 0
+                        in_stock:
+                          type: integer
+                          example: 0
+                          default: 0
+                        meta:
+                          type: array
+                        created_at:
+                          type: string
+                          example: '2017-05-05 19:49:21'
+                        updated_at:
+                          type: string
+                          example: '2017-05-05 19:49:21'
+                        deleted_at: {}
+                        deprecation_warning:
+                          type: string
+                          example: The name and decription fiels will be deprecated on 7/1/17
+                        user:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                            system_admin:
+                              type: boolean
+                              example: false
+                              default: true
+                            name:
+                              type: string
+                              example: Test Guy
+                            email:
+                              type: string
+                              example: contact@example.com
+                            email_verification_sent_at:
+                              type: string
+                              example: '2017-03-29 15:27:19'
+                            email_verified_at:
+                              type: string
+                              example: '2017-03-29 15:27:21'
+                            is_api_key:
+                              type: boolean
+                              example: false
+                              default: true
+                            created_at:
+                              type: string
+                              example: '2017-01-11 21:44:02'
+                            updated_at:
+                              type: string
+                              example: '2017-04-24 15:41:58'
+                            deleted_at: {}
+                            gravatar:
+                              type: string
+                              example: //www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650
+                            team_admin: {}
+                            team_enabled: {}
+                            team_role: {}
+                        files:
+                          type: array
+                        thumbnail: {}
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"sort\": [\n    \"The selected sort is invalid.\"\n  ],\n  \"order\": [\n    \"The selected order is invalid.\"\n  ],\n  \"is_active\": [\n    \"The is active field must be true or false.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  sort:
+                    type: array
+                    items:
+                      type: string
+                      example: The selected sort is invalid.
+                  order:
+                    type: array
+                    items:
+                      type: string
+                      example: The selected order is invalid.
+                  is_active:
+                    type: array
+                    items:
+                      type: string
+                      example: The is active field must be true or false.
+      deprecated: false
+      tags:
+      - Item
+  /item/{id}/decrement:
+    put:
+      summary: Decrement Item's Stock
+      description: Decreases the stock of an item.
+      operationId: decrement-items-stock
+      parameters:
+      - name: quantity
+        in: query
+        schema:
+          type: integer
+          format: int32
+        required: true
+        description: The amount to reduce the in_stock value.
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: ID of the item.
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"0a6c966c-6a70-44eb-aa26-673310ca65c0\",\n  \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n  \"merchant_id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n  \"thumbnail_id\": null,\n  \"item\": \"Soap 2.0\",\n  \"code\": \"aaaa\",\n  \"details\": \"Even cleaner time\",\n  \"is_active\": true,\n  \"is_taxable\": false,\n  \"is_service\": false,\n  \"is_discount\": false,\n  \"price\": 7.11,\n  \"in_stock\": -9,\n  \"meta\": [],\n  \"created_at\": \"2017-05-05 20:13:12\",\n  \"updated_at\": \"2017-05-05 20:16:21\",\n  \"deleted_at\": null,\n  \"deprecation_warning\": \"The name and decription fiels will be deprecated on 7/1/17\",\n  \"user\": {\n    \"id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n    \"system_admin\": false,\n    \"name\": \"Test Guy\",\n    \"email\": \"contact@example.com\",\n    \"email_verification_sent_at\": \"2017-03-29 15:27:19\",\n    \"email_verified_at\": \"2017-03-29 15:27:21\",\n    \"is_api_key\": false,\n    \"created_at\": \"2017-01-11 21:44:02\",\n    \"updated_at\": \"2017-04-24 15:41:58\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650\",\n    \"team_admin\": null,\n    \"team_enabled\": null,\n    \"team_role\": null\n  },\n  \"files\": [],\n  \"thumbnail\": null\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 0a6c966c-6a70-44eb-aa26-673310ca65c0
+                  user_id:
+                    type: string
+                    example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                  merchant_id:
+                    type: string
+                    example: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                  thumbnail_id: {}
+                  item:
+                    type: string
+                    example: Soap 2.0
+                  code:
+                    type: string
+                    example: aaaa
+                  details:
+                    type: string
+                    example: Even cleaner time
+                  is_active:
+                    type: boolean
+                    example: true
+                    default: true
+                  is_taxable:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_service:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_discount:
+                    type: boolean
+                    example: false
+                    default: true
+                  price:
+                    type: number
+                    example: 7.11
+                    default: 0
+                  in_stock:
+                    type: integer
+                    example: -9
+                    default: 0
+                  meta:
+                    type: array
+                  created_at:
+                    type: string
+                    example: '2017-05-05 20:13:12'
+                  updated_at:
+                    type: string
+                    example: '2017-05-05 20:16:21'
+                  deleted_at: {}
+                  deprecation_warning:
+                    type: string
+                    example: The name and decription fiels will be deprecated on 7/1/17
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                      system_admin:
+                        type: boolean
+                        example: false
+                        default: true
+                      name:
+                        type: string
+                        example: Test Guy
+                      email:
+                        type: string
+                        example: contact@example.com
+                      email_verification_sent_at:
+                        type: string
+                        example: '2017-03-29 15:27:19'
+                      email_verified_at:
+                        type: string
+                        example: '2017-03-29 15:27:21'
+                      is_api_key:
+                        type: boolean
+                        example: false
+                        default: true
+                      created_at:
+                        type: string
+                        example: '2017-01-11 21:44:02'
+                      updated_at:
+                        type: string
+                        example: '2017-04-24 15:41:58'
+                      deleted_at: {}
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650
+                      team_admin: {}
+                      team_enabled: {}
+                      team_role: {}
+                  files:
+                    type: array
+                  thumbnail: {}
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": [\n    \"The item was not found\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: array
+                    items:
+                      type: string
+                      example: The item was not found
+      deprecated: false
+      tags:
+      - Item
+  /item/{id}:
+    delete:
+      summary: Delete a Catalog Item
+      description: ''
+      operationId: delete-a-catalog-item
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      tags:
+      - Item
+    get:
+      summary: Retrieve an Item by ID
+      description: Retrieves the merchant's item matching the given id and then returns details about the item
+      operationId: retrieve-an-item-by-id
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: This is the ID of the item to be returned.
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"79256d84-3930-4e4b-bc71-9c6587cfc65c\",\n  \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n  \"merchant_id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n  \"thumbnail_id\": null,\n  \"item\": \"meeseeks\",\n  \"code\": \"aaaa\",\n  \"details\": \"just a test item\",\n  \"is_active\": true,\n  \"is_taxable\": false,\n  \"is_service\": false,\n  \"is_discount\": false,\n  \"price\": 7.11,\n  \"in_stock\": 0,\n  \"meta\": [],\n  \"created_at\": \"2017-05-05 19:49:21\",\n  \"updated_at\": \"2017-05-05 19:49:21\",\n  \"deleted_at\": null,\n  \"deprecation_warning\": \"The name and decription fiels will be deprecated on 7/1/17\",\n  \"user\": {\n    \"id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n    \"system_admin\": false,\n    \"name\": \"Test Guy\",\n    \"email\": \"contact@example.com\",\n    \"email_verification_sent_at\": \"2017-03-29 15:27:19\",\n    \"email_verified_at\": \"2017-03-29 15:27:21\",\n    \"is_api_key\": false,\n    \"created_at\": \"2017-01-11 21:44:02\",\n    \"updated_at\": \"2017-04-24 15:41:58\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650\",\n    \"team_admin\": null,\n    \"team_enabled\": null,\n    \"team_role\": null\n  },\n  \"files\": [],\n  \"thumbnail\": null\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 79256d84-3930-4e4b-bc71-9c6587cfc65c
+                  user_id:
+                    type: string
+                    example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                  merchant_id:
+                    type: string
+                    example: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                  thumbnail_id: {}
+                  item:
+                    type: string
+                    example: meeseeks
+                  code:
+                    type: string
+                    example: aaaa
+                  details:
+                    type: string
+                    example: just a test item
+                  is_active:
+                    type: boolean
+                    example: true
+                    default: true
+                  is_taxable:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_service:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_discount:
+                    type: boolean
+                    example: false
+                    default: true
+                  price:
+                    type: number
+                    example: 7.11
+                    default: 0
+                  in_stock:
+                    type: integer
+                    example: 0
+                    default: 0
+                  meta:
+                    type: array
+                  created_at:
+                    type: string
+                    example: '2017-05-05 19:49:21'
+                  updated_at:
+                    type: string
+                    example: '2017-05-05 19:49:21'
+                  deleted_at: {}
+                  deprecation_warning:
+                    type: string
+                    example: The name and decription fiels will be deprecated on 7/1/17
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                      system_admin:
+                        type: boolean
+                        example: false
+                        default: true
+                      name:
+                        type: string
+                        example: Test Guy
+                      email:
+                        type: string
+                        example: contact@example.com
+                      email_verification_sent_at:
+                        type: string
+                        example: '2017-03-29 15:27:19'
+                      email_verified_at:
+                        type: string
+                        example: '2017-03-29 15:27:21'
+                      is_api_key:
+                        type: boolean
+                        example: false
+                        default: true
+                      created_at:
+                        type: string
+                        example: '2017-01-11 21:44:02'
+                      updated_at:
+                        type: string
+                        example: '2017-04-24 15:41:58'
+                      deleted_at: {}
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650
+                      team_admin: {}
+                      team_enabled: {}
+                      team_role: {}
+                  files:
+                    type: array
+                  thumbnail: {}
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "\n{\n  \"id\": [\n    \"The item was not found\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: array
+                    items:
+                      type: string
+                      example: The item was not found
+      deprecated: false
+      tags:
+      - Item
+    put:
+      summary: Update an Item
+      description: Updates or edits any existing catalog item that matches the given id.
+      operationId: update-an-item
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: ID of the item to be modified.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                item:
+                  type: string
+                  description: Name of the catalog item
+                code:
+                  type: string
+                  description: Code of the catalog item
+                category:
+                  type: string
+                  description: Set category for catalog item
+                details:
+                  type: string
+                  description: Description for catalog item
+                is_active:
+                  type: boolean
+                  description: Define if the item is active
+                is_taxable:
+                  type: boolean
+                  description: Define if the item is taxable
+                is_service:
+                  type: boolean
+                  description: Define if the item is a service
+                is_discount:
+                  type: boolean
+                  default: false
+                  description: Defaults to false. Sets the item to a discount which overrides the is_service variable.
+                price:
+                  type: number
+                  description: Update the catalog item price
+                  format: float
+                in_stock:
+                  type: integer
+                  description: Sets the stock quantity
+                  format: int32
+                low_stock_alert:
+                  type: integer
+                  description: Update the low stock alert amount
+                  format: int32
+                meta:
+                  type: string
+                  format: json
+                files:
+                  type: string
+                  description: IDs of files to be associated to the item.
+                thumbnail:
+                  type: string
+                  description: 'File ID of a file to be associated to the item as the thumbnail or preview. '
+              required:
+              - item
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value:
+                    id: 4cddf784-55d4-4dcb-a266-1eb5af051e01
+                    user_id: 2d089742-6aca-462d-8db3-c2966e1f9e68
+                    merchant_id: a61d78cc-cde9-44ac-8a18-30c39be05879
+                    thumbnail_id: null
+                    item: test item
+                    code: aaaa
+                    category: essential items
+                    details: just a test item
+                    is_active: true
+                    is_taxable: false
+                    is_service: false
+                    is_discount: false
+                    price: 7.11
+                    in_stock: 0
+                    low_stock_alert: 3
+                    meta: []
+                    created_at: '2018-10-02 14:30:48'
+                    updated_at: '2018-10-02 14:30:48'
+                    deleted_at: null
+                    user:
+                      id: 2d089742-6aca-462d-8db3-c2966e1f9e68
+                      system_admin: true
+                      name: Morty Junior
+                      email: contact@example.com
+                      email_verification_sent_at: '2018-09-26 18:24:21'
+                      email_verified_at: '2016-05-11 17:13:33'
+                      is_api_key: false
+                      acknowledgments:
+                        signedApplication: true
+                        editedOnboardingInformation: false
+                        tutorial: true
+                        godviewWelcome: true
+                      created_at: '2016-05-18 14:11:46'
+                      updated_at: '2018-09-26 18:24:21'
+                      deleted_at: null
+                      gravatar: //www.gravatar.com/avatar/772cbf95746d7da86789cc3634c46ba8
+                      team_admin: null
+                      team_enabled: null
+                      team_role: null
+                      merchant_options: []
+                      is_default: false
+                    files: []
+                    thumbnail: null
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 4cddf784-55d4-4dcb-a266-1eb5af051e01
+                  user_id:
+                    type: string
+                    example: 2d089742-6aca-462d-8db3-c2966e1f9e68
+                  merchant_id:
+                    type: string
+                    example: a61d78cc-cde9-44ac-8a18-30c39be05879
+                  thumbnail_id: {}
+                  item:
+                    type: string
+                    example: test item
+                  code:
+                    type: string
+                    example: aaaa
+                  category:
+                    type: string
+                    example: essential items
+                  details:
+                    type: string
+                    example: just a test item
+                  is_active:
+                    type: boolean
+                    example: true
+                    default: true
+                  is_taxable:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_service:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_subscription:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_discount:
+                    type: boolean
+                    example: false
+                    default: true
+                  price:
+                    type: number
+                    example: 7.11
+                    default: 0
+                  in_stock:
+                    type: integer
+                    example: 0
+                    default: 0
+                  low_stock_alert:
+                    type: integer
+                    example: 3
+                    default: 0
+                  meta:
+                    type: array
+                  created_at:
+                    type: string
+                    example: '2018-10-02 14:30:48'
+                  updated_at:
+                    type: string
+                    example: '2018-10-02 14:30:48'
+                  deleted_at: {}
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 2d089742-6aca-462d-8db3-c2966e1f9e68
+                      system_admin:
+                        type: boolean
+                        example: true
+                        default: true
+                      name:
+                        type: string
+                        example: Morty Junior
+                      email:
+                        type: string
+                        example: contact@example.com
+                      email_verification_sent_at:
+                        type: string
+                        example: '2018-09-26 18:24:21'
+                      email_verified_at:
+                        type: string
+                        example: '2016-05-11 17:13:33'
+                      is_api_key:
+                        type: boolean
+                        example: false
+                        default: true
+                      acknowledgments:
+                        type: object
+                        properties:
+                          signedApplication:
+                            type: boolean
+                            example: true
+                            default: true
+                          editedOnboardingInformation:
+                            type: boolean
+                            example: false
+                            default: true
+                          tutorial:
+                            type: boolean
+                            example: true
+                            default: true
+                          godviewWelcome:
+                            type: boolean
+                            example: true
+                            default: true
+                      created_at:
+                        type: string
+                        example: '2016-05-18 14:11:46'
+                      updated_at:
+                        type: string
+                        example: '2018-09-26 18:24:21'
+                      deleted_at: {}
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/772cbf95746d7da86789cc3634c46ba8
+                      team_admin: {}
+                      team_enabled: {}
+                      team_role: {}
+                      merchant_options:
+                        type: array
+                      is_default:
+                        type: boolean
+                        example: false
+                        default: true
+                  files:
+                    type: array
+                  thumbnail: {}
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"item\": [\n    \"The item field is required.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  item:
+                    type: array
+                    items:
+                      type: string
+                      example: The item field is required.
+      deprecated: false
+      tags:
+      - Item
+  /item/{id}/increment:
+    put:
+      summary: Increment Item's Stock
+      description: Increases the stock of an item.
+      operationId: increment-items-stock
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: quantity
+        in: query
+        schema:
+          type: integer
+          format: int32
+        required: true
+        description: The number of stock to add to the in_stock value.
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"0a6c966c-6a70-44eb-aa26-673310ca65c0\",\n  \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n  \"merchant_id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n  \"thumbnail_id\": null,\n  \"item\": \"Soap 2.0\",\n  \"code\": \"aaaa\",\n  \"details\": \"Even cleaner time\",\n  \"is_active\": true,\n  \"is_taxable\": false,\n  \"is_service\": false,\n  \"is_discount\": false,\n  \"price\": 7.11,\n  \"in_stock\": 1,\n  \"meta\": [],\n  \"created_at\": \"2017-05-05 20:13:12\",\n  \"updated_at\": \"2017-05-05 20:15:55\",\n  \"deleted_at\": null,\n  \"deprecation_warning\": \"The name and decription fiels will be deprecated on 7/1/17\",\n  \"user\": {\n    \"id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n    \"system_admin\": false,\n    \"name\": \"Test guy\",\n    \"email\": \"contact@example.com\",\n    \"email_verification_sent_at\": \"2017-03-29 15:27:19\",\n    \"email_verified_at\": \"2017-03-29 15:27:21\",\n    \"is_api_key\": false,\n    \"created_at\": \"2017-01-11 21:44:02\",\n    \"updated_at\": \"2017-04-24 15:41:58\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650\",\n    \"team_admin\": null,\n    \"team_enabled\": null,\n    \"team_role\": null\n  },\n  \"files\": [],\n  \"thumbnail\": null\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 0a6c966c-6a70-44eb-aa26-673310ca65c0
+                  user_id:
+                    type: string
+                    example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                  merchant_id:
+                    type: string
+                    example: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                  thumbnail_id: {}
+                  item:
+                    type: string
+                    example: Soap 2.0
+                  code:
+                    type: string
+                    example: aaaa
+                  details:
+                    type: string
+                    example: Even cleaner time
+                  is_active:
+                    type: boolean
+                    example: true
+                    default: true
+                  is_taxable:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_service:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_discount:
+                    type: boolean
+                    example: false
+                    default: true
+                  price:
+                    type: number
+                    example: 7.11
+                    default: 0
+                  in_stock:
+                    type: integer
+                    example: 1
+                    default: 0
+                  meta:
+                    type: array
+                  created_at:
+                    type: string
+                    example: '2017-05-05 20:13:12'
+                  updated_at:
+                    type: string
+                    example: '2017-05-05 20:15:55'
+                  deleted_at: {}
+                  deprecation_warning:
+                    type: string
+                    example: The name and decription fiels will be deprecated on 7/1/17
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                      system_admin:
+                        type: boolean
+                        example: false
+                        default: true
+                      name:
+                        type: string
+                        example: Test guy
+                      email:
+                        type: string
+                        example: contact@example.com
+                      email_verification_sent_at:
+                        type: string
+                        example: '2017-03-29 15:27:19'
+                      email_verified_at:
+                        type: string
+                        example: '2017-03-29 15:27:21'
+                      is_api_key:
+                        type: boolean
+                        example: false
+                        default: true
+                      created_at:
+                        type: string
+                        example: '2017-01-11 21:44:02'
+                      updated_at:
+                        type: string
+                        example: '2017-04-24 15:41:58'
+                      deleted_at: {}
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650
+                      team_admin: {}
+                      team_enabled: {}
+                      team_role: {}
+                  files:
+                    type: array
+                  thumbnail: {}
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": [\n    \"The item was not found\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: array
+                    items:
+                      type: string
+                      example: The item was not found
+      deprecated: false
+      tags:
+      - Item
+  /item/code:
+    get:
+      summary: Retrieve All Item Codes
+      description: The item code is merchant-side code used for business to keep track of their items.
+      operationId: retrieve-all-item-codes
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: ''
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      tags:
+      - Item
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: API key for merchant-level operations. Provides access to merchant-specific endpoints including transactions, payments, customer management, and merchant account settings. This key is scoped to a single merchant account and cannot access partner-level functionality.
+    PartnerApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Partner-level API key with elevated privileges. Grants access to all partner operations including merchant management, portfolio oversight, reporting across multiple merchant accounts, and partner-specific administrative functions. Also provides access to all merchant-level operations for accounts under the partner's management.
+    EphemeralAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Temporary authentication token with limited lifespan. Used for short-term access to specific operations, typically generated for secure one-time actions or time-bounded sessions. Automatically expires after a predefined period for enhanced security.

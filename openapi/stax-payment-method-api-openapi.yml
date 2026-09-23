@@ -1,0 +1,1398 @@
+openapi: 3.2.0
+info:
+  title: stax-api Payment Method API
+  version: '0.1'
+servers:
+- url: https://apiprod.fattlabs.com/
+security:
+- ApiKeyAuth: []
+tags:
+- name: Payment Method
+paths:
+  /payment-method:
+    post:
+      summary: Create a Bank Payment Method
+      description: Create a new payment method by securely tokenizing bank account details (ACH)
+      operationId: create-a-payment-method-copy
+      parameters:
+      - name: __cf_bm
+        in: cookie
+        description: Cloudflare Bot Management cookie for security verification
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - customer_id
+              - method
+              - person_name
+              - bank_account
+              - bank_routing
+              - bank_name
+              - bank_type
+              - bank_holder_type
+              properties:
+                customer_id:
+                  type: string
+                  description: The customer id which will be associated with the payment method
+                method:
+                  type: string
+                  default: bank
+                  enum:
+                  - bank
+                person_name:
+                  type: string
+                  description: Account holder first and last name. For company card/account, you can use Company Name
+                bank_account:
+                  type: string
+                bank_routing:
+                  type: string
+                bank_name:
+                  type: string
+                bank_type:
+                  type: string
+                  enum:
+                  - checking
+                  - savings
+                bank_holder_type:
+                  type: string
+                  enum:
+                  - personal
+                  - business
+                address_1:
+                  type: string
+                  description: This field may be used for AVS.
+                address_2:
+                  type: string
+                address_city:
+                  type: string
+                  description: The city associated with the cardholder.
+                address_state:
+                  type: string
+                  description: 'Use the 2-letter state abbreviation. '
+                address_zip:
+                  type: string
+                  description: This field may be used for AVS.
+                address_country:
+                  type: string
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      tags:
+      - Payment Method
+    get:
+      summary: Get all Payment Methods for a Merchant
+      description: Retrieves a paginated data array of all non-deleted payment methods associated with a merchant by default.
+      operationId: get-all-payment-methods-for-a-merchant
+      parameters:
+      - name: __cf_bm
+        in: cookie
+        description: Cloudflare Bot Management cookie for security verification
+        required: false
+        schema:
+          type: string
+      - name: per_page
+        in: query
+        description: Used to indicate how many records you want to fetch per page. The maximum is 200 and the minimum is 1. Defaults to 20.
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      - name: au_last_event
+        in: query
+        description: Used to filter results by the account updater last event.
+        schema:
+          type: string
+          enum:
+          - ReplacePaymentMethod
+          - ContactCardHolder
+          - ClosePaymentMethod
+      - name: au_last_event_start_at
+        in: query
+        description: Used to filter results that have the au_last_event_at greater than or equal to the given datetime value.
+        schema:
+          type: string
+          format: date
+      - name: au_last_event_end_at
+        in: query
+        description: Used to filter results that have the au_last_event_at less than or equal to the given datetime value.
+        schema:
+          type: string
+          format: date
+      - name: status
+        in: query
+        description: Used to filter results by the payment method's status.
+        schema:
+          type: string
+          enum:
+          - all
+          - deleted
+          default: all
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"current_page\": 1,\n  \"data\": [\n    {\n      \"id\": \"7e3a83ea-6770-41f7-9b28-7ea1a3ae33e7\",\n      \"customer_id\": \"35e4cfa9-d87e-45fc-84da-a6bdce2c3330\",\n      \"merchant_id\": \"85c58c65-4da7-4f99-acb0-afa885874572\",\n      \"user_id\": \"hosted-payments\",\n      \"nickname\": \"VISA: Bob Smithers (ending in: 1111)\",\n      \"has_cvv\": 0,\n      \"is_default\": 0,\n      \"method\": \"card\",\n      \"person_name\": \"Bob Smithers\",\n      \"card_type\": \"visa\",\n      \"card_last_four\": \"1111\",\n      \"card_exp\": \"032022\",\n      \"bank_name\": null,\n      \"bank_type\": null,\n      \"bank_holder_type\": null,\n      \"address_1\": null,\n      \"address_2\": null,\n      \"address_city\": null,\n      \"address_state\": null,\n      \"address_zip\": \"999999\",\n      \"address_country\": null,\n      \"purged_at\": null,\n      \"deleted_at\": null,\n      \"created_at\": \"2018-08-03 17:59:10\",\n      \"updated_at\": \"2018-08-03 17:59:10\",\n      \"card_exp_datetime\": \"2022-03-31 23:59:59\",\n      \"is_usable_in_vt\": true,\n      \"is_tokenized\": true,\n      \"au_last_event\": null,\n      \"au_last_event_at\": null,\n      \"customer\": {\n        \"id\": \"35e4cfa9-d87e-45fc-84da-a6bdce2c3330\",\n        \"firstname\": \"John\",\n        \"lastname\": \"Smith\",\n        \"company\": \"ABC INC\",\n        \"email\": \"webpaymentstest@test.com\",\n        \"cc_emails\": [],\n        \"cc_sms\": null,\n        \"phone\": \"1234567898\",\n        \"address_1\": \"123 Rite Way\",\n        \"address_2\": \"Unit 12\",\n        \"address_city\": \"Orlando\",\n        \"address_state\": \"FL\",\n        \"address_zip\": \"32801\",\n        \"address_country\": \"USA\",\n        \"notes\": null,\n        \"reference\": \"\",\n        \"options\": null,\n        \"created_at\": \"2018-07-27 19:08:48\",\n        \"updated_at\": \"2018-07-27 19:08:48\",\n        \"deleted_at\": null,\n        \"allow_invoice_credit_card_payments\": true,\n        \"gravatar\": \"//www.gravatar.com/avatar/18dd69e3959903c248ac613b51bc7f8e\"\n      },\n      \"user\": {\n        \"id\": \"35e4cfa9-d87e-45fc-32df-a6bdce2casytr\",\n        \"system_admin\": true,\n        \"name\": \"Smith John\",\n        \"email\": \"userwebpaymenttest@test.com\",\n        \"email_verification_sent_at\": \"2016-05-11 17:13:33\",\n        \"email_verified_at\": \"2020-06-08 13:39:30\",\n        \"is_api_key\": false,\n        \"options\": null,\n        \"acknowledgments\": {\n          \"signedApplication\": true,\n          \"editedOnboardingInformation\": true,\n          \"godviewOmniSearchTooltip\": true,\n          \"tutorial\": true,\n          \"setPassword\": true,\n          \"godviewWelcome\": true\n        },\n        \"created_at\": \"2023-11-07 17:53:36\",\n        \"updated_at\": \"2023-11-07 17:53:36\",\n        \"deleted_at\": null,\n        \"brand\": \"fattmerchant\",\n        \"mfa_enabled\": false,\n        \"role_id\": null,\n        \"gravatar\": \"//www.gravatar.com/avatar/772cbf95746d7da86789cc3634c46ba8\",\n        \"team_admin\": null,\n        \"team_enabled\": null,\n        \"team_role\": null,\n        \"merchant_options\": [],\n        \"is_default\": false,\n        \"brands\": [\n          \"fattmerchant\"\n        ],\n        \"role_name\": null\n      }\n    },\n    {\n      \"id\": \"403e043d-2971-4062-adc7-7e64f7882786\",\n      \"customer_id\": \"35e4cfa9-d87e-45fc-84da-a6bdce2c3330\",\n      \"merchant_id\": \"85c58c65-4da7-4f99-acb0-afa885874572\",\n      \"user_id\": \"a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8\",\n      \"nickname\": \"personal savings, BANK INC (ending in: 3210)\",\n      \"has_cvv\": 0,\n      \"is_default\": 1,\n      \"method\": \"bank\",\n      \"person_name\": \"Bob Smith\",\n      \"card_type\": null,\n      \"card_last_four\": \"3210\",\n      \"card_exp\": null,\n      \"bank_name\": \"Bank INC\",\n      \"bank_type\": \"savings\",\n      \"bank_holder_type\": \"personal\",\n      \"address_1\": null,\n      \"address_2\": null,\n      \"address_city\": null,\n      \"address_state\": null,\n      \"address_zip\": null,\n      \"address_country\": null,\n      \"purged_at\": null,\n      \"deleted_at\": null,\n      \"created_at\": \"2018-08-02 21:06:04\",\n      \"updated_at\": \"2018-08-02 21:06:04\",\n      \"card_exp_datetime\": \"2018-08-02 21:06:04\",\n      \"is_usable_in_vt\": true,\n      \"is_tokenized\": true,\n      \"au_last_event\": \"ReplacePaymentMethod\",\n      \"au_last_event_at\": \"2018-12-02 21:06:04\",\n      \"customer\": {\n        \"id\": \"35e4cfa9-d87e-45fc-84da-a6bdce2c3330\",\n        \"firstname\": \"John\",\n        \"lastname\": \"Smith\",\n        \"company\": \"ABC INC\",\n        \"email\": \"webpaymentstest@test.com\",\n        \"cc_emails\": [],\n        \"cc_sms\": null,\n        \"phone\": \"1234567898\",\n        \"address_1\": \"123 Rite Way\",\n        \"address_2\": \"Unit 12\",\n        \"address_city\": \"Orlando\",\n        \"address_state\": \"FL\",\n        \"address_zip\": \"32801\",\n        \"address_country\": \"USA\",\n        \"notes\": null,\n        \"reference\": \"\",\n        \"options\": null,\n        \"created_at\": \"2018-07-27 19:08:48\",\n        \"updated_at\": \"2018-07-27 19:08:48\",\n        \"deleted_at\": null,\n        \"allow_invoice_credit_card_payments\": true,\n        \"gravatar\": \"//www.gravatar.com/avatar/18dd69e3959903c248ac613b51bc7f8e\"\n      },\n      \"user\": {\n        \"id\": \"35e4cfa9-d87e-45fc-32df-a6bdce2casytr\",\n        \"system_admin\": true,\n        \"name\": \"Smith John\",\n        \"email\": \"userwebpaymenttest@test.com\",\n        \"email_verification_sent_at\": \"2016-05-11 17:13:33\",\n        \"email_verified_at\": \"2020-06-08 13:39:30\",\n        \"is_api_key\": false,\n        \"options\": null,\n        \"acknowledgments\": {\n          \"signedApplication\": true,\n          \"editedOnboardingInformation\": true,\n          \"godviewOmniSearchTooltip\": true,\n          \"tutorial\": true,\n          \"setPassword\": true,\n          \"godviewWelcome\": true\n        },\n        \"created_at\": \"2023-11-07 17:53:36\",\n        \"updated_at\": \"2023-11-07 17:53:36\",\n        \"deleted_at\": null,\n        \"brand\": \"fattmerchant\",\n        \"mfa_enabled\": false,\n        \"role_id\": null,\n        \"gravatar\": \"//www.gravatar.com/avatar/772cbf95746d7da86789cc3634c46ba8\",\n        \"team_admin\": null,\n        \"team_enabled\": null,\n        \"team_role\": null,\n        \"merchant_options\": [],\n        \"is_default\": false,\n        \"brands\": [\n          \"fattmerchant\"\n        ],\n        \"role_name\": null\n      }\n    }\n  ],\n  \"first_page_url\": \"https://apiprod.fattlabs.com/payment-method?page=1\",\n  \"from\": 1,\n  \"last_page\": 1,\n  \"last_page_url\": \"https://apiprod.fattlabs.com/payment-method?page=1\",\n  \"next_page_url\": null,\n  \"path\": \"https://apiprod.fattlabs.com/payment-method\",\n  \"per_page\": \"10\",\n  \"prev_page_url\": null,\n  \"to\": 1,\n  \"total\": 1\n}"
+              schema:
+                type: object
+                properties:
+                  current_page:
+                    type: integer
+                    example: 1
+                    default: 0
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: 7e3a83ea-6770-41f7-9b28-7ea1a3ae33e7
+                        customer_id:
+                          type: string
+                          example: 35e4cfa9-d87e-45fc-84da-a6bdce2c3330
+                        merchant_id:
+                          type: string
+                          example: 85c58c65-4da7-4f99-acb0-afa885874572
+                        user_id:
+                          type: string
+                          example: hosted-payments
+                        nickname:
+                          type: string
+                          example: 'VISA: Bob Smithers (ending in: 1111)'
+                        has_cvv:
+                          type: integer
+                          example: 0
+                          default: 0
+                        is_default:
+                          type: integer
+                          example: 0
+                          default: 0
+                        method:
+                          type: string
+                          example: card
+                        person_name:
+                          type: string
+                          example: Bob Smithers
+                        card_type:
+                          type: string
+                          example: visa
+                        card_last_four:
+                          type: string
+                          example: '1111'
+                        card_exp:
+                          type: string
+                          example: '032022'
+                        bank_name: {}
+                        bank_type: {}
+                        bank_holder_type: {}
+                        address_1: {}
+                        address_2: {}
+                        address_city: {}
+                        address_state: {}
+                        address_zip:
+                          type: string
+                          example: '999999'
+                        address_country: {}
+                        purged_at: {}
+                        deleted_at: {}
+                        created_at:
+                          type: string
+                          example: '2018-08-03 17:59:10'
+                        updated_at:
+                          type: string
+                          example: '2018-08-03 17:59:10'
+                        card_exp_datetime:
+                          type: string
+                          example: '2022-03-31 23:59:59'
+                        is_usable_in_vt:
+                          type: boolean
+                          example: true
+                          default: true
+                        is_tokenized:
+                          type: boolean
+                          example: true
+                          default: true
+                        au_last_event: {}
+                        au_last_event_at: {}
+                        customer:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: 35e4cfa9-d87e-45fc-84da-a6bdce2c3330
+                            firstname:
+                              type: string
+                              example: John
+                            lastname:
+                              type: string
+                              example: Smith
+                            company:
+                              type: string
+                              example: ABC INC
+                            email:
+                              type: string
+                              example: webpaymentstest@test.com
+                            cc_emails:
+                              type: array
+                            cc_sms: {}
+                            phone:
+                              type: string
+                              example: '1234567898'
+                            address_1:
+                              type: string
+                              example: 123 Rite Way
+                            address_2:
+                              type: string
+                              example: Unit 12
+                            address_city:
+                              type: string
+                              example: Orlando
+                            address_state:
+                              type: string
+                              example: FL
+                            address_zip:
+                              type: string
+                              example: '32801'
+                            address_country:
+                              type: string
+                              example: USA
+                            notes: {}
+                            reference:
+                              type: string
+                              example: ''
+                            options: {}
+                            created_at:
+                              type: string
+                              example: '2018-07-27 19:08:48'
+                            updated_at:
+                              type: string
+                              example: '2018-07-27 19:08:48'
+                            deleted_at: {}
+                            allow_invoice_credit_card_payments:
+                              type: boolean
+                              example: true
+                              default: true
+                            gravatar:
+                              type: string
+                              example: //www.gravatar.com/avatar/18dd69e3959903c248ac613b51bc7f8e
+                        user:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: 35e4cfa9-d87e-45fc-32df-a6bdce2casytr
+                            system_admin:
+                              type: boolean
+                              example: true
+                              default: true
+                            name:
+                              type: string
+                              example: Smith John
+                            email:
+                              type: string
+                              example: userwebpaymenttest@test.com
+                            email_verification_sent_at:
+                              type: string
+                              example: '2016-05-11 17:13:33'
+                            email_verified_at:
+                              type: string
+                              example: '2020-06-08 13:39:30'
+                            is_api_key:
+                              type: boolean
+                              example: false
+                              default: true
+                            options: {}
+                            acknowledgments:
+                              type: object
+                              properties:
+                                signedApplication:
+                                  type: boolean
+                                  example: true
+                                  default: true
+                                editedOnboardingInformation:
+                                  type: boolean
+                                  example: true
+                                  default: true
+                                godviewOmniSearchTooltip:
+                                  type: boolean
+                                  example: true
+                                  default: true
+                                tutorial:
+                                  type: boolean
+                                  example: true
+                                  default: true
+                                setPassword:
+                                  type: boolean
+                                  example: true
+                                  default: true
+                                godviewWelcome:
+                                  type: boolean
+                                  example: true
+                                  default: true
+                            created_at:
+                              type: string
+                              example: '2023-11-07 17:53:36'
+                            updated_at:
+                              type: string
+                              example: '2023-11-07 17:53:36'
+                            deleted_at: {}
+                            brand:
+                              type: string
+                              example: fattmerchant
+                            mfa_enabled:
+                              type: boolean
+                              example: false
+                              default: true
+                            role_id: {}
+                            gravatar:
+                              type: string
+                              example: //www.gravatar.com/avatar/772cbf95746d7da86789cc3634c46ba8
+                            team_admin: {}
+                            team_enabled: {}
+                            team_role: {}
+                            merchant_options:
+                              type: array
+                            is_default:
+                              type: boolean
+                              example: false
+                              default: true
+                            brands:
+                              type: array
+                              items:
+                                type: string
+                                example: fattmerchant
+                            role_name: {}
+                  first_page_url:
+                    type: string
+                    example: https://apiprod.fattlabs.com/payment-method?page=1
+                  from:
+                    type: integer
+                    example: 1
+                    default: 0
+                  last_page:
+                    type: integer
+                    example: 1
+                    default: 0
+                  last_page_url:
+                    type: string
+                    example: https://apiprod.fattlabs.com/payment-method?page=1
+                  next_page_url: {}
+                  path:
+                    type: string
+                    example: https://apiprod.fattlabs.com/payment-method
+                  per_page:
+                    type: string
+                    example: '10'
+                  prev_page_url: {}
+                  to:
+                    type: integer
+                    example: 1
+                    default: 0
+                  total:
+                    type: integer
+                    example: 1
+                    default: 0
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Unformatted Date:
+                  value: "{\n  \"au_last_event_end_at\": [\n    \"The au last event end at does not match the format Y-m-d H:i:s.\"\n  ]\n}"
+                Invalid Account Updater Event:
+                  value: "{\n  \"au_last_event\": [\n    \"The selected au last event is invalid.\"\n  ]\n}"
+                Invalid Status:
+                  value: "{\n  \"status\": [\n    \"The selected status is invalid.\"\n  ]\n}"
+              schema:
+                oneOf:
+                - title: Unformatted Date
+                  type: object
+                  properties:
+                    au_last_event_end_at:
+                      type: array
+                      items:
+                        type: string
+                        example: The au last event end at does not match the format Y-m-d H:i:s.
+                - title: Invalid Account Updater Event
+                  type: object
+                  properties:
+                    au_last_event:
+                      type: array
+                      items:
+                        type: string
+                        example: The selected au last event is invalid.
+                - title: Invalid Status
+                  type: object
+                  properties:
+                    status:
+                      type: array
+                      items:
+                        type: string
+                        example: The selected status is invalid.
+      deprecated: false
+      tags:
+      - Payment Method
+  /payment-method/:
+    post:
+      summary: Create a Card Payment Method
+      description: Create a new credit or debit card payment method by securely tokenizing the card details.
+      operationId: create-a-payment-method
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - customer_id
+              - method
+              - person_name
+              - card_number
+              - card_cvv
+              - card_type
+              - card_exp
+              properties:
+                customer_id:
+                  type: string
+                  description: The customer id which will be associated with the payment method
+                method:
+                  type: string
+                  default: card
+                  enum:
+                  - card
+                person_name:
+                  type: string
+                  description: Account holder first and last name. For company card/account, you can use Company Name
+                card_number:
+                  type: string
+                card_cvv:
+                  type: number
+                card_exp:
+                  type: string
+                  description: 4 digit expiration (ex. "0427")
+                card_type:
+                  type: string
+                  description: null is accepted
+                address_1:
+                  type: string
+                  description: This may be used for AVS.
+                address_2:
+                  type: string
+                address_city:
+                  type: string
+                  description: 'The cIty associated with the cardholder. '
+                address_state:
+                  type: string
+                  description: 'Use the 2-letter state abbreviation. '
+                address_zip:
+                  type: string
+                  description: This may be used for AVS.
+                address_country:
+                  type: string
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      tags:
+      - Payment Method
+  /payment-method/{id}:
+    delete:
+      summary: Delete a Payment Method
+      description: This function deletes a payment-method of a customer.
+      operationId: delete-a-payment-method
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"6ba7babe-9906-4e7e-b1a5-f628c7badb61\",\n  \"customer_id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n  \"merchant_id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n  \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n  \"nickname\": \"VISA: Steven Smith Jr. (ending in: 1111)\",\n  \"is_default\": 1,\n  \"method\": \"card\",\n  \"person_name\": \"Steven Smith Jr.\",\n  \"card_type\": \"visa\",\n  \"card_last_four\": \"1111\",\n  \"card_exp\": \"042019\",\n  \"bank_name\": null,\n  \"bank_type\": null,\n  \"bank_holder_type\": null,\n  \"address_1\": null,\n  \"address_2\": null,\n  \"address_city\": null,\n  \"address_state\": null,\n  \"address_zip\": \"32944\",\n  \"address_country\": \"USA\",\n  \"purged_at\": null,\n  \"deleted_at\": \"2017-05-10 19:54:09\",\n  \"created_at\": \"2017-05-10 19:54:04\",\n  \"updated_at\": \"2017-05-10 19:54:04\",\n  \"card_exp_datetime\": \"2019-04-30 23:59:59\",\n  \"customer\": {\n    \"id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n    \"firstname\": \"John\",\n    \"lastname\": \"Smith\",\n    \"company\": \"ABC INC\",\n    \"email\": \"demo@abc.com\",\n    \"cc_emails\": [\n      \"demo1@abc.com\",\n      \"demo2@abc.com\"\n    ],\n    \"phone\": \"1234567898\",\n    \"address_1\": \"123 Rite Way\",\n    \"address_2\": \"Unit 12\",\n    \"address_city\": \"Orlando\",\n    \"address_state\": \"FL\",\n    \"address_zip\": \"32801\",\n    \"address_country\": \"USA\",\n    \"notes\": null,\n    \"reference\": \"BARTLE\",\n    \"options\": \"\",\n    \"created_at\": \"2017-05-08 19:22:51\",\n    \"updated_at\": \"2017-05-08 19:23:46\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061\"\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 6ba7babe-9906-4e7e-b1a5-f628c7badb61
+                  customer_id:
+                    type: string
+                    example: d45ee88c-8b27-4be8-8d81-77dda1b81826
+                  merchant_id:
+                    type: string
+                    example: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                  user_id:
+                    type: string
+                    example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                  nickname:
+                    type: string
+                    example: 'VISA: Steven Smith Jr. (ending in: 1111)'
+                  is_default:
+                    type: integer
+                    example: 1
+                    default: 0
+                  method:
+                    type: string
+                    example: card
+                  person_name:
+                    type: string
+                    example: Steven Smith Jr.
+                  card_type:
+                    type: string
+                    example: visa
+                  card_last_four:
+                    type: string
+                    example: '1111'
+                  card_exp:
+                    type: string
+                    example: 042019
+                  bank_name: {}
+                  bank_type: {}
+                  bank_holder_type: {}
+                  address_1: {}
+                  address_2: {}
+                  address_city: {}
+                  address_state: {}
+                  address_zip:
+                    type: string
+                    example: '32944'
+                  address_country:
+                    type: string
+                    example: USA
+                  purged_at: {}
+                  deleted_at:
+                    type: string
+                    example: '2017-05-10 19:54:09'
+                  created_at:
+                    type: string
+                    example: '2017-05-10 19:54:04'
+                  updated_at:
+                    type: string
+                    example: '2017-05-10 19:54:04'
+                  card_exp_datetime:
+                    type: string
+                    example: '2019-04-30 23:59:59'
+                  customer:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: d45ee88c-8b27-4be8-8d81-77dda1b81826
+                      firstname:
+                        type: string
+                        example: John
+                      lastname:
+                        type: string
+                        example: Smith
+                      company:
+                        type: string
+                        example: ABC INC
+                      email:
+                        type: string
+                        example: demo@abc.com
+                      cc_emails:
+                        type: array
+                        items:
+                          type: string
+                          example: demo1@abc.com
+                      phone:
+                        type: string
+                        example: '1234567898'
+                      address_1:
+                        type: string
+                        example: 123 Rite Way
+                      address_2:
+                        type: string
+                        example: Unit 12
+                      address_city:
+                        type: string
+                        example: Orlando
+                      address_state:
+                        type: string
+                        example: FL
+                      address_zip:
+                        type: string
+                        example: '32801'
+                      address_country:
+                        type: string
+                        example: USA
+                      notes: {}
+                      reference:
+                        type: string
+                        example: BARTLE
+                      options:
+                        type: string
+                        example: ''
+                      created_at:
+                        type: string
+                        example: '2017-05-08 19:22:51'
+                      updated_at:
+                        type: string
+                        example: '2017-05-08 19:23:46'
+                      deleted_at: {}
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Invalid Id:
+                  value: "{\n  \"id\": [\n    \"The selected id is invalid.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: array
+                    items:
+                      type: string
+                      example: The selected id is invalid.
+      deprecated: false
+      tags:
+      - Payment Method
+    get:
+      summary: Get a Payment Method By ID
+      description: Retrieves the payment method matching the given id.
+      operationId: get-a-payment-method-by-id
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"6ba7babe-9906-4e7e-b1a5-f628c7badb61\",\n  \"customer_id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n  \"merchant_id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n  \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n  \"nickname\": \"VISA: Steven Smith Jr. (ending in: 1111)\",\n  \"is_default\": 1,\n  \"method\": \"card\",\n  \"meta\": {\n    \"cardDisplay\": \"484718\",\n    \"routingDisplay\": null,\n    \"accountDisplay\": null,\n    \"eligibleForCardUpdater\": true,\n    \"storageState\": \"cached\",\n    \"fingerprint\": \"888999888777888999988\",\n    \"errors\": [],\n    \"prepaid\": null\n  },\n  \"bin_type\": \"DEBIT\",\n  \"person_name\": \"Steven Smith Jr.\",\n  \"card_type\": \"visa\",\n  \"card_last_four\": \"1111\",\n  \"card_exp\": \"042019\",\n  \"bank_name\": null,\n  \"bank_type\": null,\n  \"bank_holder_type\": null,\n  \"address_1\": null,\n  \"address_2\": null,\n  \"address_city\": null,\n  \"address_state\": null,\n  \"address_zip\": \"32944\",\n  \"address_country\": \"USA\",\n  \"purged_at\": null,\n  \"deleted_at\": \"2017-05-10 19:54:09\",\n  \"created_at\": \"2017-05-10 19:54:04\",\n  \"updated_at\": \"2017-05-10 19:54:09\",\n  \"card_exp_datetime\": \"2019-04-30 23:59:59\",\n  \"customer\": {\n    \"id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n    \"firstname\": \"John\",\n    \"lastname\": \"Smith\",\n    \"company\": \"ABC INC\",\n    \"email\": \"demo@abc.com\",\n    \"cc_emails\": [\n      \"demo1@abc.com\",\n      \"demo2@abc.com\"\n    ],\n    \"phone\": \"1234567898\",\n    \"address_1\": \"123 Rite Way\",\n    \"address_2\": \"Unit 12\",\n    \"address_city\": \"Orlando\",\n    \"address_state\": \"FL\",\n    \"address_zip\": \"32801\",\n    \"address_country\": \"USA\",\n    \"notes\": null,\n    \"reference\": \"BARTLE\",\n    \"options\": \"\",\n    \"created_at\": \"2017-05-08 19:22:51\",\n    \"updated_at\": \"2017-05-08 19:23:46\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061\"\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 6ba7babe-9906-4e7e-b1a5-f628c7badb61
+                  customer_id:
+                    type: string
+                    example: d45ee88c-8b27-4be8-8d81-77dda1b81826
+                  merchant_id:
+                    type: string
+                    example: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                  user_id:
+                    type: string
+                    example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                  nickname:
+                    type: string
+                    example: 'VISA: Steven Smith Jr. (ending in: 1111)'
+                  is_default:
+                    type: integer
+                    example: 1
+                    default: 0
+                  method:
+                    type: string
+                    example: card
+                  meta:
+                    type: object
+                    properties:
+                      cardDisplay:
+                        type: string
+                        example: '484718'
+                      routingDisplay: {}
+                      accountDisplay: {}
+                      eligibleForCardUpdater:
+                        type: boolean
+                        example: true
+                        default: true
+                      storageState:
+                        type: string
+                        example: cached
+                      fingerprint:
+                        type: string
+                        example: '888999888777888999988'
+                      errors:
+                        type: array
+                      prepaid: {}
+                  bin_type:
+                    type: string
+                    example: DEBIT
+                  person_name:
+                    type: string
+                    example: Steven Smith Jr.
+                  card_type:
+                    type: string
+                    example: visa
+                  card_last_four:
+                    type: string
+                    example: '1111'
+                  card_exp:
+                    type: string
+                    example: 042019
+                  bank_name: {}
+                  bank_type: {}
+                  bank_holder_type: {}
+                  address_1: {}
+                  address_2: {}
+                  address_city: {}
+                  address_state: {}
+                  address_zip:
+                    type: string
+                    example: '32944'
+                  address_country:
+                    type: string
+                    example: USA
+                  purged_at: {}
+                  deleted_at:
+                    type: string
+                    example: '2017-05-10 19:54:09'
+                  created_at:
+                    type: string
+                    example: '2017-05-10 19:54:04'
+                  updated_at:
+                    type: string
+                    example: '2017-05-10 19:54:09'
+                  card_exp_datetime:
+                    type: string
+                    example: '2019-04-30 23:59:59'
+                  customer:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: d45ee88c-8b27-4be8-8d81-77dda1b81826
+                      firstname:
+                        type: string
+                        example: John
+                      lastname:
+                        type: string
+                        example: Smith
+                      company:
+                        type: string
+                        example: ABC INC
+                      email:
+                        type: string
+                        example: demo@abc.com
+                      cc_emails:
+                        type: array
+                        items:
+                          type: string
+                          example: demo1@abc.com
+                      phone:
+                        type: string
+                        example: '1234567898'
+                      address_1:
+                        type: string
+                        example: 123 Rite Way
+                      address_2:
+                        type: string
+                        example: Unit 12
+                      address_city:
+                        type: string
+                        example: Orlando
+                      address_state:
+                        type: string
+                        example: FL
+                      address_zip:
+                        type: string
+                        example: '32801'
+                      address_country:
+                        type: string
+                        example: USA
+                      notes: {}
+                      reference:
+                        type: string
+                        example: BARTLE
+                      options:
+                        type: string
+                        example: ''
+                      created_at:
+                        type: string
+                        example: '2017-05-08 19:22:51'
+                      updated_at:
+                        type: string
+                        example: '2017-05-08 19:23:46'
+                      deleted_at: {}
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Invalid ID:
+                  value: "{\n  \"id\": [\n    \"The selected id is invalid.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: array
+                    items:
+                      type: string
+                      example: The selected id is invalid.
+      tags:
+      - Payment Method
+    put:
+      summary: Update a Payment Method
+      description: This function updates a payment-method after it already exists whether it was created through Stax.js or direct-post.
+      operationId: update-a-payment-method
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: is_default
+        in: query
+        schema:
+          type: boolean
+        required: false
+        description: 1 or 0 (true or false)
+      - name: person_name
+        in: query
+        schema:
+          type: string
+        description: Name of the customer.
+      - name: card_last_four
+        in: query
+        schema:
+          type: integer
+          format: int32
+        description: Last four digits of the payment method to be modified.
+      - name: card_type
+        in: query
+        description: 10 character max. null is acceptable.
+        schema:
+          type: string
+      - name: card_exp
+        in: query
+        schema:
+          type: string
+        description: 4 digits of the expiry date.
+      - name: has_cvv
+        in: query
+        schema:
+          type: boolean
+      - name: bank_name
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 255 character max. If supplied, MUST have a value, it is not nullable.
+      - name: bank_type
+        in: query
+        schema:
+          type: string
+          enum:
+          - checking
+          - savings
+        description: ' If supplied, MUST have a value, it is not nullable.'
+      - name: bank_holder_type
+        in: query
+        schema:
+          type: string
+          enum:
+          - personal
+          - business
+        description: ' If supplied, MUST have a value, it is not nullable.'
+      - name: meta
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+        description: 'Note this will overwrite all data currently in the meta field. '
+      - in: query
+        name: address_1
+        schema:
+          type: string
+        description: Max 255 characters. Null is accepted. This field may be used for AVS.
+      - in: query
+        name: address_2
+        schema:
+          type: string
+        description: Max 255 characters. Null is accepted.
+      - in: query
+        name: address_city
+        schema:
+          type: string
+        description: Max 255 characters. Null is accepted.
+      - in: query
+        name: address_state
+        schema:
+          type: string
+        description: Two character state.Null is accepted.
+      - in: query
+        name: address_zip
+        schema:
+          type: string
+        description: Max 16 characters. Null is accepted. This field may be used for AVS.
+      - in: query
+        name: address_country
+        schema:
+          type: string
+        description: 'Use country 3 character code. Null is accepted. '
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"6ba7babe-9906-4e7e-b1a5-f628c7badb61\",\n  \"customer_id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n  \"merchant_id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n  \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n  \"nickname\": \"VISA: Carl Junior Sr. (ending in: 1111)\",\n  \"is_default\": 1,\n  \"method\": \"card\",\n  \"person_name\": \"Carl Junior Sr.\",\n  \"card_type\": \"visa\",\n  \"card_last_four\": \"1111\",\n  \"card_exp\": \"042019\",\n  \"bank_name\": null,\n  \"bank_type\": null,\n  \"bank_holder_type\": null,\n  \"address_1\": null,\n  \"address_2\": null,\n  \"address_city\": null,\n  \"address_state\": null,\n  \"address_zip\": \"32944\",\n  \"address_country\": \"USA\",\n  \"purged_at\": null,\n  \"deleted_at\": null,\n  \"created_at\": \"2017-05-10 19:54:04\",\n  \"updated_at\": \"2017-05-10 19:54:04\",\n  \"card_exp_datetime\": \"2019-04-30 23:59:59\",\n  \"customer\": {\n    \"id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n    \"firstname\": \"John\",\n    \"lastname\": \"Smith\",\n    \"company\": \"ABC INC\",\n    \"email\": \"demo@abc.com\",\n    \"cc_emails\": [\n      \"demo1@abc.com\",\n      \"demo2@abc.com\"\n    ],\n    \"phone\": \"1234567898\",\n    \"address_1\": \"123 Rite Way\",\n    \"address_2\": \"Unit 12\",\n    \"address_city\": \"Orlando\",\n    \"address_state\": \"FL\",\n    \"address_zip\": \"32801\",\n    \"address_country\": \"USA\",\n    \"notes\": null,\n    \"reference\": \"BARTLE\",\n    \"options\": \"\",\n    \"created_at\": \"2017-05-08 19:22:51\",\n    \"updated_at\": \"2017-05-08 19:23:46\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061\"\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 6ba7babe-9906-4e7e-b1a5-f628c7badb61
+                  customer_id:
+                    type: string
+                    example: d45ee88c-8b27-4be8-8d81-77dda1b81826
+                  merchant_id:
+                    type: string
+                    example: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                  user_id:
+                    type: string
+                    example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                  nickname:
+                    type: string
+                    example: 'VISA: Carl Junior Sr. (ending in: 1111)'
+                  is_default:
+                    type: integer
+                    example: 1
+                    default: 0
+                  method:
+                    type: string
+                    example: card
+                  person_name:
+                    type: string
+                    example: Carl Junior Sr.
+                  card_type:
+                    type: string
+                    example: visa
+                  card_last_four:
+                    type: string
+                    example: '1111'
+                  card_exp:
+                    type: string
+                    example: 042019
+                  bank_name: {}
+                  bank_type: {}
+                  bank_holder_type: {}
+                  address_1: {}
+                  address_2: {}
+                  address_city: {}
+                  address_state: {}
+                  address_zip:
+                    type: string
+                    example: '32944'
+                  address_country:
+                    type: string
+                    example: USA
+                  purged_at: {}
+                  deleted_at: {}
+                  created_at:
+                    type: string
+                    example: '2017-05-10 19:54:04'
+                  updated_at:
+                    type: string
+                    example: '2017-05-10 19:54:04'
+                  card_exp_datetime:
+                    type: string
+                    example: '2019-04-30 23:59:59'
+                  customer:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: d45ee88c-8b27-4be8-8d81-77dda1b81826
+                      firstname:
+                        type: string
+                        example: John
+                      lastname:
+                        type: string
+                        example: Smith
+                      company:
+                        type: string
+                        example: ABC INC
+                      email:
+                        type: string
+                        example: demo@abc.com
+                      cc_emails:
+                        type: array
+                        items:
+                          type: string
+                          example: demo1@abc.com
+                      phone:
+                        type: string
+                        example: '1234567898'
+                      address_1:
+                        type: string
+                        example: 123 Rite Way
+                      address_2:
+                        type: string
+                        example: Unit 12
+                      address_city:
+                        type: string
+                        example: Orlando
+                      address_state:
+                        type: string
+                        example: FL
+                      address_zip:
+                        type: string
+                        example: '32801'
+                      address_country:
+                        type: string
+                        example: USA
+                      notes: {}
+                      reference:
+                        type: string
+                        example: BARTLE
+                      options:
+                        type: string
+                        example: ''
+                      created_at:
+                        type: string
+                        example: '2017-05-08 19:22:51'
+                      updated_at:
+                        type: string
+                        example: '2017-05-08 19:23:46'
+                      deleted_at: {}
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Invalid Id:
+                  value: "{\n  \"id\": [\n    \"The selected id is invalid.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: array
+                    items:
+                      type: string
+                      example: The selected id is invalid.
+      tags:
+      - Payment Method
+  /payment_method/{payment_method_id}/external_vault:
+    post:
+      summary: Share a payment method with a third party
+      description: Make a copy of an existing Stax Payment Method in an external gateway
+      operationId: share-a-payment-method-with-a-third-party
+      parameters:
+      - name: payment_method_id
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: gateway_token
+        in: query
+        description: corresponds to a valid third party gateway token. This will be provided to you through Partner Success
+        schema:
+          type: string
+      responses:
+        '201':
+          description: '201'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"0\": {\n    \"transaction\": {\n      \"created_at\": \"2022-05-09T11:31:24Z\",\n      \"currency_code\": null,\n      \"updated_at\": \"2022-05-09T11:31:24Z\",\n      \"succeeded\": true,\n      \"token\": \"IDZJzXNXkqiLk3dQY5LecxarSMp\",\n      \"state\": \"succeeded\",\n      \"gateway_specific_fields\": null,\n      \"gateway_specific_response_fields\": {\n        \"provider\": {}\n      },\n      \"transaction_type\": \"Store\",\n      \"third_party_token\": null,\n      \"gateway_transaction_id\": \"cus_LeoRJx05gH5FnG|card_1KxUoCBkOJcrLi5mLgUkB7Zu\",\n      \"gateway_latency_ms\": 668,\n      \"message_key\": \"messages.transaction_succeeded\",\n      \"message\": \"Succeeded!\",\n      \"gateway_token\": \"237c78vnYCN201Ib0ZAEzlZ4d0l\",\n      \"gateway_type\": \"third party gateway\",\n      \"payment_method\": {\n        \"token\": \"KVVQGbZgCzwMnhptyDNnhtyAk27\",\n        \"created_at\": \"2022-05-09T11:31:24Z\",\n        \"updated_at\": \"2022-05-09T11:31:24Z\",\n        \"gateway_type\": \"third_party_gateway\",\n        \"storage_state\": \"retained\",\n        \"metadata\": null,\n        \"third_party_token\": \"cus_LeoRJx05gH5FnG|card_1KxUoCBkOJcrLi5mLgUkB7Zu\",\n        \"payment_method_type\": \"third_party_token\",\n        \"errors\": []\n      },\n      \"basis_payment_method\": {\n        \"token\": \"KQYeXq7dKFA37x29rSrj4gvPSSV\",\n        \"created_at\": \"2022-03-21T15:13:46Z\",\n        \"updated_at\": \"2022-05-09T11:31:24Z\",\n        \"email\": null,\n        \"data\": null,\n        \"storage_state\": \"retained\",\n        \"test\": true,\n        \"metadata\": null,\n        \"callback_url\": null,\n        \"last_four_digits\": \"1111\",\n        \"first_six_digits\": \"411111\",\n        \"card_type\": \"visa\",\n        \"first_name\": \"Jimiy\",\n        \"last_name\": \"Test\",\n        \"month\": 12,\n        \"year\": 2022,\n        \"address1\": null,\n        \"address2\": null,\n        \"city\": null,\n        \"state\": null,\n        \"zip\": null,\n        \"country\": null,\n        \"phone_number\": null,\n        \"company\": null,\n        \"full_name\": \"Jimiy Test\",\n        \"eligible_for_card_updater\": true,\n        \"shipping_address1\": null,\n        \"shipping_address2\": null,\n        \"shipping_city\": null,\n        \"shipping_state\": null,\n        \"shipping_zip\": null,\n        \"shipping_country\": null,\n        \"shipping_phone_number\": null,\n        \"issuer_identification_number\": \"41111111\",\n        \"payment_method_type\": \"credit_card\",\n        \"errors\": [],\n        \"fingerprint\": \"e3cef43464fc832f6e04f187df25af497994\",\n        \"verification_value\": \"\",\n        \"number\": \"XXXX-XXXX-XXXX-1111\"\n      },\n      \"response\": {\n        \"success\": true,\n        \"message\": \"Transaction approved\",\n        \"avs_code\": null,\n        \"avs_message\": null,\n        \"cvv_code\": null,\n        \"cvv_message\": null,\n        \"pending\": false,\n        \"result_unknown\": false,\n        \"error_code\": null,\n        \"error_detail\": null,\n        \"cancelled\": false,\n        \"fraud_review\": null,\n        \"created_at\": \"2022-05-09T11:31:24Z\",\n        \"updated_at\": \"2022-05-09T11:31:24Z\"\n      }\n    }\n  },\n  \"success\": [\n    \"payment method successfully submitted\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  '0':
+                    type: object
+                    properties:
+                      transaction:
+                        type: object
+                        properties:
+                          created_at:
+                            type: string
+                            example: '2022-05-09T11:31:24Z'
+                          currency_code: {}
+                          updated_at:
+                            type: string
+                            example: '2022-05-09T11:31:24Z'
+                          succeeded:
+                            type: boolean
+                            example: true
+                            default: true
+                          token:
+                            type: string
+                            example: IDZJzXNXkqiLk3dQY5LecxarSMp
+                          state:
+                            type: string
+                            example: succeeded
+                          gateway_specific_fields: {}
+                          gateway_specific_response_fields:
+                            type: object
+                            properties:
+                              provider:
+                                type: object
+                                properties: {}
+                          transaction_type:
+                            type: string
+                            example: Store
+                          third_party_token: {}
+                          gateway_transaction_id:
+                            type: string
+                            example: cus_LeoRJx05gH5FnG|card_1KxUoCBkOJcrLi5mLgUkB7Zu
+                          gateway_latency_ms:
+                            type: integer
+                            example: 668
+                            default: 0
+                          message_key:
+                            type: string
+                            example: messages.transaction_succeeded
+                          message:
+                            type: string
+                            example: Succeeded!
+                          gateway_token:
+                            type: string
+                            example: 237c78vnYCN201Ib0ZAEzlZ4d0l
+                          gateway_type:
+                            type: string
+                            example: third party gateway
+                          payment_method:
+                            type: object
+                            properties:
+                              token:
+                                type: string
+                                example: KVVQGbZgCzwMnhptyDNnhtyAk27
+                              created_at:
+                                type: string
+                                example: '2022-05-09T11:31:24Z'
+                              updated_at:
+                                type: string
+                                example: '2022-05-09T11:31:24Z'
+                              gateway_type:
+                                type: string
+                                example: third_party_gateway
+                              storage_state:
+                                type: string
+                                example: retained
+                              metadata: {}
+                              third_party_token:
+                                type: string
+                                example: cus_LeoRJx05gH5FnG|card_1KxUoCBkOJcrLi5mLgUkB7Zu
+                              payment_method_type:
+                                type: string
+                                example: third_party_token
+                              errors:
+                                type: array
+                          basis_payment_method:
+                            type: object
+                            properties:
+                              token:
+                                type: string
+                                example: KQYeXq7dKFA37x29rSrj4gvPSSV
+                              created_at:
+                                type: string
+                                example: '2022-03-21T15:13:46Z'
+                              updated_at:
+                                type: string
+                                example: '2022-05-09T11:31:24Z'
+                              email: {}
+                              data: {}
+                              storage_state:
+                                type: string
+                                example: retained
+                              test:
+                                type: boolean
+                                example: true
+                                default: true
+                              metadata: {}
+                              callback_url: {}
+                              last_four_digits:
+                                type: string
+                                example: '1111'
+                              first_six_digits:
+                                type: string
+                                example: '411111'
+                              card_type:
+                                type: string
+                                example: visa
+                              first_name:
+                                type: string
+                                example: Jimiy
+                              last_name:
+                                type: string
+                                example: Test
+                              month:
+                                type: integer
+                                example: 12
+                                default: 0
+                              year:
+                                type: integer
+                                example: 2022
+                                default: 0
+                              address1: {}
+                              address2: {}
+                              city: {}
+                              state: {}
+                              zip: {}
+                              country: {}
+                              phone_number: {}
+                              company: {}
+                              full_name:
+                                type: string
+                                example: Jimiy Test
+                              eligible_for_card_updater:
+                                type: boolean
+                                example: true
+                                default: true
+                              shipping_address1: {}
+                              shipping_address2: {}
+                              shipping_city: {}
+                              shipping_state: {}
+                              shipping_zip: {}
+                              shipping_country: {}
+                              shipping_phone_number: {}
+                              issuer_identification_number:
+                                type: string
+                                example: '41111111'
+                              payment_method_type:
+                                type: string
+                                example: credit_card
+                              errors:
+                                type: array
+                              fingerprint:
+                                type: string
+                                example: e3cef43464fc832f6e04f187df25af497994
+                              verification_value:
+                                type: string
+                                example: ''
+                              number:
+                                type: string
+                                example: XXXX-XXXX-XXXX-1111
+                          response:
+                            type: object
+                            properties:
+                              success:
+                                type: boolean
+                                example: true
+                                default: true
+                              message:
+                                type: string
+                                example: Transaction approved
+                              avs_code: {}
+                              avs_message: {}
+                              cvv_code: {}
+                              cvv_message: {}
+                              pending:
+                                type: boolean
+                                example: false
+                                default: true
+                              result_unknown:
+                                type: boolean
+                                example: false
+                                default: true
+                              error_code: {}
+                              error_detail: {}
+                              cancelled:
+                                type: boolean
+                                example: false
+                                default: true
+                              fraud_review: {}
+                              created_at:
+                                type: string
+                                example: '2022-05-09T11:31:24Z'
+                              updated_at:
+                                type: string
+                                example: '2022-05-09T11:31:24Z'
+                  success:
+                    type: array
+                    items:
+                      type: string
+                      example: payment method successfully submitted
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                No Payment Method Found:
+                  value: "{\n  \"error\": [\n    \"no payment method found.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: array
+                    items:
+                      type: string
+                      example: no payment method found.
+      deprecated: false
+      tags:
+      - Payment Method
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: API key for merchant-level operations. Provides access to merchant-specific endpoints including transactions, payments, customer management, and merchant account settings. This key is scoped to a single merchant account and cannot access partner-level functionality.
+    PartnerApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Partner-level API key with elevated privileges. Grants access to all partner operations including merchant management, portfolio oversight, reporting across multiple merchant accounts, and partner-specific administrative functions. Also provides access to all merchant-level operations for accounts under the partner's management.
+    EphemeralAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Temporary authentication token with limited lifespan. Used for short-term access to specific operations, typically generated for secure one-time actions or time-bounded sessions. Automatically expires after a predefined period for enhanced security.

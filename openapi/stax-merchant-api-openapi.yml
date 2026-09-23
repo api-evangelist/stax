@@ -1,0 +1,3635 @@
+openapi: 3.2.0
+info:
+  title: stax-api Merchant API
+  version: '0.1'
+servers:
+- url: https://apiprod.fattlabs.com/
+security:
+- ApiKeyAuth: []
+tags:
+- name: Merchant
+paths:
+  /merchant/{id}/registration/file:
+    post:
+      summary: Add File to Merchant Registration
+      description: Uploads a file to a merchant's registration.
+      operationId: add-file-to-merchant-registration
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: ID of the merchant.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              - file
+              properties:
+                name:
+                  type: string
+                  description: The name of the file.
+                file:
+                  type: string
+                  description: The file itself.
+                  format: binary
+                registration_document_id:
+                  type: string
+                  description: Associates the file with a specific registration document.
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"annual_volume\": \"\",\n  \"avg_trans_size\": \"\",\n  \"b2b_percent\": \"\",\n  \"bank_account_type\": \"\",\n  \"business_address_1\": \"\",\n  \"business_address_2\": \"\",\n  \"business_address_city\": \"\",\n  \"business_address_country\": \"\",\n  \"business_address_state\": \"\",\n  \"business_address_zip\": \"\",\n  \"business_dba\": \"\",\n  \"business_email\": \"\",\n  \"business_fax\": \"\",\n  \"business_legal_name\": \"\",\n  \"business_open_date\": \"\",\n  \"business_phone_number\": \"\",\n  \"business_tax_id\": \"\",\n  \"business_website\": \"\",\n  \"card_not_present_percent\": \"\",\n  \"card_present_percent\": \"\",\n  \"card_swiped_percent\": \"\",\n  \"chosen_plan\": \"\",\n  \"chosen_processing_method\": \"\",\n  \"company_type\": \"\",\n  \"email\": \"\",\n  \"first_name\": \"\",\n  \"highest_trans_amount\": \"\",\n  \"international\": \"\",\n  \"internet\": \"\",\n  \"job_title\": \"\",\n  \"last_name\": \"\",\n  \"location_type\": \"\",\n  \"meta\": {\n    \"ownership_percentage\": 60,\n    \"owner_citizenship\": \"ALA\",\n    \"representatives\": [\n      {\n        \"title\": \"\",\n        \"date_of_birth\": \"\",\n        \"ssn\": \"\",\n        \"first_name\": \"\",\n        \"last_name\": \"\",\n        \"type\": \"\",\n        \"ownership_percentage\": 40,\n        \"email\": \"\",\n        \"phone\": \"\",\n        \"address_1\": \"\",\n        \"address_2\": \"\",\n        \"address_city\": \"\",\n        \"address_state\": \"\",\n        \"address_zip\": \"\",\n        \"citizenship\": \"ALA\"\n      }\n    ]\n  },\n  \"moto_percent\": \"\",\n  \"network\": \"\",\n  \"owner_address_1\": \"\",\n  \"owner_address_2\": \"\",\n  \"owner_address_city\": \"\",\n  \"owner_address_country\": \"\",\n  \"owner_address_state\": \"\",\n  \"owner_address_zip\": \"\",\n  \"phone_number\": \"\",\n  \"plan\": \"\",\n  \"principal_owners_name\": \"\",\n  \"reason_for_applying\": \"\",\n  \"referred_by\": \"\",\n  \"refund_policy\": \"\",\n  \"seasonal_flag\": false,\n  \"seasonal_months\": \"\",\n  \"service_you_provide\": \"\",\n  \"title\": \"\",\n  \"user_dob\": \"\",\n  \"merchant_id\": \"791fc3fa-4534-4617-97b6-d41c9e1ce8da\",\n  \"user_id\": \"a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8\",\n  \"updated_at\": \"2019-06-19 21:22:03\",\n  \"created_at\": \"2019-06-19 21:22:03\",\n  \"files\": [\n    {\n      \"id\": \"69ad5457-c027-4057-ad52-05ef0e39ec39\",\n      \"merchant_id\": \"866ccc18-315e-496d-8a49-f16a5da79b75\",\n      \"user_id\": \"8f5f7d73-d53c-47c6-8880-6da0de8d9a10\",\n      \"name\": \"voidcheck\",\n      \"path\": \"onboarding/69ad5457-c027-4057-ad52-05ef0e39ec39.png\",\n      \"public_url\": \"https://fattonboardingfiles.s3.us-west-2.amazonaws.com/onboarding/69ad5457-c027-4057-ad52-05ef0e39ec39.png\",\n      \"tag\": \"onboarding\",\n      \"meta\": {\n        \"filesize_bytes\": 2631,\n        \"filesize\": \"0.03 kB\",\n        \"extension\": \"png\",\n        \"size\": {\n          \"width\": 225,\n          \"height\": 225\n        },\n        \"mime\": \"image/png\"\n      },\n      \"created_at\": \"2020-01-16 18:35:03\",\n      \"updated_at\": \"2020-01-16 18:35:04\",\n      \"deleted_at\": null,\n      \"registration_document_id\": \"RD11eb3bbd85936820828f2b181cd9c9d0\"\n    }\n  ],\n  \"electronic_signature\": {\n    \"html_content\": \"I agree to...\",\n    \"ip\": \"42.1.1.113\",\n    \"timestamp\": \"2019-06-19 21:22:03\",\n    \"user_id\": \"a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8\",\n    \"email\": \"john@doe.com\",\n    \"browser_agent\": \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36\"\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  annual_volume:
+                    type: string
+                    example: ''
+                  avg_trans_size:
+                    type: string
+                    example: ''
+                  b2b_percent:
+                    type: string
+                    example: ''
+                  bank_account_type:
+                    type: string
+                    example: ''
+                  business_address_1:
+                    type: string
+                    example: ''
+                  business_address_2:
+                    type: string
+                    example: ''
+                  business_address_city:
+                    type: string
+                    example: ''
+                  business_address_country:
+                    type: string
+                    example: ''
+                  business_address_state:
+                    type: string
+                    example: ''
+                  business_address_zip:
+                    type: string
+                    example: ''
+                  business_dba:
+                    type: string
+                    example: ''
+                  business_email:
+                    type: string
+                    example: ''
+                  business_fax:
+                    type: string
+                    example: ''
+                  business_legal_name:
+                    type: string
+                    example: ''
+                  business_open_date:
+                    type: string
+                    example: ''
+                  business_phone_number:
+                    type: string
+                    example: ''
+                  business_tax_id:
+                    type: string
+                    example: ''
+                  business_website:
+                    type: string
+                    example: ''
+                  card_not_present_percent:
+                    type: string
+                    example: ''
+                  card_present_percent:
+                    type: string
+                    example: ''
+                  card_swiped_percent:
+                    type: string
+                    example: ''
+                  chosen_plan:
+                    type: string
+                    example: ''
+                  chosen_processing_method:
+                    type: string
+                    example: ''
+                  company_type:
+                    type: string
+                    example: ''
+                  email:
+                    type: string
+                    example: ''
+                  first_name:
+                    type: string
+                    example: ''
+                  highest_trans_amount:
+                    type: string
+                    example: ''
+                  international:
+                    type: string
+                    example: ''
+                  internet:
+                    type: string
+                    example: ''
+                  job_title:
+                    type: string
+                    example: ''
+                  last_name:
+                    type: string
+                    example: ''
+                  location_type:
+                    type: string
+                    example: ''
+                  meta:
+                    type: object
+                    properties:
+                      ownership_percentage:
+                        type: integer
+                        example: 60
+                        default: 0
+                      owner_citizenship:
+                        type: string
+                        example: ALA
+                      representatives:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            title:
+                              type: string
+                              example: ''
+                            date_of_birth:
+                              type: string
+                              example: ''
+                            ssn:
+                              type: string
+                              example: ''
+                            first_name:
+                              type: string
+                              example: ''
+                            last_name:
+                              type: string
+                              example: ''
+                            type:
+                              type: string
+                              example: ''
+                            ownership_percentage:
+                              type: integer
+                              example: 40
+                              default: 0
+                            email:
+                              type: string
+                              example: ''
+                            phone:
+                              type: string
+                              example: ''
+                            address_1:
+                              type: string
+                              example: ''
+                            address_2:
+                              type: string
+                              example: ''
+                            address_city:
+                              type: string
+                              example: ''
+                            address_state:
+                              type: string
+                              example: ''
+                            address_zip:
+                              type: string
+                              example: ''
+                            citizenship:
+                              type: string
+                              example: ALA
+                  moto_percent:
+                    type: string
+                    example: ''
+                  network:
+                    type: string
+                    example: ''
+                  owner_address_1:
+                    type: string
+                    example: ''
+                  owner_address_2:
+                    type: string
+                    example: ''
+                  owner_address_city:
+                    type: string
+                    example: ''
+                  owner_address_country:
+                    type: string
+                    example: ''
+                  owner_address_state:
+                    type: string
+                    example: ''
+                  owner_address_zip:
+                    type: string
+                    example: ''
+                  phone_number:
+                    type: string
+                    example: ''
+                  plan:
+                    type: string
+                    example: ''
+                  principal_owners_name:
+                    type: string
+                    example: ''
+                  reason_for_applying:
+                    type: string
+                    example: ''
+                  referred_by:
+                    type: string
+                    example: ''
+                  refund_policy:
+                    type: string
+                    example: ''
+                  seasonal_flag:
+                    type: boolean
+                    example: false
+                    default: true
+                  seasonal_months:
+                    type: string
+                    example: ''
+                  service_you_provide:
+                    type: string
+                    example: ''
+                  title:
+                    type: string
+                    example: ''
+                  user_dob:
+                    type: string
+                    example: ''
+                  merchant_id:
+                    type: string
+                    example: 791fc3fa-4534-4617-97b6-d41c9e1ce8da
+                  user_id:
+                    type: string
+                    example: a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8
+                  updated_at:
+                    type: string
+                    example: '2019-06-19 21:22:03'
+                  created_at:
+                    type: string
+                    example: '2019-06-19 21:22:03'
+                  files:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: 69ad5457-c027-4057-ad52-05ef0e39ec39
+                        merchant_id:
+                          type: string
+                          example: 866ccc18-315e-496d-8a49-f16a5da79b75
+                        user_id:
+                          type: string
+                          example: 8f5f7d73-d53c-47c6-8880-6da0de8d9a10
+                        name:
+                          type: string
+                          example: voidcheck
+                        path:
+                          type: string
+                          example: onboarding/69ad5457-c027-4057-ad52-05ef0e39ec39.png
+                        public_url:
+                          type: string
+                          example: https://fattonboardingfiles.s3.us-west-2.amazonaws.com/onboarding/69ad5457-c027-4057-ad52-05ef0e39ec39.png
+                        tag:
+                          type: string
+                          example: onboarding
+                        meta:
+                          type: object
+                          properties:
+                            filesize_bytes:
+                              type: integer
+                              example: 2631
+                              default: 0
+                            filesize:
+                              type: string
+                              example: 0.03 kB
+                            extension:
+                              type: string
+                              example: png
+                            size:
+                              type: object
+                              properties:
+                                width:
+                                  type: integer
+                                  example: 225
+                                  default: 0
+                                height:
+                                  type: integer
+                                  example: 225
+                                  default: 0
+                            mime:
+                              type: string
+                              example: image/png
+                        created_at:
+                          type: string
+                          example: '2020-01-16 18:35:03'
+                        updated_at:
+                          type: string
+                          example: '2020-01-16 18:35:04'
+                        deleted_at: {}
+                        registration_document_id:
+                          type: string
+                          example: RD11eb3bbd85936820828f2b181cd9c9d0
+                  electronic_signature:
+                    type: object
+                    properties:
+                      html_content:
+                        type: string
+                        example: I agree to...
+                      ip:
+                        type: string
+                        example: 42.1.1.113
+                      timestamp:
+                        type: string
+                        example: '2019-06-19 21:22:03'
+                      user_id:
+                        type: string
+                        example: a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8
+                      email:
+                        type: string
+                        example: john@doe.com
+                      browser_agent:
+                        type: string
+                        example: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"file\": [\n    \"The file field is required.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  file:
+                    type: array
+                    items:
+                      type: string
+                      example: The file field is required.
+      deprecated: false
+      security:
+      - PartnerApiKey: []
+      tags:
+      - Merchant
+  /merchant:
+    post:
+      summary: Create a Merchant
+      description: Creates a new merchant
+      operationId: create-a-merchant
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                company_name:
+                  type: string
+                  description: Name of the company
+                contact_name:
+                  type: string
+                  description: Name of the main contact person for the company.
+                contact_email:
+                  type: string
+                  description: Email for communication.
+                contact_phone:
+                  type: string
+                  description: Phone number of the company.
+                address_1:
+                  type: string
+                  description: Address of the company.
+                Address_2:
+                  type: string
+                address_city:
+                  type: string
+                  description: CIty of the company location.
+                address_state:
+                  type: string
+                  description: 2 letter abbreviation of the state where the company is located.
+                Address_zip:
+                  type: string
+                  description: Zip code of the company.
+                hosted_payments_token:
+                  type: string
+                  description: Payment token.
+                currency:
+                  type: string
+                  description: Three letter abbreviation of the currency. e.g., USD.
+                reference:
+                  type: string
+                  description: This reference field can be used as an external identifier, and can be used to filter the GET /merchant API.
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"9cbfffba-33e2-4d25-aa2b-11e9bc11c301\",\n  \"mid\": \"\",\n  \"status\": \"ACTIVE\",\n  \"subdomain\": \"\",\n  \"company_name\": \"Stax\",\n  \"display_name\": \"Stax\",\n  \"contact_name\": \"Stax\",\n  \"contact_email\": \"contact@example.com\",\n  \"contact_phone\": \"8555503288\",\n  \"address_1\": \"25 Wall Street\",\n  \"address_2\": \"Suite 1\",\n  \"address_city\": \"Orlando\",\n  \"address_state\": \"FL\",\n  \"address_zip\": \"32801\",\n  \"hosted_payments_token\": \"CompanyName-c3073a83d4a2\",\n  \"currency\": [\n    \"USD\"\n  ],\n  \"plan\": {\n    \"id\": \"1de08ed1-27e3-4e5a-bc17-ea76444b636c\",\n    \"merchant_id\": \"9cbfffba-33e2-4d25-aa2b-11e9bc11c301\",\n    \"user_id\": \"user1\",\n    \"name\": \"premium\",\n    \"created_at\": \"2020-02-17 13:35:11\",\n    \"updated_at\": \"2020-02-17 13:35:11\"\n  },\n  \"options\": [],\n  \"notes\": \"\",\n  \"gateway_type\": null,\n  \"vendor_keys\": [],\n  \"processor\": \"\",\n  \"partner\": null,\n  \"product_type\": \"\",\n  \"is_enterprise\": false,\n  \"is_payfac\": false,\n  \"fm_billing_schedule_id\": null,\n  \"welcome_email_sent_at\": null,\n  \"created_at\": \"2020-02-17 13:35:11\",\n  \"updated_at\": \"2020-02-17 13:35:11\",\n  \"deleted_at\": null,\n  \"brand\": \"fattmerchant\",\n  \"branding\": null,\n  \"allow_ach\": false,\n  \"is_portal\": false,\n  \"allow_credits\": false,\n  \"allow_terminal\": false,\n  \"users\": [],\n  \"reference\": \"Entity00000\"}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 9cbfffba-33e2-4d25-aa2b-11e9bc11c301
+                  mid:
+                    type: string
+                    example: ''
+                  status:
+                    type: string
+                    example: ACTIVE
+                  subdomain:
+                    type: string
+                    example: ''
+                  company_name:
+                    type: string
+                    example: Stax
+                  display_name:
+                    type: string
+                    example: Stax
+                  contact_name:
+                    type: string
+                    example: Stax
+                  contact_email:
+                    type: string
+                    example: contact@example.com
+                  contact_phone:
+                    type: string
+                    example: '8555503288'
+                  address_1:
+                    type: string
+                    example: 25 Wall Street
+                  address_2:
+                    type: string
+                    example: Suite 1
+                  address_city:
+                    type: string
+                    example: Orlando
+                  address_state:
+                    type: string
+                    example: FL
+                  address_zip:
+                    type: string
+                    example: '32801'
+                  hosted_payments_token:
+                    type: string
+                    example: CompanyName-c3073a83d4a2
+                  currency:
+                    type: array
+                    items:
+                      type: string
+                      example: USD
+                  plan:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 1de08ed1-27e3-4e5a-bc17-ea76444b636c
+                      merchant_id:
+                        type: string
+                        example: 9cbfffba-33e2-4d25-aa2b-11e9bc11c301
+                      user_id:
+                        type: string
+                        example: user1
+                      name:
+                        type: string
+                        example: premium
+                      created_at:
+                        type: string
+                        example: '2020-02-17 13:35:11'
+                      updated_at:
+                        type: string
+                        example: '2020-02-17 13:35:11'
+                  options:
+                    type: array
+                  notes:
+                    type: string
+                    example: ''
+                  gateway_type: {}
+                  vendor_keys:
+                    type: array
+                  processor:
+                    type: string
+                    example: ''
+                  partner: {}
+                  product_type:
+                    type: string
+                    example: ''
+                  is_enterprise:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_payfac:
+                    type: boolean
+                    example: false
+                    default: true
+                  fm_billing_schedule_id: {}
+                  welcome_email_sent_at: {}
+                  created_at:
+                    type: string
+                    example: '2020-02-17 13:35:11'
+                  updated_at:
+                    type: string
+                    example: '2020-02-17 13:35:11'
+                  deleted_at: {}
+                  brand:
+                    type: string
+                    example: fattmerchant
+                  branding: {}
+                  allow_ach:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_portal:
+                    type: boolean
+                    example: false
+                    default: true
+                  allow_credits:
+                    type: boolean
+                    example: false
+                    default: true
+                  allow_terminal:
+                    type: boolean
+                    example: false
+                    default: true
+                  users:
+                    type: array
+                  reference:
+                    type: string
+                    example: Entity00000
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"company_name\": [\n    \"The company name field is required.\"\n  ],\n  \"contact_email\": [\n    \"The contact email field is required.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  company_name:
+                    type: array
+                    items:
+                      type: string
+                      example: The company name field is required.
+                  contact_email:
+                    type: array
+                    items:
+                      type: string
+                      example: The contact email field is required.
+      deprecated: false
+      security:
+      - PartnerApiKey: []
+      tags:
+      - Merchant
+    get:
+      summary: Get all Merchants
+      description: Returns paginated data for all of your merchants
+      operationId: get-all-merchants
+      parameters:
+      - name: per_page
+        in: query
+        description: Determines how many records will be returned per page.
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        in: query
+        description: Returns data for the page given.
+        schema:
+          type: integer
+          format: int32
+      - name: statuses[]
+        in: query
+        description: 'Returns the merchant(s) with the given merchant status(es). Possible values:  ACTIVE, PENDING, INACTIVE.'
+        schema:
+          type: array
+          items:
+            type: string
+      - name: reference
+        in: query
+        description: Filters merchants whose reference field holds the exact value specified.
+        schema:
+          type: string
+      - name: risk_hold
+        in: query
+        description: Filters merchants who have a risk hold on their account.
+        schema:
+          type: boolean
+      - name: ids[]
+        in: query
+        description: Returns the merchant(s) with the given merchant id(s).
+        schema:
+          type: array
+          items:
+            type: string
+      - name: contact_email
+        in: query
+        description: Returns all merchants with the given email.
+        schema:
+          type: string
+      - name: contact_phone
+        in: query
+        description: Returns all merchants with the given phone number.
+        schema:
+          type: string
+      - name: contact_name
+        in: query
+        description: Returns all merchants with the given name.
+        schema:
+          type: string
+      - name: company_name
+        in: query
+        description: Returns all merchants with the given company name.
+        schema:
+          type: string
+      - name: address_city
+        in: query
+        description: Returns all merchants in a given city.
+        schema:
+          type: string
+      - name: address_state
+        in: query
+        description: Returns all merchants in a given state.
+        schema:
+          type: string
+      - name: address_zip
+        in: query
+        description: Returns all merchants in a given zip code.
+        schema:
+          type: string
+      - name: sort
+        in: query
+        description: The property by which the results are sorted.
+        schema:
+          type: string
+          enum:
+          - created_at
+          - updated_at
+          - status
+      - name: order
+        in: query
+        description: The order in which the results are sorted.
+        schema:
+          type: string
+          enum:
+          - DESC
+          - ASC
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"current_page\": 3,\n  \"data\": [\n    {\n      \"id\": \"87e7872f-ba17-4e6a-aa6f-3346a7345444\",\n      \"mid\": \"\",\n      \"status\": \"PENDING\",\n      \"subdomain\": \"\",\n      \"company_name\": \"Company\",\n      \"display_name\": \"Company\",\n      \"contact_name\": \"\",\n      \"contact_email\": \"contact@example.com\",\n      \"contact_phone\": \"9202856700\",\n      \"address_1\": \"\",\n      \"address_2\": \"\",\n      \"address_city\": \"\",\n      \"address_state\": \"\",\n      \"address_zip\": \"\",\n      \"hosted_payments_token\": \"Company-fea49bf66320\",\n      \"currency\": [\n        \"USD\"\n      ],\n      \"plan\": {\n        \"id\": \"a513f85f-f944-4aa2-bee0-75dd1bce9275\",\n        \"merchant_id\": \"87e7872f-ba17-4e6a-aa6f-3346a7345444\",\n        \"user_id\": \"992f0ffc-03a9-47d7-9eff-5c170c78e830\",\n        \"name\": \"portal\",\n        \"created_at\": \"2020-05-05 19:43:20\",\n        \"updated_at\": \"2020-05-05 19:43:20\"\n      },\n      \"options\": null,\n      \"notes\": \"\",\n      \"gateway_type\": null,\n      \"vendor_keys\": null,\n      \"processor\": \"\",\n      \"partner\": null,\n      \"product_type\": \"\",\n      \"is_enterprise\": false,\n      \"is_payfac\": false,\n      \"fm_billing_schedule_id\": null,\n      \"welcome_email_sent_at\": null,\n      \"created_at\": \"2020-05-05 19:43:20\",\n      \"updated_at\": \"2020-05-05 19:43:20\",\n      \"deleted_at\": null,\n      \"brand\": \"fattmerchant\",\n      \"branding\": null,\n      \"allow_ach\": false,\n      \"is_portal\": true,\n      \"allow_credits\": false,\n      \"allow_terminal\": false,\n      \"users\": []\n    },\n    {\n      \"id\": \"249196af-fcc0-4f8a-bf13-64e9be20df4a\",\n      \"mid\": \"\",\n      \"status\": \"PENDING\",\n      \"subdomain\": \"\",\n      \"company_name\": \"Company\",\n      \"display_name\": \"Company\",\n      \"contact_name\": \"\",\n      \"contact_email\": \"contact@example.com\",\n      \"contact_phone\": \"9202856700\",\n      \"address_1\": \"\",\n      \"address_2\": \"\",\n      \"address_city\": \"\",\n      \"address_state\": \"\",\n      \"address_zip\": \"\",\n      \"hosted_payments_token\": \"Company-1eb16c7e33e3\",\n      \"currency\": [\n        \"USD\"\n      ],\n      \"plan\": {\n        \"id\": \"d8e29ffa-8d20-47c9-b40f-74add7b937d6\",\n        \"merchant_id\": \"249196af-fcc0-4f8a-bf13-64e9be20df4a\",\n        \"user_id\": \"992f0ffc-03a9-47d7-9eff-5c170c78e830\",\n        \"name\": \"portal\",\n        \"created_at\": \"2020-05-05 19:04:30\",\n        \"updated_at\": \"2020-05-05 19:04:30\"\n      },\n      \"options\": null,\n      \"notes\": \"\",\n      \"gateway_type\": null,\n      \"vendor_keys\": null,\n      \"processor\": \"\",\n      \"partner\": null,\n      \"product_type\": \"\",\n      \"is_enterprise\": false,\n      \"is_payfac\": false,\n      \"fm_billing_schedule_id\": null,\n      \"welcome_email_sent_at\": null,\n      \"created_at\": \"2020-05-05 19:04:30\",\n      \"updated_at\": \"2020-05-05 19:04:30\",\n      \"deleted_at\": null,\n      \"brand\": \"fattmerchant\",\n      \"branding\": null,\n      \"allow_ach\": false,\n      \"is_portal\": true,\n      \"allow_credits\": false,\n      \"allow_terminal\": false,\n      \"users\": []\n    }\n  ],\n  \"first_page_url\": \"https://apiprod.fattlabs.com//merchant?page=1\",\n  \"from\": 5,\n  \"last_page\": 34,\n  \"last_page_url\": \"https://apiprod.fattlabs.com//merchant?page=34\",\n  \"next_page_url\": \"https://apiprod.fattlabs.com//merchant?page=4\",\n  \"path\": \"https://apiprod.fattlabs.com//merchant\",\n  \"per_page\": \"2\",\n  \"prev_page_url\": \"https://apiprod.fattlabs.com//merchant?page=2\",\n  \"to\": 6,\n  \"total\": 67\n}"
+              schema:
+                type: object
+                properties:
+                  current_page:
+                    type: integer
+                    example: 3
+                    default: 0
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: 87e7872f-ba17-4e6a-aa6f-3346a7345444
+                        mid:
+                          type: string
+                          example: ''
+                        status:
+                          type: string
+                          example: PENDING
+                        subdomain:
+                          type: string
+                          example: ''
+                        company_name:
+                          type: string
+                          example: Company
+                        display_name:
+                          type: string
+                          example: Company
+                        contact_name:
+                          type: string
+                          example: ''
+                        contact_email:
+                          type: string
+                          example: contact@example.com
+                        contact_phone:
+                          type: string
+                          example: '9202856700'
+                        address_1:
+                          type: string
+                          example: ''
+                        address_2:
+                          type: string
+                          example: ''
+                        address_city:
+                          type: string
+                          example: ''
+                        address_state:
+                          type: string
+                          example: ''
+                        address_zip:
+                          type: string
+                          example: ''
+                        hosted_payments_token:
+                          type: string
+                          example: Company-fea49bf66320
+                        currency:
+                          type: array
+                          items:
+                            type: string
+                            example: USD
+                        plan:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: a513f85f-f944-4aa2-bee0-75dd1bce9275
+                            merchant_id:
+                              type: string
+                              example: 87e7872f-ba17-4e6a-aa6f-3346a7345444
+                            user_id:
+                              type: string
+                              example: 992f0ffc-03a9-47d7-9eff-5c170c78e830
+                            name:
+                              type: string
+                              example: portal
+                            created_at:
+                              type: string
+                              example: '2020-05-05 19:43:20'
+                            updated_at:
+                              type: string
+                              example: '2020-05-05 19:43:20'
+                        options: {}
+                        notes:
+                          type: string
+                          example: ''
+                        gateway_type: {}
+                        vendor_keys: {}
+                        processor:
+                          type: string
+                          example: ''
+                        partner: {}
+                        product_type:
+                          type: string
+                          example: ''
+                        is_enterprise:
+                          type: boolean
+                          example: false
+                          default: true
+                        is_payfac:
+                          type: boolean
+                          example: false
+                          default: true
+                        fm_billing_schedule_id: {}
+                        welcome_email_sent_at: {}
+                        created_at:
+                          type: string
+                          example: '2020-05-05 19:43:20'
+                        updated_at:
+                          type: string
+                          example: '2020-05-05 19:43:20'
+                        deleted_at: {}
+                        brand:
+                          type: string
+                          example: fattmerchant
+                        branding: {}
+                        allow_ach:
+                          type: boolean
+                          example: false
+                          default: true
+                        is_portal:
+                          type: boolean
+                          example: true
+                          default: true
+                        allow_credits:
+                          type: boolean
+                          example: false
+                          default: true
+                        allow_terminal:
+                          type: boolean
+                          example: false
+                          default: true
+                        users:
+                          type: array
+                  first_page_url:
+                    type: string
+                    example: https://apiprod.fattlabs.com//merchant?page=1
+                  from:
+                    type: integer
+                    example: 5
+                    default: 0
+                  last_page:
+                    type: integer
+                    example: 34
+                    default: 0
+                  last_page_url:
+                    type: string
+                    example: https://apiprod.fattlabs.com//merchant?page=34
+                  next_page_url:
+                    type: string
+                    example: https://apiprod.fattlabs.com//merchant?page=4
+                  path:
+                    type: string
+                    example: https://apiprod.fattlabs.com//merchant
+                  per_page:
+                    type: string
+                    example: '2'
+                  prev_page_url:
+                    type: string
+                    example: https://apiprod.fattlabs.com//merchant?page=2
+                  to:
+                    type: integer
+                    example: 6
+                    default: 0
+                  total:
+                    type: integer
+                    example: 67
+                    default: 0
+      deprecated: false
+      security:
+      - PartnerApiKey: []
+      tags:
+      - Merchant
+  /merchant/{id}/apikey:
+    post:
+      summary: Create a New API Key for Merchant
+      description: Generates a new API key for the specified merchant.
+      operationId: create-a-new-api-key-for-merchant
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: Merchant ID for which to create a new API key.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: ' Name for the key. 255 character max. Example: "api-key-1"'
+                team_role:
+                  type: string
+                  enum:
+                  - '"admin"'
+                  - '"staff"'
+                  - '"full"'
+                  - '"reporting"'
+                  description: We recommend "admin" so the API key can be used for all routes.
+                  default: full
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      security:
+      - PartnerApiKey: []
+      tags:
+      - Merchant
+    get:
+      summary: List API Keys for Merchant
+      description: Lists all API keys associated with the specified merchant.
+      operationId: list-api-keys-for-merchant
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: ID of the merchant.
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: " {\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"id\": \"ebf007e4-90c9-4764-b8be-4b2a21a7deda\",\n                \"name\": \"api-key-1\",\n                \"email\": null,\n                \"email_verification_sent_at\": null,\n                \"email_verified_at\": null,\n                \"created_at\": \"2019-06-19 20:32:15\",\n                \"updated_at\": \"2019-06-19 20:32:15\",\n                \"deleted_at\": null,\n                \"gravatar\": \"//www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e\",\n                \"team_role\": \"full\",\n                \"team_admin\": false,\n                \"team_enabled\": true,\n                \"api_key\": \"THIS_VALUE_WILL_CONTAIN_JWT_STRING\"\n            },\n            {\n                \"id\": \"71626cac-ba4e-4c71-a8d3-315a279b8ef1\",\n                \"name\": \"api-key-2\",\n                \"email\": null,\n                \"email_verification_sent_at\": null,\n                \"email_verified_at\": null,\n                \"created_at\": \"2019-06-19 20:32:11\",\n                \"updated_at\": \"2019-06-19 20:32:11\",\n                \"deleted_at\": null,\n                \"gravatar\": \"//www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e\",\n                \"team_role\": \"full\",\n                \"team_admin\": false,\n                \"team_enabled\": true,\n                \"api_key\": \"THIS_VALUE_WILL_CONTAIN_JWT_STRING\"\n            },\n        ],\n        \"from\": 1,\n        \"last_page\": 1,\n        \"per_page\": 20,\n        \"prev_page_url\": null,\n        \"to\": 2,\n        \"total\": 2\n    }"
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      security:
+      - PartnerApiKey: []
+      tags:
+      - Merchant
+  /merchant/{id}/registration/file/{file_id}:
+    delete:
+      summary: Delete File from Merchant Registration
+      description: Delete a file from a merchant's registration
+      operationId: delete-file-from-merchant-registration
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: ID of the merchant.
+      - name: file_id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: ID of the file to be removed.
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"annual_volume\": \"\",\n  \"avg_trans_size\": \"\",\n  \"b2b_percent\": \"\",\n  \"bank_account_type\": \"\",\n  \"business_address_1\": \"\",\n  \"business_address_2\": \"\",\n  \"business_address_city\": \"\",\n  \"business_address_country\": \"\",\n  \"business_address_state\": \"\",\n  \"business_address_zip\": \"\",\n  \"business_dba\": \"\",\n  \"business_email\": \"\",\n  \"business_fax\": \"\",\n  \"business_legal_name\": \"\",\n  \"business_open_date\": \"\",\n  \"business_phone_number\": \"\",\n  \"business_tax_id\": \"\",\n  \"business_website\": \"\",\n  \"card_not_present_percent\": \"\",\n  \"card_present_percent\": \"\",\n  \"card_swiped_percent\": \"\",\n  \"chosen_plan\": \"\",\n  \"chosen_processing_method\": \"\",\n  \"company_type\": \"\",\n  \"email\": \"\",\n  \"first_name\": \"\",\n  \"highest_trans_amount\": \"\",\n  \"international\": \"\",\n  \"internet\": \"\",\n  \"job_title\": \"\",\n  \"last_name\": \"\",\n  \"location_type\": \"\",\n  \"meta\": {\n    \"ownership_percentage\": 60,\n    \"owner_citizenship\": \"ALA\",\n    \"representatives\": [\n      {\n        \"title\": \"\",\n        \"date_of_birth\": \"\",\n        \"ssn\": \"\",\n        \"first_name\": \"\",\n        \"last_name\": \"\",\n        \"type\": \"\",\n        \"ownership_percentage\": 40,\n        \"email\": \"\",\n        \"phone\": \"\",\n        \"address_1\": \"\",\n        \"address_2\": \"\",\n        \"address_city\": \"\",\n        \"address_state\": \"\",\n        \"address_zip\": \"\",\n        \"citizenship\": \"ALA\"\n      }\n    ]\n  },\n  \"moto_percent\": \"\",\n  \"network\": \"\",\n  \"owner_address_1\": \"\",\n  \"owner_address_2\": \"\",\n  \"owner_address_city\": \"\",\n  \"owner_address_country\": \"\",\n  \"owner_address_state\": \"\",\n  \"owner_address_zip\": \"\",\n  \"phone_number\": \"\",\n  \"plan\": \"\",\n  \"principal_owners_name\": \"\",\n  \"reason_for_applying\": \"\",\n  \"referred_by\": \"\",\n  \"refund_policy\": \"\",\n  \"seasonal_flag\": false,\n  \"seasonal_months\": \"\",\n  \"service_you_provide\": \"\",\n  \"title\": \"\",\n  \"user_dob\": \"\",\n  \"merchant_id\": \"791fc3fa-4534-4617-97b6-d41c9e1ce8da\",\n  \"user_id\": \"a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8\",\n  \"updated_at\": \"2019-06-19 21:22:03\",\n  \"created_at\": \"2019-06-19 21:22:03\",\n  \"files\": [\n    {\n      \"id\": \"69ad5457-c027-4057-ad52-05ef0e39ec39\",\n      \"merchant_id\": \"866ccc18-315e-496d-8a49-f16a5da79b75\",\n      \"user_id\": \"8f5f7d73-d53c-47c6-8880-6da0de8d9a10\",\n      \"name\": \"voidcheck\",\n      \"path\": \"onboarding/69ad5457-c027-4057-ad52-05ef0e39ec39.png\",\n      \"public_url\": \"https://fattonboardingfiles.s3.us-west-2.amazonaws.com/onboarding/69ad5457-c027-4057-ad52-05ef0e39ec39.png\",\n      \"tag\": \"onboarding\",\n      \"meta\": {\n        \"filesize_bytes\": 2631,\n        \"filesize\": \"0.03 kB\",\n        \"extension\": \"png\",\n        \"size\": {\n          \"width\": 225,\n          \"height\": 225\n        },\n        \"mime\": \"image/png\"\n      },\n      \"created_at\": \"2020-01-16 18:35:03\",\n      \"updated_at\": \"2020-01-16 18:35:04\",\n      \"deleted_at\": null\n    },\n    {\n      \"id\": \"e87441c2-4c1f-483f-87eb-117cbd909405\",\n      \"merchant_id\": \"866ccc18-315e-496d-8a49-f16a5da79b75\",\n      \"user_id\": \"8f5f7d73-d53c-47c6-8880-6da0de8d9a10\",\n      \"name\": \"voidcheck\",\n      \"path\": null,\n      \"public_url\": null,\n      \"tag\": \"onboarding\",\n      \"meta\": null,\n      \"created_at\": \"2020-01-16 18:34:08\",\n      \"updated_at\": \"2020-01-16 18:34:08\",\n      \"deleted_at\": null\n    },\n    {\n      \"id\": \"67e140cc-73fb-439f-9c32-545ad5a8492d\",\n      \"merchant_id\": \"866ccc18-315e-496d-8a49-f16a5da79b75\",\n      \"user_id\": \"8f5f7d73-d53c-47c6-8880-6da0de8d9a10\",\n      \"name\": \"voidcheck\",\n      \"path\": \"onboarding/67e140cc-73fb-439f-9c32-545ad5a8492d.txt\",\n      \"public_url\": \"https://fattonboardingfiles.s3.us-west-2.amazonaws.com/onboarding/67e140cc-73fb-439f-9c32-545ad5a8492d.txt\",\n      \"tag\": \"onboarding\",\n      \"meta\": {\n        \"filesize_bytes\": 35,\n        \"filesize\": \"0 kB\",\n        \"extension\": \"txt\",\n        \"size\": null,\n        \"mime\": \"text/plain\"\n      },\n      \"created_at\": \"2020-01-16 18:01:54\",\n      \"updated_at\": \"2020-01-16 18:01:54\",\n      \"deleted_at\": null\n    },\n    {\n      \"id\": \"72331b5e-340b-4dbf-a807-ad175d8eee53\",\n      \"merchant_id\": \"866ccc18-315e-496d-8a49-f16a5da79b75\",\n      \"user_id\": \"8f5f7d73-d53c-47c6-8880-6da0de8d9a10\",\n      \"name\": \"voidcheck\",\n      \"path\": null,\n      \"public_url\": null,\n      \"tag\": \"onboarding\",\n      \"meta\": null,\n      \"created_at\": \"2020-01-16 17:48:43\",\n      \"updated_at\": \"2020-01-16 17:48:43\",\n      \"deleted_at\": null\n    }\n  ],\n  \"electronic_signature\": {\n    \"html_content\": \"I agree to...\",\n    \"ip\": \"42.1.1.113\",\n    \"timestamp\": \"2019-06-19 21:22:03\",\n    \"user_id\": \"a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8\",\n    \"email\": \"john@doe.com\",\n    \"browser_agent\": \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36\"\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  annual_volume:
+                    type: string
+                    example: ''
+                  avg_trans_size:
+                    type: string
+                    example: ''
+                  b2b_percent:
+                    type: string
+                    example: ''
+                  bank_account_type:
+                    type: string
+                    example: ''
+                  business_address_1:
+                    type: string
+                    example: ''
+                  business_address_2:
+                    type: string
+                    example: ''
+                  business_address_city:
+                    type: string
+                    example: ''
+                  business_address_country:
+                    type: string
+                    example: ''
+                  business_address_state:
+                    type: string
+                    example: ''
+                  business_address_zip:
+                    type: string
+                    example: ''
+                  business_dba:
+                    type: string
+                    example: ''
+                  business_email:
+                    type: string
+                    example: ''
+                  business_fax:
+                    type: string
+                    example: ''
+                  business_legal_name:
+                    type: string
+                    example: ''
+                  business_open_date:
+                    type: string
+                    example: ''
+                  business_phone_number:
+                    type: string
+                    example: ''
+                  business_tax_id:
+                    type: string
+                    example: ''
+                  business_website:
+                    type: string
+                    example: ''
+                  card_not_present_percent:
+                    type: string
+                    example: ''
+                  card_present_percent:
+                    type: string
+                    example: ''
+                  card_swiped_percent:
+                    type: string
+                    example: ''
+                  chosen_plan:
+                    type: string
+                    example: ''
+                  chosen_processing_method:
+                    type: string
+                    example: ''
+                  company_type:
+                    type: string
+                    example: ''
+                  email:
+                    type: string
+                    example: ''
+                  first_name:
+                    type: string
+                    example: ''
+                  highest_trans_amount:
+                    type: string
+                    example: ''
+                  international:
+                    type: string
+                    example: ''
+                  internet:
+                    type: string
+                    example: ''
+                  job_title:
+                    type: string
+                    example: ''
+                  last_name:
+                    type: string
+                    example: ''
+                  location_type:
+                    type: string
+                    example: ''
+                  meta:
+                    type: object
+                    properties:
+                      ownership_percentage:
+                        type: integer
+                        example: 60
+                        default: 0
+                      owner_citizenship:
+                        type: string
+                        example: ALA
+                      representatives:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            title:
+                              type: string
+                              example: ''
+                            date_of_birth:
+                              type: string
+                              example: ''
+                            ssn:
+                              type: string
+                              example: ''
+                            first_name:
+                              type: string
+                              example: ''
+                            last_name:
+                              type: string
+                              example: ''
+                            type:
+                              type: string
+                              example: ''
+                            ownership_percentage:
+                              type: integer
+                              example: 40
+                              default: 0
+                            email:
+                              type: string
+                              example: ''
+                            phone:
+                              type: string
+                              example: ''
+                            address_1:
+                              type: string
+                              example: ''
+                            address_2:
+                              type: string
+                              example: ''
+                            address_city:
+                              type: string
+                              example: ''
+                            address_state:
+                              type: string
+                              example: ''
+                            address_zip:
+                              type: string
+                              example: ''
+                            citizenship:
+                              type: string
+                              example: ALA
+                  moto_percent:
+                    type: string
+                    example: ''
+                  network:
+                    type: string
+                    example: ''
+                  owner_address_1:
+                    type: string
+                    example: ''
+                  owner_address_2:
+                    type: string
+                    example: ''
+                  owner_address_city:
+                    type: string
+                    example: ''
+                  owner_address_country:
+                    type: string
+                    example: ''
+                  owner_address_state:
+                    type: string
+                    example: ''
+                  owner_address_zip:
+                    type: string
+                    example: ''
+                  phone_number:
+                    type: string
+                    example: ''
+                  plan:
+                    type: string
+                    example: ''
+                  principal_owners_name:
+                    type: string
+                    example: ''
+                  reason_for_applying:
+                    type: string
+                    example: ''
+                  referred_by:
+                    type: string
+                    example: ''
+                  refund_policy:
+                    type: string
+                    example: ''
+                  seasonal_flag:
+                    type: boolean
+                    example: false
+                    default: true
+                  seasonal_months:
+                    type: string
+                    example: ''
+                  service_you_provide:
+                    type: string
+                    example: ''
+                  title:
+                    type: string
+                    example: ''
+                  user_dob:
+                    type: string
+                    example: ''
+                  merchant_id:
+                    type: string
+                    example: 791fc3fa-4534-4617-97b6-d41c9e1ce8da
+                  user_id:
+                    type: string
+                    example: a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8
+                  updated_at:
+                    type: string
+                    example: '2019-06-19 21:22:03'
+                  created_at:
+                    type: string
+                    example: '2019-06-19 21:22:03'
+                  files:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: 69ad5457-c027-4057-ad52-05ef0e39ec39
+                        merchant_id:
+                          type: string
+                          example: 866ccc18-315e-496d-8a49-f16a5da79b75
+                        user_id:
+                          type: string
+                          example: 8f5f7d73-d53c-47c6-8880-6da0de8d9a10
+                        name:
+                          type: string
+                          example: voidcheck
+                        path:
+                          type: string
+                          example: onboarding/69ad5457-c027-4057-ad52-05ef0e39ec39.png
+                        public_url:
+                          type: string
+                          example: https://fattonboardingfiles.s3.us-west-2.amazonaws.com/onboarding/69ad5457-c027-4057-ad52-05ef0e39ec39.png
+                        tag:
+                          type: string
+                          example: onboarding
+                        meta:
+                          type: object
+                          properties:
+                            filesize_bytes:
+                              type: integer
+                              example: 2631
+                              default: 0
+                            filesize:
+                              type: string
+                              example: 0.03 kB
+                            extension:
+                              type: string
+                              example: png
+                            size:
+                              type: object
+                              properties:
+                                width:
+                                  type: integer
+                                  example: 225
+                                  default: 0
+                                height:
+                                  type: integer
+                                  example: 225
+                                  default: 0
+                            mime:
+                              type: string
+                              example: image/png
+                        created_at:
+                          type: string
+                          example: '2020-01-16 18:35:03'
+                        updated_at:
+                          type: string
+                          example: '2020-01-16 18:35:04'
+                        deleted_at: {}
+                  electronic_signature:
+                    type: object
+                    properties:
+                      html_content:
+                        type: string
+                        example: I agree to...
+                      ip:
+                        type: string
+                        example: 42.1.1.113
+                      timestamp:
+                        type: string
+                        example: '2019-06-19 21:22:03'
+                      user_id:
+                        type: string
+                        example: a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8
+                      email:
+                        type: string
+                        example: john@doe.com
+                      browser_agent:
+                        type: string
+                        example: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"annual_volume\": [\n    \"The annual volume may not be greater than 100 characters.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  annual_volume:
+                    type: array
+                    items:
+                      type: string
+                      example: The annual volume may not be greater than 100 characters.
+      deprecated: false
+      security:
+      - PartnerApiKey: []
+      tags:
+      - Merchant
+  /merchant/{merchant_id}:
+    get:
+      summary: Get Merchant by ID
+      description: Retrieves the merchant specified by the {id} parameter.
+      operationId: get-merchant-by-id
+      parameters:
+      - name: merchant_id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: ID of the merchant.
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"65649c08-71be-4745-a437-c265df8f3ed3\",\n  \"mid\": \"\",\n  \"status\": \"PENDING\",\n  \"subdomain\": \"\",\n  \"company_name\": \"Test merchant\",\n  \"display_name\": \"Test merchant\",\n  \"contact_name\": \"\",\n  \"contact_email\": \"payments@test.io\",\n  \"contact_phone\": \"\",\n  \"address_1\": \"\",\n  \"address_2\": \"\",\n  \"address_city\": \"\",\n  \"address_state\": \"\",\n  \"address_zip\": \"\",\n  \"hosted_payments_token\": \"Test Merchant\",\n  \"currency\": [\n    \"USD\"\n  ],\n  \"plan\": {\n    \"id\": \"ecc2e251-278d-4322-aaae-e4ba985f8f40\",\n    \"merchant_id\": \"65649c08-71be-4745-a437-c265df8f3765\",\n    \"user_id\": \"c3a7f735-a8f0-4ca1-937d-d0f2b76ba44b\",\n    \"name\": \"plan-0\",\n    \"created_at\": \"2021-07-14 18:53:53\",\n    \"updated_at\": \"2021-07-14 18:53:53\"\n  },\n  \"options\": null,\n  \"notes\": \"\",\n  \"gateway_type\": null,\n  \"vendor_keys\": null,\n  \"processor\": \"\",\n  \"partner\": null,\n  \"product_type\": \"Other\",\n  \"is_enterprise\": false,\n  \"is_payfac\": false,\n  \"is_sandbox\": false,\n  \"fm_billing_schedule_id\": null,\n  \"fee_reconciliation_payment_method_id\": null,\n  \"welcome_email_sent_at\": null,\n  \"created_at\": \"2021-07-14 18:53:52\",\n  \"updated_at\": \"2021-07-14 18:53:52\",\n  \"deleted_at\": null,\n  \"brand\": \"fattmerchant\",\n  \"risk_hold\": false,\n  \"branding\": null,\n  \"allow_ach\": false,\n  \"is_portal\": false,\n  \"is_flat_rate\": false,\n  \"allow_credits\": false,\n  \"allow_terminal\": false,\n  \"gateways\": [],\n  \"is_surcharge_enabled\": false,\n  \"is_trust\": false,\n  \"users\": [\n    {\n      \"id\": \"c3a7f735-a8fa-4ca1-937d-d0f2b76ba44b\",\n      \"system_admin\": false,\n      \"name\": \"Test user\",\n      \"email\": \"payments@test.io\",\n      \"email_verification_sent_at\": null,\n      \"email_verified_at\": null,\n      \"is_api_key\": false,\n      \"options\": null,\n      \"acknowledgments\": {\n        \"setPassword\": true\n      },\n      \"created_at\": \"2021-07-14 18:51:27\",\n      \"updated_at\": \"2021-07-14 18:53:16\",\n      \"deleted_at\": null,\n      \"brand\": \"fattmerchant\",\n      \"gravatar\": \"//www.gravatar.com/avatar/c75f409ceae6d2a2ca1efdc2a313236f\",\n      \"team_admin\": true,\n      \"team_enabled\": true,\n      \"team_role\": \"admin\",\n      \"merchant_options\": [],\n      \"is_default\": false,\n      \"brands\": [\n        \"fattmerchant\"\n      ],\n      \"pivot\": {\n        \"merchant_id\": \"65649c08-71be-4745-a437-c265df8f3ed3\",\n        \"user_id\": \"c3a7f735-a8fa-4ca1-937d-d0f2b76ba44b\",\n        \"is_default\": false,\n        \"team_role\": \"admin\",\n        \"deleted_at\": null,\n        \"merchant_options\": [],\n        \"created_at\": \"2021-07-14 18:53:53\",\n        \"updated_at\": \"2021-07-14 18:53:53\"\n      }\n    }\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 65649c08-71be-4745-a437-c265df8f3ed3
+                  mid:
+                    type: string
+                    example: ''
+                  status:
+                    type: string
+                    example: PENDING
+                  subdomain:
+                    type: string
+                    example: ''
+                  company_name:
+                    type: string
+                    example: Test merchant
+                  display_name:
+                    type: string
+                    example: Test merchant
+                  contact_name:
+                    type: string
+                    example: ''
+                  contact_email:
+                    type: string
+                    example: payments@test.io
+                  contact_phone:
+                    type: string
+                    example: ''
+                  address_1:
+                    type: string
+                    example: ''
+                  address_2:
+                    type: string
+                    example: ''
+                  address_city:
+                    type: string
+                    example: ''
+                  address_state:
+                    type: string
+                    example: ''
+                  address_zip:
+                    type: string
+                    example: ''
+                  hosted_payments_token:
+                    type: string
+                    example: Test Merchant
+                  currency:
+                    type: array
+                    items:
+                      type: string
+                      example: USD
+                  plan:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: ecc2e251-278d-4322-aaae-e4ba985f8f40
+                      merchant_id:
+                        type: string
+                        example: 65649c08-71be-4745-a437-c265df8f3765
+                      user_id:
+                        type: string
+                        example: c3a7f735-a8f0-4ca1-937d-d0f2b76ba44b
+                      name:
+                        type: string
+                        example: plan-0
+                      created_at:
+                        type: string
+                        example: '2021-07-14 18:53:53'
+                      updated_at:
+                        type: string
+                        example: '2021-07-14 18:53:53'
+                  options: {}
+                  notes:
+                    type: string
+                    example: ''
+                  gateway_type: {}
+                  vendor_keys: {}
+                  processor:
+                    type: string
+                    example: ''
+                  partner: {}
+                  product_type:
+                    type: string
+                    example: Other
+                  is_enterprise:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_payfac:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_sandbox:
+                    type: boolean
+                    example: false
+                    default: true
+                  fm_billing_schedule_id: {}
+                  fee_reconciliation_payment_method_id: {}
+                  welcome_email_sent_at:
+                    type: string
+                    format: date-time
+                  created_at:
+                    type: string
+                    example: '2021-07-14 18:53:52'
+                  updated_at:
+                    type: string
+                    example: '2021-07-14 18:53:52'
+                  deleted_at:
+                    type: string
+                  brand:
+                    type: string
+                    example: fattmerchant
+                  risk_hold:
+                    type: boolean
+                    example: false
+                    default: true
+                  branding:
+                    type: string
+                  allow_ach:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_portal:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_flat_rate:
+                    type: boolean
+                    example: false
+                    default: true
+                  allow_credits:
+                    type: boolean
+                    example: false
+                    default: true
+                  allow_terminal:
+                    type: boolean
+                    example: false
+                    default: true
+                  gateways:
+                    type: array
+                  is_surcharge_enabled:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_trust:
+                    type: boolean
+                    example: false
+                    default: true
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: c3a7f735-a8fa-4ca1-937d-d0f2b76ba44b
+                        system_admin:
+                          type: boolean
+                          example: false
+                          default: true
+                        name:
+                          type: string
+                          example: Test user
+                        email:
+                          type: string
+                          example: payments@test.io
+                        email_verification_sent_at:
+                          type: string
+                          format: date-time
+                        email_verified_at:
+                          type: string
+                          format: date-time
+                        is_api_key:
+                          type: boolean
+                          example: false
+                          default: true
+                        options: {}
+                        acknowledgments:
+                          type: object
+                          properties:
+                            setPassword:
+                              type: boolean
+                              example: true
+                              default: true
+                        created_at:
+                          type: string
+                          example: '2021-07-14 18:51:27'
+                        updated_at:
+                          type: string
+                          example: '2021-07-14 18:53:16'
+                        deleted_at:
+                          type: string
+                          format: date-time
+                        brand:
+                          type: string
+                          example: fattmerchant
+                        gravatar:
+                          type: string
+                          example: //www.gravatar.com/avatar/c75f409ceae6d2a2ca1efdc2a313236f
+                        team_admin:
+                          type: boolean
+                          example: true
+                          default: true
+                        team_enabled:
+                          type: boolean
+                          example: true
+                          default: true
+                        team_role:
+                          type: string
+                          example: admin
+                        merchant_options:
+                          type: array
+                        is_default:
+                          type: boolean
+                          example: false
+                          default: true
+                        brands:
+                          type: array
+                          items:
+                            type: string
+                            example: fattmerchant
+                        pivot:
+                          type: object
+                          properties:
+                            merchant_id:
+                              type: string
+                              example: 65649c08-71be-4745-a437-c265df8f3ed3
+                            user_id:
+                              type: string
+                              example: c3a7f735-a8fa-4ca1-937d-d0f2b76ba44b
+                            is_default:
+                              type: boolean
+                              example: false
+                              default: true
+                            team_role:
+                              type: string
+                              example: admin
+                            deleted_at:
+                              type: string
+                              format: date-time
+                            merchant_options:
+                              type: array
+                            created_at:
+                              type: string
+                              example: '2021-07-14 18:53:53'
+                            updated_at:
+                              type: string
+                              example: '2021-07-14 18:53:53'
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      security:
+      - PartnerApiKey: []
+      tags:
+      - Merchant
+  /merchant/{id}/registration:
+    get:
+      summary: Get Merchant Registration Data
+      description: Retrieves the registration data used by our underwriting team during onboarding.
+      operationId: get-merchant-registration-data
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: 'ID of the merchant. '
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: ''
+                Response:
+                  summary: Response
+                  value:
+                    merchant_id: 0bb5b5a0-807b-4946-a911-cf6dd92aa9d8
+                    user_id: user1
+                    electronic_signature: null
+                    credit_inquiry_electronic_signature: null
+                    application_agreed_at: null
+                    countersigned_at: null
+                    signature_status: null
+                    application_status: null
+                    underwriting_status: null
+                    underwriting_substatuses: null
+                    underwriting_note: null
+                    meta:
+                      ownership_percentage: '50'
+                      owner_citizenship: USA
+                      representatives:
+                      - title: CFO
+                        date_of_birth: 01/01/1990
+                        ssn: '592611899'
+                        citizenship: USA
+                        first_name: Marcus
+                        last_name: Reid
+                        type: Beneficial Owner
+                        ownership_percentage: '50'
+                        email: demo@fattmerchant.com
+                        phone: (123) 456-7890
+                        address_1: 5890 East Colfax Avenue
+                        address_2: ''
+                        address_city: Denver
+                        address_state: CO
+                        address_country: USA
+                        address_zip: '80220'
+                        drivers_license_id: 0987654321
+                        drivers_license_state: CO
+                    first_name: Lucia
+                    last_name: Moore
+                    email: demo@fattmerchant.com
+                    title: CEO
+                    company_type: L
+                    entity_ownership_type: PRIVATE
+                    phone_number: '1234567890'
+                    source: null
+                    promo_code: null
+                    ref_code: null
+                    plan: portal
+                    fm_pc_name: null
+                    business_legal_name: Olympus Test Onboarding Merchant
+                    business_dba: Olympus Test Onboarding Merchant
+                    business_website: olympustest.com
+                    business_fax: null
+                    business_email: demo@fattmerchant.com
+                    business_address_1: 123 Main Street
+                    business_address_2: null
+                    business_address_city: Broomfield
+                    business_address_state: CO
+                    business_address_zip: '80020'
+                    business_address_country: USA
+                    owner_address_1: 1234 West Cedar Avenue
+                    owner_address_2: ''
+                    owner_address_city: Denver
+                    owner_address_state: CO
+                    owner_address_zip: '80223'
+                    owner_address_country: USA
+                    user_ip: 127.0.0.1
+                    user_ssn: '592611800'
+                    user_dob: 01/01/1990
+                    business_phone_number: '1234567890'
+                    business_tax_id: '789029921'
+                    business_open_date: 01/01/2024
+                    job_title: CEO
+                    refund_policy: T
+                    reason_for_applying: Never Accepted Cards Before
+                    service_you_provide: Chiropractors
+                    annual_volume: '100000.00'
+                    avg_trans_size: '500.00'
+                    highest_trans_amount: '2000.00'
+                    card_present_percent: '0'
+                    card_not_present_percent: '100'
+                    card_swiped_percent: '50'
+                    moto_percent: '0'
+                    b2b_percent: '0'
+                    bank_routing_number: '021000021'
+                    bank_account_number: '1234567890123'
+                    bank_account_owner_name: Lucia Moore
+                    secondary_bank_routing_number: null
+                    secondary_bank_account_number: null
+                    secondary_bank_account_owner_name: Lucia Moore
+                    secondary_bank_account_type: null
+                    secondary_bank_account_purpose: null
+                    principal_owners_name: Lucia Moore
+                    chosen_plan: null
+                    chosen_processing_method: api
+                    plan_txamnt: '.15'
+                    plan_dcamnt: '3.0'
+                    plan_ach_cap: '10'
+                    plan_ach_txamnt: '0'
+                    plan_ach_dcamnt: '1'
+                    plan_nabu: null
+                    referred_by: null
+                    created_at: '2025-06-05 20:38:33'
+                    updated_at: '2025-06-05 20:51:58'
+                    deleted_at: null
+                    paper_statement: false
+                    num_of_locs: ''
+                    addl_loc: false
+                    addl_loc_main_mid: ''
+                    internet: '50'
+                    international: '0'
+                    mcc: '8041'
+                    proc_change: NOT_NOW_PROC
+                    seasonal_flag: false
+                    seasonal_months: ''
+                    bus_type: '1'
+                    sub_bus_type: ''
+                    special_proc: ''
+                    pos_software_publisher: ''
+                    pos_software_name: ''
+                    pos_software_version: ''
+                    site_inspection: ''
+                    location_type: ''
+                    network: ''
+                    bank_account_type: ''
+                    mcc_addl_desc: ''
+                    business_location_address_1: 123 Main Street
+                    business_location_address_2: null
+                    business_location_address_city: Broomfield
+                    business_location_address_country: USA
+                    business_location_address_state: CO
+                    business_location_address_zip: '80020'
+                    business_location_email: null
+                    business_location_fax: null
+                    business_location_phone_number: '1234567890'
+                    note: null
+                    credit_qual_disc_rate: '3.0'
+                    credit_qual_trans_fee: '.15'
+                    credit_mid_disc_rate: '3.0'
+                    credit_mid_trans_fee: '.15'
+                    credit_non_disc_rate: '3.0'
+                    credit_non_trans_fee: '.15'
+                    amex_qual_disc_rate: '3.0'
+                    amex_qual_trans_fee: '.15'
+                    amex_mid_disc_rate: '3.0'
+                    amex_mid_trans_fee: '.15'
+                    amex_non_disc_rate: '3.0'
+                    amex_non_trans_fee: '.15'
+                    is_flat_rate: true
+                    pricing_plan: stax-300-surcharging-CNP-291
+                    finix_merchant_id: null
+                    finix_identity_id: null
+                    annual_gross_ach_revenue: '40000.00'
+                    avg_ach_transaction: '500.00'
+                    largest_ach_transaction: '2000.00'
+                    cp_transaction_rate: '3.0'
+                    cp_per_item_rate: '.15'
+                    cp_amex_rate: '3.0'
+                    cp_amex_per_item_rate: '.15'
+                    warnings: []
+                    merchant_autoverification_authorization:
+                      ip: 127.0.0.1
+                      email: demo@fattmerchant.com
+                      user_id: user1
+                      timestamp: '2024-09-05 21:10:53'
+                      browser_agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36
+                    chargeback_percent: null
+                    annual_gross_shopping_cart_revenue: '100000.00'
+                    avg_shopping_cart_transaction: '500.00'
+                    largest_shopping_cart_transaction: '2000.00'
+                    shopping_cart_card_present_percent: '0'
+                    shopping_cart_b2b_percent: '0'
+                    shopping_cart_international: '0'
+                    cp_credit_surcharge_rate: null
+                    cnp_credit_surcharge_rate: '3.0'
+                    cp_debit_trans_fee: null
+                    cnp_debit_trans_fee: '.15'
+                    cp_debit_discount_rate: null
+                    cnp_debit_discount_rate: '2.91'
+                    field_permissions: null
+                    drivers_license_id: '1234567890'
+                    drivers_license_state: CO
+                    bank_institution_name: null
+                    external_company_id: CO11f085aaf0eae5ad424e8a2ceb9f66e0
+                    secondary_bank_institution_name: null
+                    registration_source: enrollment-api
+                    created_by: user1
+                    meta_json: '{"representatives": [{"ssn": "592611899", "type": "Beneficial Owner", "email": "demo@fattmerchant.com", "phone": "(123) 456-7890", "title": "CFO", "address_1": "5890 East Colfax Avenue", "address_2": "", "last_name": "Reid", "first_name": "Marcus", "address_zip": "80220", "citizenship": "USA", "address_city": "Denver", "address_state": "CO", "date_of_birth": "01/01/1990", "address_country": "USA", "drivers_license_id": "0987654321", "ownership_percentage": "50", "drivers_license_state": "CO"}], "owner_citizenship": "USA", "ownership_percentage": "50"}'
+                    signature_request_id: null
+                    is_trust: null
+                    monthly_minimum_fee: null
+                    monthly_service_fee: null
+                    fees: null
+                    pci_compromise_type: null
+                    paypal_transaction_fee: null
+                    paypal_per_item_fee: null
+                    amex_direct_number: null
+                    amex_direct_required: 0
+                    files:
+                    - id: b87deb62-6fac-4ce2-9ece-94f56d21bd7b
+                      merchant_id: 0bb5b5a0-807b-4946-a911-cf6dd92aa9d8
+                      user_id: user1
+                      name: Document_Merchant_Application__devops-logo.jpg
+                      path: onboarding/b87deb62-6fac-4ce2-9ece-94f56d21bd7b.jpg
+                      public_url: https://stax-qa-onboarding.s3.us-west-2.amazonaws.com/onboarding/b87deb62-6fac-4ce2-9ece-94f56d21bd7b.jpg
+                      tag: onboarding
+                      meta:
+                        filesize_bytes: 40396
+                        filesize: 40.4 kB
+                        extension: jpg
+                        size:
+                          width: 820
+                          height: 431
+                        mime: image/jpeg
+                        onboardingMagType: '21'
+                      created_at: '2025-06-05 20:51:07'
+                      updated_at: '2025-06-05 20:51:17'
+                      deleted_at: null
+                      registration_document_id: null
+                    brand: fattmerchant
+                    underwriting_substatus: null
+                    empty_required_fields: []
+                    latest_file_uploaded_at: '2025-06-05 20:51:07'
+                    allow_conditional_approval: true
+                    merchant:
+                      id: 0bb5b5a0-807b-4946-a911-cf6dd92aa9d8
+                      mid: ''
+                      status: PENDING
+                      subdomain: ''
+                      company_name: BlockChyp Test Merchant
+                      display_name: BlockChyp Test Merchant
+                      contact_name: Lucia Moore
+                      contact_email: demo@fattmerchant.com
+                      contact_phone: ''
+                      address_1: 123 Main Street
+                      address_2: ''
+                      address_city: Broomfield
+                      address_state: CO
+                      address_zip: '80020'
+                      hosted_payments_token: BlockChyp-Test-Merchant-6f3ad2ff616c
+                      plan:
+                        id: f34b8c58-b958-4785-b603-e2f97315afdc
+                        merchant_id: 0bb5b5a0-807b-4946-a911-cf6dd92aa9d8
+                        user_id: user1
+                        name: portal
+                        created_at: '2025-06-05 20:38:33'
+                        updated_at: '2025-06-05 20:38:33'
+                      options:
+                        surcharge_policy: always_allow
+                        transaction_limit: null
+                        ach_transaction_limit: null
+                        emv_user: null
+                        emv_password: null
+                        emv_terminal_id: null
+                        emv_terminal_secret: null
+                        hosted_payments_url_long: null
+                        hosted_payments_note: null
+                        hosted_payments_success_note: null
+                        repeat_method_use_limit: null
+                        repeat_method_use_window: 43200
+                        level_2_processing: null
+                        max_webhook_limit_per_event: null
+                        decline_limit_per_hour: null
+                        decline_period_grace_period_exp: null
+                      notes: ''
+                      currency:
+                      - USD
+                      gateway_type: SETTLEMENTS
+                      vendor_keys: []
+                      processor: ''
+                      partner: null
+                      product_type: Fattpay Online
+                      is_enterprise: false
+                      is_payfac: true
+                      is_sandbox: false
+                      is_test_mode: 0
+                      fm_billing_schedule_id: null
+                      fee_reconciliation_payment_method_id: null
+                      welcome_email_sent_at: null
+                      activated_at: null
+                      created_at: '2025-06-05 20:38:33'
+                      updated_at: '2025-06-05 20:38:33'
+                      deleted_at: null
+                      brand: fattmerchant
+                      risk_hold: false
+                      merchant_processor_application: payfac
+                      reference: null
+                      branding: null
+                      allow_ach: false
+                      allow_paypal: false
+                      require_address: false
+                      is_portal: true
+                      is_flat_rate: true
+                      allow_credits: false
+                      allow_terminal: false
+                      gateways:
+                      - name: engine
+                        type: SETTLEMENTS
+                        processor_mid: null
+                      is_surcharge_enabled: true
+                      cnp_credit_surcharge_rate: 3
+                      is_trust: false
+                      underwriting_status: null
+                      underwriting_substatuses: null
+                      allow_cnp_digital_wallet: false
+              schema:
+                type: object
+                properties:
+                  underwriting_status:
+                    type: string
+                    example: PENDED
+                  underwriting_substatuses:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+                          example: Volume Clarity
+                  annual_volume:
+                    type: string
+                    example: ''
+                  avg_trans_size:
+                    type: string
+                    example: ''
+                  b2b_percent:
+                    type: string
+                    example: ''
+                  bank_routing_number: {}
+                  bank_account_type:
+                    type: string
+                    example: ''
+                  bank_account_number: {}
+                  bank_account_owner_name: {}
+                  secondary_bank_routing_number: {}
+                  secondary_bank_account_number: {}
+                  secondary_bank_account_owner_name: {}
+                  secondary_bank_account_type: {}
+                  secondary_bank_account_purpose: {}
+                  business_address_1:
+                    type: string
+                    example: ''
+                  business_address_2:
+                    type: string
+                    example: ''
+                  business_address_city:
+                    type: string
+                    example: ''
+                  business_address_country:
+                    type: string
+                    example: ''
+                  business_address_state:
+                    type: string
+                    example: ''
+                  business_address_zip:
+                    type: string
+                    example: ''
+                  business_dba:
+                    type: string
+                    example: ''
+                  business_email:
+                    type: string
+                    example: ''
+                  business_fax:
+                    type: string
+                    example: ''
+                  business_legal_name:
+                    type: string
+                    example: ''
+                  business_open_date:
+                    type: string
+                    example: ''
+                  business_phone_number:
+                    type: string
+                    example: ''
+                  business_tax_id:
+                    type: string
+                    example: ''
+                  business_website:
+                    type: string
+                    example: ''
+                  card_not_present_percent:
+                    type: string
+                    example: ''
+                  card_present_percent:
+                    type: string
+                    example: ''
+                  card_swiped_percent:
+                    type: string
+                    example: ''
+                  chosen_plan:
+                    type: string
+                    example: ''
+                  chosen_processing_method:
+                    type: string
+                    example: ''
+                  company_type:
+                    type: string
+                    example: ''
+                  email:
+                    type: string
+                    example: ''
+                  first_name:
+                    type: string
+                    example: ''
+                  highest_trans_amount:
+                    type: string
+                    example: ''
+                  international:
+                    type: string
+                    example: ''
+                  internet:
+                    type: string
+                    example: ''
+                  job_title:
+                    type: string
+                    example: ''
+                  last_name:
+                    type: string
+                    example: ''
+                  location_type:
+                    type: string
+                    example: ''
+                  meta:
+                    type: object
+                    properties:
+                      ownership_percentage:
+                        type: integer
+                        example: 60
+                        default: 0
+                      owner_citizenship:
+                        type: string
+                        example: ALA
+                      representatives:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            title:
+                              type: string
+                              example: ''
+                            date_of_birth:
+                              type: string
+                              example: ''
+                            ssn:
+                              type: string
+                              example: ''
+                            first_name:
+                              type: string
+                              example: ''
+                            last_name:
+                              type: string
+                              example: ''
+                            type:
+                              type: string
+                              example: ''
+                            ownership_percentage:
+                              type: integer
+                              example: 40
+                              default: 0
+                            email:
+                              type: string
+                              example: ''
+                            phone:
+                              type: string
+                              example: ''
+                            address_1:
+                              type: string
+                              example: ''
+                            address_2:
+                              type: string
+                              example: ''
+                            address_city:
+                              type: string
+                              example: ''
+                            address_state:
+                              type: string
+                              example: ''
+                            address_zip:
+                              type: string
+                              example: ''
+                            citizenship:
+                              type: string
+                              example: ALA
+                  moto_percent:
+                    type: string
+                    example: ''
+                  network:
+                    type: string
+                    example: ''
+                  owner_address_1:
+                    type: string
+                    example: ''
+                  owner_address_2:
+                    type: string
+                    example: ''
+                  owner_address_city:
+                    type: string
+                    example: ''
+                  owner_address_country:
+                    type: string
+                    example: ''
+                  owner_address_state:
+                    type: string
+                    example: ''
+                  owner_address_zip:
+                    type: string
+                    example: ''
+                  phone_number:
+                    type: string
+                    example: ''
+                  plan:
+                    type: string
+                    example: ''
+                  principal_owners_name:
+                    type: string
+                    example: ''
+                  reason_for_applying:
+                    type: string
+                    example: ''
+                  referred_by:
+                    type: string
+                    example: ''
+                  refund_policy:
+                    type: string
+                    example: ''
+                  seasonal_flag:
+                    type: boolean
+                    example: false
+                    default: true
+                  seasonal_months:
+                    type: string
+                    example: ''
+                  service_you_provide:
+                    type: string
+                    example: ''
+                  title:
+                    type: string
+                    example: ''
+                  user_dob:
+                    type: string
+                    example: ''
+                  merchant_id:
+                    type: string
+                    example: 791fc3fa-4534-4617-97b6-d41c9e1ce8da
+                  user_id:
+                    type: string
+                    example: a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8
+                  updated_at:
+                    type: string
+                    example: '2019-06-19 21:22:03'
+                  created_at:
+                    type: string
+                    example: '2019-06-19 21:22:03'
+                  files:
+                    type: array
+                  electronic_signature:
+                    type: object
+                    properties:
+                      html_content:
+                        type: string
+                        example: I agree to...
+                      ip:
+                        type: string
+                        example: 42.1.1.113
+                      timestamp:
+                        type: string
+                        example: '2019-06-19 21:22:03'
+                      user_id:
+                        type: string
+                        example: a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8
+                      email:
+                        type: string
+                        example: john@doe.com
+                      browser_agent:
+                        type: string
+                        example: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"annual_volume\": [\n    \"The annual volume may not be greater than 100 characters.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  annual_volume:
+                    type: array
+                    items:
+                      type: string
+                      example: The annual volume may not be greater than 100 characters.
+      deprecated: false
+      security:
+      - PartnerApiKey: []
+      tags:
+      - Merchant
+    put:
+      summary: Update Merchant Registration Data
+      description: Upserts registration data for a merchant, used during onboarding.
+      operationId: update-merchant-registration-data
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: ID of the merchant
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: 100 character max. Merchant email address.
+                first_name:
+                  type: string
+                  description: Merchant owner/signer first name. 100 character max.
+                last_name:
+                  type: string
+                  description: Merchant owner/signer last name. 100 character max.
+                refund_policy:
+                  type: string
+                  enum:
+                  - '''N'''
+                  - '''E'''
+                  - '''T'''
+                  - '''O'''
+                  description: 'Refund policy. N: No Refunds, E: Merchandise Exchange Only, T: 30 Days or Fewer, O: Other'
+                business_fax:
+                  type: string
+                  description: 'Merchant fax number. format: (999) 999-9999, 9999999999, 999-999-9999.'
+                business_legal_name:
+                  type: string
+                  description: Merchant business legal name. 100 character max.
+                business_dba:
+                  type: string
+                  description: Merchant business 'Doing Business As' name (should be same as legal name if no dba).
+                business_website:
+                  type: string
+                  description: merchant business website address (include http://). 100 characters max.
+                business_phone_number:
+                  type: string
+                  description: 'Merchant business phone number, format: (999) 999-9999, 9999999999, 999-999-9999.'
+                business_address_1:
+                  type: string
+                  description: Merchant business address line 1.100 characters max.
+                business_address_2:
+                  type: string
+                  description: merchant business address line 2 (optional if no address line 2). 100 characters max.
+                business_address_city:
+                  type: string
+                  description: Merchant business city.
+                business_address_state:
+                  type: string
+                  description: The two letter abbreviation of the state.
+                business_address_zip:
+                  type: string
+                  description: Merchant business zip
+                business_address_country:
+                  type: string
+                  description: Merchant business country  2 characters.
+                business_location_address_1:
+                  type: string
+                  description: Merchant business address line 1 (if no secondary billing address, this field should be a duplicate of business_address_1)
+                business_location_address_2:
+                  type: string
+                  description: Merchant business address line 2 (if no secondary billing address, this field should be a duplicate of business_address_2)
+                business_location_address_city:
+                  type: string
+                  description: Merchant business city (if no secondary billing address, this field should be a duplicate of business_address_city)
+                business_location_address_state:
+                  type: string
+                  description: Merchant business state two letters (if no secondary billing address, this field should be a duplicate of business_address_state)
+                business_location_address_zip:
+                  type: string
+                  description: Merchant business zip (if no secondary billing address, this field should be a duplicate of business_address_zip).
+                business_location_address_country:
+                  type: string
+                  description: Merchant business country iso alpha-2(if no secondary billing address, this field should be a duplicate of business_address_country).
+                business_location_phone_number:
+                  type: string
+                  description: 'Merchant business phone number, format: (999) 999-9999 (if no secondary billing address, this field should be a duplicate of business_address_phone).'
+                business_open_date:
+                  type: string
+                  description: Merchant business open date. Format MM/DD/YYYY.
+                company_type:
+                  type: string
+                  enum:
+                  - A
+                  - G
+                  - S
+                  - F
+                  - L
+                  - E
+                  - P
+                  - V
+                  - B
+                  - R
+                  description: 'A: Association/Estate/Trust, G: Government (Federal/State/Local), S: Individual/Sole Proprietor, F: Financial Institution, L: LLC (Limited-Liability Corporation), E: Tax-Exempt Organization (501C), P: Partnership, V: Private Corporation, B: Public Corporation, R: SEC-Registered Entity.'
+                business_tax_id:
+                  type: string
+                  description: 'Merchant business tax id. Format: 12-3456789.'
+                annual_volume:
+                  type: string
+                  description: Merchant's annual credit card only volume.
+                annual_gross_ach_revenue:
+                  type: string
+                  description: Merchant's annual ACH volume. Can be null.
+                avg_trans_size:
+                  type: string
+                  description: Merchant's credit card average transaction size.
+                avg_ach_transaction:
+                  type: string
+                  description: Merchant's average ACH transaction size. Can be null.
+                highest_trans_amount:
+                  type: string
+                  description: Merchant's reported highest credit card transaction amount.
+                largest_ach_transaction:
+                  type: string
+                  description: Merchant's reported highest ACH transaction amount. Can be null.
+                card_present_percent:
+                  type: string
+                  description: 'Merchant volume card present percent eg: 50 (ex. Terminal transactions where card is physically present at time of transaction)'
+                card_swiped_percent:
+                  type: string
+                  description: Merchant volume of card swiped transactions. percent eg 50. Can be null.
+                card_not_present_percent:
+                  type: string
+                  description: Merchant volume not present, e.g., 15 (e.g., transactions taken on the website where the user enters card information into a form).
+                moto_percent:
+                  type: string
+                  description: Merchant volume percentage taken over moto (mail order telephone order) -- typically the same value as card_not_present_percent.
+                internet:
+                  type: string
+                  description: Merchant volume percentage taken over the internet.
+                b2b_percent:
+                  type: string
+                  description: The merchant business to business volume percentage
+                international:
+                  type: string
+                  description: The merchant international volume percentage.
+                bank_routing_number:
+                  type: string
+                  description: The billing bank routing number.
+                bank_account_number:
+                  type: string
+                  description: The billing bank account number.
+                bank_account_owner_name:
+                  type: string
+                  description: The billing bank account owner name.
+                pricing_plan:
+                  type: string
+                  description: 'IMPORTANT: Partners only. Please reach out to your account manager or POC for information on your pricing plan option(s).'
+                proc_change:
+                  type: string
+                  enum:
+                  - PROC_CHANGE
+                  - NOT_NOW_PROC
+                  description: ' Has merchant processed before or are they not currently processing. PROC_CHANGE: merchant is currently processing with a different processor and needs to change processors. NOT_NOW_PROC: merchant is not currently processing payments'
+                mcc:
+                  type: string
+                  description: 'IMPORTANT: Partners only. Please reach out to your account manager or POC for information on mcc codes if needed.'
+                service_you_provide:
+                  type: string
+                  description: The merchant business main service/ product description. Max 200 characters.
+                bus_type:
+                  type: string
+                  description: 'Business type: 1: Retail, 11: Restaurant, 12: Moto, 18: Internet'
+                  enum:
+                  - '1'
+                  - '11'
+                  - '12'
+                  - '18'
+                sub_bus_type:
+                  type: string
+                  description: 'Sub business type: 19: Retail.key entered, 45: Moto, 13: Dial pay capture, 36: Interchange plus'
+                  enum:
+                  - '19'
+                  - '45'
+                  - '13'
+                  - '36'
+                principal_owners_name:
+                  type: string
+                  description: The merchant owner principal first and last name.
+                job_title:
+                  type: string
+                  description: The merchant owner title (same as title).
+                title:
+                  type: string
+                  description: The merchant owner title (same as job_title).
+                user_dob:
+                  type: string
+                  description: 'Owner date of birth. Format: MM/DD/YYYY'
+                drivers_license_id:
+                  type: string
+                  description: Driver's license id of the owner/signer. Can be null.
+                drivers_license_state:
+                  type: string
+                  description: The state where driver's license of the owner/signer was issued (Please send in a 2-character state code. ex. "FL" for Florida). Can be null.
+                phone_number:
+                  type: string
+                  description: 'Owner/signer phone number, format: (999) 999-9999.'
+                owner_address_1:
+                  type: string
+                owner_address_2:
+                  type: string
+                owner_address_city:
+                  type: string
+                owner_address_state:
+                  type: string
+                  description: Owner/signer's 2-character state.
+                owner_address_country:
+                  type: string
+                  description: Owner/signer's 2 character state.
+                owner_address_zip:
+                  type: string
+                  description: Postal / Zip code.
+                user_ssn:
+                  type: string
+                  description: Primary owner/signer social security number.
+                note:
+                  type: string
+                  description: max 100 characters.
+                electronic_signature:
+                  properties:
+                    html_content:
+                      type: string
+                      description: ' Legal content displayed to user (talk to your Partner Success Team for more information).'
+                    ip:
+                      type: string
+                      description: ipv4, ipv6
+                    user_id:
+                      type: string
+                      description: User_id or user email associated with the merchant.
+                    email:
+                      type: string
+                      description: User email associated with the merchant.
+                    browser_agent:
+                      type: string
+                      description: '"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36".'
+                  required: []
+                  type: object
+                credit_inquiry_electronic_signature:
+                  properties:
+                    html_content:
+                      type: string
+                      description: legal content displayed to user which allows Stax to perform soft credit pulls. The credit inquiry must be agreed to independent of the payment processing agreement or any other terms in your application. We recommend having a separate checkbox for the credit inquiry before submitting the application (talk to your Partner Success Team for more information)"You understand that by clicking on the checkbox associated with this notice, you are providing ‘written instructions’ to Stax and any lender to whom Stax forwards this application, in connection with this application, for commercial lending under the Fair Credit Reporting Act, hereby authorizing Stax and any such lender to obtain information from your personal credit report or other information from Experian. You authorize Stax and any such lender to obtain such information solely in connection with this application for commercial lending."
+                    ip:
+                      type: string
+                      description: ' ipv4, ipv6'
+                    user_id:
+                      type: string
+                      description: User ID or user email associated with the merchant.
+                    email:
+                      type: string
+                      description: User email associated with the merchant.
+                    browser_agent:
+                      type: string
+                      description: e.g. "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36".
+                  required: []
+                  type: object
+                meta:
+                  properties:
+                    owner_percentage:
+                      type: string
+                      description: The ownership percentage for primary owner, eg. 50
+                    owner_citizenship:
+                      type: string
+                      description: The ownership 3 character ISO country code for primary owner eg ALA.
+                    representatives:
+                      properties:
+                        title:
+                          type: string
+                          description: Position within the organization.
+                        date_of_birth:
+                          type: string
+                          description: 'DOB format: MM/DD/YYYY'
+                        ssn:
+                          type: string
+                          description: Representative social security number.
+                        drivers_license_id:
+                          type: string
+                          description: Driver's license id of the representative. Can be NULL.
+                        drivers_license_state:
+                          type: string
+                          description: The state where driver's license was issued (Please send in a 2-character state code. ex. "FL" for Florida).
+                        first_name:
+                          type: string
+                          description: Name of representative.
+                        last_name:
+                          type: string
+                          description: Surname of representative.
+                        type:
+                          type: string
+                          description: Type of owner.
+                          enum:
+                          - Beneficial Owner
+                          - Guarantor
+                        ownership_percentage:
+                          type: string
+                          description: Ownership percentage for company representatives, eg. 50
+                        email:
+                          type: string
+                          description: Representative email.
+                        phone:
+                          type: string
+                          description: Representative phone number.
+                        address_1:
+                          type: string
+                        address_2:
+                          type: string
+                        address_city:
+                          type: string
+                        address_state:
+                          type: string
+                          description: State (two letter) (ex. FL).
+                        address_zip:
+                          type: string
+                        citizenship:
+                          type: string
+                          description: 3 character ISO country code for company representative, eg. ALA.
+                      required: []
+                      type: object
+                      description: Any additional representatives (required for any owner/representative with 25% or more ownership).
+                    '{partnername}_created_at':
+                      type: string
+                      description: The created at date with the ISV software. Format YYYY-MM-DD.
+                    '{partnername}_netnew':
+                      type: boolean
+                      description: ' Indicates if the merchant is a brand new merchant for the ISV. '
+                    '{partnername}_months_processing':
+                      type: string
+                      description: Indicates the amount of months the merchant has processed payments with another payment solution in the ISV. If none, indicate "0"
+                  required: []
+                  type: object
+                files:
+                  type: string
+                  description: See Add File To Merchant Registration route for more information.
+                autoverify:
+                  type: boolean
+                  description: Determines whether or not to run autoverification on the registration record. See "Get Registration Documents" for more info on autoverification.
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"annual_volume\": \"\",\n  \"avg_trans_size\": \"\",\n  \"b2b_percent\": \"\",\n  \"bank_account_type\": \"\",\n  \"business_address_1\": \"\",\n  \"business_address_2\": \"\",\n  \"business_address_city\": \"\",\n  \"business_address_country\": \"\",\n  \"business_address_state\": \"\",\n  \"business_address_zip\": \"\",\n  \"business_dba\": \"\",\n  \"business_email\": \"\",\n  \"business_fax\": \"\",\n  \"business_legal_name\": \"\",\n  \"business_open_date\": \"\",\n  \"business_phone_number\": \"\",\n  \"business_tax_id\": \"\",\n  \"business_website\": \"\",\n  \"card_not_present_percent\": \"\",\n  \"card_present_percent\": \"\",\n  \"card_swiped_percent\": \"\",\n  \"chosen_plan\": \"\",\n  \"chosen_processing_method\": \"\",\n  \"company_type\": \"\",\n  \"drivers_license_id\": \"M9K778578\",\n  \"drivers_license_state\": \"FL\",\n  \"email\": \"\",\n  \"first_name\": \"\",\n  \"highest_trans_amount\": \"\",\n  \"international\": \"\",\n  \"internet\": \"\",\n  \"job_title\": \"\",\n  \"last_name\": \"\",\n  \"location_type\": \"\",\n  \"mcc\": \"1750\",\n  \"meta\": {\n    \"ownership_percentage\": 60,\n    \"owner_citizenship\": \"ALA\",\n    \"representatives\": [\n      {\n        \"title\": \"\",\n        \"date_of_birth\": \"\",\n        \"ssn\": \"\",\n        \"drivers_license_id\": \"M9K778578\",\n        \"drivers_license_state\": \"FL\",\n        \"first_name\": \"\",\n        \"last_name\": \"\",\n        \"type\": \"\",\n        \"ownership_percentage\": 40,\n        \"email\": \"\",\n        \"phone\": \"\",\n        \"address_1\": \"\",\n        \"address_2\": \"\",\n        \"address_city\": \"\",\n        \"address_state\": \"\",\n        \"address_zip\": \"\",\n        \"citizenship\": \"ALA\"\n      }\n    ],\n    \"stax_created_at\": \"2022-06-30\",\n    \"stax_netnew\": true,\n    \"stax_months_processing\": \"0\"\n  },\n  \"moto_percent\": \"\",\n  \"network\": \"\",\n  \"owner_address_1\": \"\",\n  \"owner_address_2\": \"\",\n  \"owner_address_city\": \"\",\n  \"owner_address_country\": \"\",\n  \"owner_address_state\": \"\",\n  \"owner_address_zip\": \"\",\n  \"phone_number\": \"\",\n  \"plan\": \"\",\n  \"pricing_plan\": \"interchange0-15\",\n  \"principal_owners_name\": \"\",\n  \"reason_for_applying\": \"\",\n  \"referred_by\": \"\",\n  \"refund_policy\": \"\",\n  \"seasonal_flag\": false,\n  \"seasonal_months\": \"\",\n  \"service_you_provide\": \"\",\n  \"title\": \"\",\n  \"user_dob\": \"\",\n  \"merchant_id\": \"791fc3fa-4534-4617-97b6-d41c9e1ce8da\",\n  \"user_id\": \"a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8\",\n  \"updated_at\": \"2019-06-19 21:22:03\",\n  \"created_at\": \"2019-06-19 21:22:03\",\n  \"files\": [],\n  \"electronic_signature\": {\n    \"html_content\": \"I agree to...\",\n    \"ip\": \"42.1.1.113\",\n    \"timestamp\": \"2019-06-19 21:22:03\",\n    \"user_id\": \"a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8\",\n    \"email\": \"john@doe.com\",\n    \"browser_agent\": \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36\"\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  annual_volume:
+                    type: string
+                    example: ''
+                  avg_trans_size:
+                    type: string
+                    example: ''
+                  b2b_percent:
+                    type: string
+                    example: ''
+                  bank_account_type:
+                    type: string
+                    example: ''
+                  business_address_1:
+                    type: string
+                    example: ''
+                  business_address_2:
+                    type: string
+                    example: ''
+                  business_address_city:
+                    type: string
+                    example: ''
+                  business_address_country:
+                    type: string
+                    example: ''
+                  business_address_state:
+                    type: string
+                    example: ''
+                  business_address_zip:
+                    type: string
+                    example: ''
+                  business_dba:
+                    type: string
+                    example: ''
+                  business_email:
+                    type: string
+                    example: ''
+                  business_fax:
+                    type: string
+                    example: ''
+                  business_legal_name:
+                    type: string
+                    example: ''
+                  business_open_date:
+                    type: string
+                    example: ''
+                  business_phone_number:
+                    type: string
+                    example: ''
+                  business_tax_id:
+                    type: string
+                    example: ''
+                  business_website:
+                    type: string
+                    example: ''
+                  card_not_present_percent:
+                    type: string
+                    example: ''
+                  card_present_percent:
+                    type: string
+                    example: ''
+                  card_swiped_percent:
+                    type: string
+                    example: ''
+                  chosen_plan:
+                    type: string
+                    example: ''
+                  chosen_processing_method:
+                    type: string
+                    example: ''
+                  company_type:
+                    type: string
+                    example: ''
+                  drivers_license_id:
+                    type: string
+                    example: M9K778578
+                  drivers_license_state:
+                    type: string
+                    example: FL
+                  email:
+                    type: string
+                    example: ''
+                  first_name:
+                    type: string
+                    example: ''
+                  highest_trans_amount:
+                    type: string
+                    example: ''
+                  international:
+                    type: string
+                    example: ''
+                  internet:
+                    type: string
+                    example: ''
+                  job_title:
+                    type: string
+                    example: ''
+                  last_name:
+                    type: string
+                    example: ''
+                  location_type:
+                    type: string
+                    example: ''
+                  mcc:
+                    type: string
+                    example: '1750'
+                  meta:
+                    type: object
+                    properties:
+                      ownership_percentage:
+                        type: integer
+                        example: 60
+                        default: 0
+                      owner_citizenship:
+                        type: string
+                        example: ALA
+                      representatives:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            title:
+                              type: string
+                              example: ''
+                            date_of_birth:
+                              type: string
+                              example: ''
+                            ssn:
+                              type: string
+                              example: ''
+                            drivers_license_id:
+                              type: string
+                              example: M9K778578
+                            drivers_license_state:
+                              type: string
+                              example: FL
+                            first_name:
+                              type: string
+                              example: ''
+                            last_name:
+                              type: string
+                              example: ''
+                            type:
+                              type: string
+                              example: ''
+                            ownership_percentage:
+                              type: integer
+                              example: 40
+                              default: 0
+                            email:
+                              type: string
+                              example: ''
+                            phone:
+                              type: string
+                              example: ''
+                            address_1:
+                              type: string
+                              example: ''
+                            address_2:
+                              type: string
+                              example: ''
+                            address_city:
+                              type: string
+                              example: ''
+                            address_state:
+                              type: string
+                              example: ''
+                            address_zip:
+                              type: string
+                              example: ''
+                            citizenship:
+                              type: string
+                              example: ALA
+                      stax_created_at:
+                        type: string
+                        example: '2022-06-30'
+                      stax_netnew:
+                        type: boolean
+                        example: true
+                        default: true
+                      stax_months_processing:
+                        type: string
+                        example: '0'
+                  moto_percent:
+                    type: string
+                    example: ''
+                  network:
+                    type: string
+                    example: ''
+                  owner_address_1:
+                    type: string
+                    example: ''
+                  owner_address_2:
+                    type: string
+                    example: ''
+                  owner_address_city:
+                    type: string
+                    example: ''
+                  owner_address_country:
+                    type: string
+                    example: ''
+                  owner_address_state:
+                    type: string
+                    example: ''
+                  owner_address_zip:
+                    type: string
+                    example: ''
+                  phone_number:
+                    type: string
+                    example: ''
+                  plan:
+                    type: string
+                    example: ''
+                  pricing_plan:
+                    type: string
+                    example: interchange0-15
+                  principal_owners_name:
+                    type: string
+                    example: ''
+                  reason_for_applying:
+                    type: string
+                    example: ''
+                  referred_by:
+                    type: string
+                    example: ''
+                  refund_policy:
+                    type: string
+                    example: ''
+                  seasonal_flag:
+                    type: boolean
+                    example: false
+                    default: true
+                  seasonal_months:
+                    type: string
+                    example: ''
+                  service_you_provide:
+                    type: string
+                    example: ''
+                  title:
+                    type: string
+                    example: ''
+                  user_dob:
+                    type: string
+                    example: ''
+                  merchant_id:
+                    type: string
+                    example: 791fc3fa-4534-4617-97b6-d41c9e1ce8da
+                  user_id:
+                    type: string
+                    example: a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8
+                  updated_at:
+                    type: string
+                    example: '2019-06-19 21:22:03'
+                  created_at:
+                    type: string
+                    example: '2019-06-19 21:22:03'
+                  files:
+                    type: array
+                  electronic_signature:
+                    type: object
+                    properties:
+                      html_content:
+                        type: string
+                        example: I agree to...
+                      ip:
+                        type: string
+                        example: 42.1.1.113
+                      timestamp:
+                        type: string
+                        example: '2019-06-19 21:22:03'
+                      user_id:
+                        type: string
+                        example: a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8
+                      email:
+                        type: string
+                        example: john@doe.com
+                      browser_agent:
+                        type: string
+                        example: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"annual_volume\": [\n    \"The annual volume may not be greater than 100 characters.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  annual_volume:
+                    type: array
+                    items:
+                      type: string
+                      example: The annual volume may not be greater than 100 characters.
+      deprecated: false
+      security:
+      - PartnerApiKey: []
+      tags:
+      - Merchant
+  /merchant/{merchant_id}/user/{user_id}:
+    post:
+      summary: '**Link Existing User to Merchant'
+      description: Link an existing user in Stax to a merchant account.
+      operationId: link-existing-user-to-merchant
+      parameters:
+      - name: merchant_id
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: user_id
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: is_default
+        in: query
+        schema:
+          type: boolean
+      - name: merchant_admin
+        in: query
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"a9a36885-19bf-449b-be0d-c7c460576e04\",\n  \"mid\": \"000000000\",\n  \"status\": \"ACTIVE\",\n  \"subdomain\": \"\",\n  \"company_name\": \"Test\",\n  \"display_name\": \"Test\",\n  \"contact_name\": \" \",\n  \"contact_email\": \"demo@staxpayments.com\",\n  \"contact_phone\": \"\",\n  \"address_1\": \"\",\n  \"address_2\": \"\",\n  \"address_city\": \"\",\n  \"address_state\": \"\",\n  \"address_zip\": \"\",\n  \"hosted_payments_token\": \"Test123456789\",\n  \"plan\": {\n    \"id\": \"a4b9e249-7524-47c7-af4b-763701ck890b\",\n    \"merchant_id\": \"a9a36885-19bf-449b-b40d-c7c460576e04\",\n    \"user_id\": \"b5fa73fe-33dd-45ec-897a-7e8c3e5a3683\",\n    \"name\": \"premium\",\n    \"created_at\": \"2021-06-21 17:48:01\",\n    \"updated_at\": \"2021-06-21 17:48:01\"\n  },\n  \"options\": {\n    \"surcharge\": {\n      \"rate\": 0,\n      \"enabled\": false\n    },\n    \"receipts_emails\": [\n      \"demo@staxpayments.com\"\n    ],\n    \"transaction_limit\": \"50000\",\n    \"hosted_payments_note\": \"\",\n    \"ach_transaction_limit\": \"85000\",\n    \"repeat_method_use_limit\": 999,\n    \"hosted_payments_url_long\": \"https://staxpayments.com/#/pay/Test-DEMO-a93786160d12\",\n    \"repeat_method_use_window\": 43200,\n    \"hosted_payments_url_short\": \"https://paymnt.io/iLBVUd\",\n    \"hosted_payments_success_note\": \"\"\n  },\n  \"notes\": \"\",\n  \"gateway_type\": \"TEST\",\n  \"vendor_keys\": [],\n  \"processor\": \"\",\n  \"partner\": null,\n  \"product_type\": \"\",\n  \"is_enterprise\": false,\n  \"is_payfac\": true,\n  \"is_sandbox\": false,\n  \"fm_billing_schedule_id\": null,\n  \"fee_reconciliation_payment_method_id\": null,\n  \"welcome_email_sent_at\": null,\n  \"created_at\": \"2021-06-21 17:48:01\",\n  \"updated_at\": \"2021-12-07 21:52:47\",\n  \"deleted_at\": null,\n  \"brand\": \"qa\",\n  \"risk_hold\": false,\n  \"branding\": null,\n  \"allow_ach\": true,\n  \"is_portal\": false,\n  \"is_flat_rate\": false,\n  \"allow_credits\": true,\n  \"allow_terminal\": false,\n  \"gateways\": [\n    {\n      \"name\": \"test\",\n      \"type\": \"TEST\"\n    }\n  ],\n  \"is_surcharge_enabled\": false,\n  \"is_trust\": false,\n  \"underwriting_status\": \"APPROVED\",\n  \"underwriting_substatuses\": null,\n  \"allow_cnp_digital_wallet\": false,\n  \"users\": [\n    {\n      \"id\": \"b5fa73fe-57dd-45ec-897a-7e8c3e5a3683\",\n      \"system_admin\": true,\n      \"name\": \"Test Test\",\n      \"email\": \"demo@staxpayments.com\",\n      \"email_verification_sent_at\": \"2021-10-04 19:50:56\",\n      \"email_verified_at\": \"2021-07-12 21:43:43\",\n      \"is_api_key\": false,\n      \"options\": null,\n      \"acknowledgments\": {\n        \"godviewOmniSearchTooltip\": true,\n        \"setPassword\": true,\n        \"godviewWelcome\": true\n      },\n      \"created_at\": \"2020-02-20 22:59:16\",\n      \"updated_at\": \"2021-10-13 15:16:10\",\n      \"deleted_at\": null,\n      \"brand\": \"stax-sandbox\",\n      \"gravatar\": \"//www.gravatar.com/avatar/663c9f306d08940340b1bf1e332b60a1\",\n      \"team_admin\": true,\n      \"team_enabled\": true,\n      \"team_role\": \"admin\",\n      \"merchant_options\": [],\n      \"is_default\": false,\n      \"brands\": [\n        \"stax-sandbox\"\n      ],\n      \"pivot\": {\n        \"merchant_id\": \"a9a36885-19bf-449b-be0d-c7c460576e04\",\n        \"user_id\": \"b5fa73fe-57dd-45ec-897a-7e8c3e5a3683\",\n        \"is_default\": false,\n        \"team_role\": \"admin\",\n        \"deleted_at\": null,\n        \"merchant_options\": [],\n        \"created_at\": \"2020-02-20 22:59:16\",\n        \"updated_at\": \"2021-12-10 14:35:14\"\n      }\n    },\n    {\n      \"id\": \"99d2300e-5177-4b59-9708-fec6d4e9dbf0\",\n      \"system_admin\": false,\n      \"name\": \"main\",\n      \"email\": null,\n      \"email_verification_sent_at\": null,\n      \"email_verified_at\": null,\n      \"is_api_key\": true,\n      \"options\": null,\n      \"acknowledgments\": null,\n      \"created_at\": \"2021-06-21 17:49:22\",\n      \"updated_at\": \"2021-06-21 17:49:22\",\n      \"deleted_at\": null,\n      \"brand\": \"buildertrend\",\n      \"gravatar\": \"//www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e\",\n      \"team_admin\": true,\n      \"team_enabled\": true,\n      \"team_role\": \"admin\",\n      \"merchant_options\": [],\n      \"is_default\": false,\n      \"brands\": [\n        \"stax-sandbox\"\n      ],\n      \"pivot\": {\n        \"merchant_id\": \"a9a36885-19bf-449b-be0d-c7c460576e04\",\n        \"user_id\": \"99d2300e-5177-4b59-9708-fec6d4e9dbf0\",\n        \"is_default\": false,\n        \"team_role\": \"admin\",\n        \"deleted_at\": null,\n        \"merchant_options\": [],\n        \"created_at\": \"2021-06-21 17:49:22\",\n        \"updated_at\": \"2021-06-21 17:49:22\"\n      }\n    }\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: a9a36885-19bf-449b-be0d-c7c460576e04
+                  mid:
+                    type: string
+                    example: '000000000'
+                  status:
+                    type: string
+                    example: ACTIVE
+                  subdomain:
+                    type: string
+                    example: ''
+                  company_name:
+                    type: string
+                    example: Test
+                  display_name:
+                    type: string
+                    example: Test
+                  contact_name:
+                    type: string
+                    example: ' '
+                  contact_email:
+                    type: string
+                    example: demo@staxpayments.com
+                  contact_phone:
+                    type: string
+                    example: ''
+                  address_1:
+                    type: string
+                    example: ''
+                  address_2:
+                    type: string
+                    example: ''
+                  address_city:
+                    type: string
+                    example: ''
+                  address_state:
+                    type: string
+                    example: ''
+                  address_zip:
+                    type: string
+                    example: ''
+                  hosted_payments_token:
+                    type: string
+                    example: Test123456789
+                  plan:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: a4b9e249-7524-47c7-af4b-763701ck890b
+                      merchant_id:
+                        type: string
+                        example: a9a36885-19bf-449b-b40d-c7c460576e04
+                      user_id:
+                        type: string
+                        example: b5fa73fe-33dd-45ec-897a-7e8c3e5a3683
+                      name:
+                        type: string
+                        example: premium
+                      created_at:
+                        type: string
+                        example: '2021-06-21 17:48:01'
+                      updated_at:
+                        type: string
+                        example: '2021-06-21 17:48:01'
+                  options:
+                    type: object
+                    properties:
+                      surcharge:
+                        type: object
+                        properties:
+                          rate:
+                            type: integer
+                            example: 0
+                            default: 0
+                          enabled:
+                            type: boolean
+                            example: false
+                            default: true
+                      receipts_emails:
+                        type: array
+                        items:
+                          type: string
+                          example: demo@staxpayments.com
+                      transaction_limit:
+                        type: string
+                        example: '50000'
+                      hosted_payments_note:
+                        type: string
+                        example: ''
+                      ach_transaction_limit:
+                        type: string
+                        example: '85000'
+                      repeat_method_use_limit:
+                        type: integer
+                        example: 999
+                        default: 0
+                      hosted_payments_url_long:
+                        type: string
+                        example: https://staxpayments.com/#/pay/Test-DEMO-a93786160d12
+                      repeat_method_use_window:
+                        type: integer
+                        example: 43200
+                        default: 0
+                      hosted_payments_url_short:
+                        type: string
+                        example: https://paymnt.io/iLBVUd
+                      hosted_payments_success_note:
+                        type: string
+                        example: ''
+                  notes:
+                    type: string
+                    example: ''
+                  gateway_type:
+                    type: string
+                    example: TEST
+                  vendor_keys:
+                    type: array
+                  processor:
+                    type: string
+                    example: ''
+                  partner: {}
+                  product_type:
+                    type: string
+                    example: ''
+                  is_enterprise:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_payfac:
+                    type: boolean
+                    example: true
+                    default: true
+                  is_sandbox:
+                    type: boolean
+                    example: false
+                    default: true
+                  fm_billing_schedule_id: {}
+                  fee_reconciliation_payment_method_id: {}
+                  welcome_email_sent_at: {}
+                  created_at:
+                    type: string
+                    example: '2021-06-21 17:48:01'
+                  updated_at:
+                    type: string
+                    example: '2021-12-07 21:52:47'
+                  deleted_at: {}
+                  brand:
+                    type: string
+                    example: qa
+                  risk_hold:
+                    type: boolean
+                    example: false
+                    default: true
+                  branding: {}
+                  allow_ach:
+                    type: boolean
+                    example: true
+                    default: true
+                  is_portal:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_flat_rate:
+                    type: boolean
+                    example: false
+                    default: true
+                  allow_credits:
+                    type: boolean
+                    example: true
+                    default: true
+                  allow_terminal:
+                    type: boolean
+                    example: false
+                    default: true
+                  gateways:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: test
+                        type:
+                          type: string
+                          example: TEST
+                  is_surcharge_enabled:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_trust:
+                    type: boolean
+                    example: false
+                    default: true
+                  underwriting_status:
+                    type: string
+                    example: APPROVED
+                  underwriting_substatuses: {}
+                  allow_cnp_digital_wallet:
+                    type: boolean
+                    example: false
+                    default: true
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: b5fa73fe-57dd-45ec-897a-7e8c3e5a3683
+                        system_admin:
+                          type: boolean
+                          example: true
+                          default: true
+                        name:
+                          type: string
+                          example: Test Test
+                        email:
+                          type: string
+                          example: demo@staxpayments.com
+                        email_verification_sent_at:
+                          type: string
+                          example: '2021-10-04 19:50:56'
+                        email_verified_at:
+                          type: string
+                          example: '2021-07-12 21:43:43'
+                        is_api_key:
+                          type: boolean
+                          example: false
+                          default: true
+                        options: {}
+                        acknowledgments:
+                          type: object
+                          properties:
+                            godviewOmniSearchTooltip:
+                              type: boolean
+                              example: true
+                              default: true
+                            setPassword:
+                              type: boolean
+                              example: true
+                              default: true
+                            godviewWelcome:
+                              type: boolean
+                              example: true
+                              default: true
+                        created_at:
+                          type: string
+                          example: '2020-02-20 22:59:16'
+                        updated_at:
+                          type: string
+                          example: '2021-10-13 15:16:10'
+                        deleted_at: {}
+                        brand:
+                          type: string
+                          example: stax-sandbox
+                        gravatar:
+                          type: string
+                          example: //www.gravatar.com/avatar/663c9f306d08940340b1bf1e332b60a1
+                        team_admin:
+                          type: boolean
+                          example: true
+                          default: true
+                        team_enabled:
+                          type: boolean
+                          example: true
+                          default: true
+                        team_role:
+                          type: string
+                          example: admin
+                        merchant_options:
+                          type: array
+                        is_default:
+                          type: boolean
+                          example: false
+                          default: true
+                        brands:
+                          type: array
+                          items:
+                            type: string
+                            example: stax-sandbox
+                        pivot:
+                          type: object
+                          properties:
+                            merchant_id:
+                              type: string
+                              example: a9a36885-19bf-449b-be0d-c7c460576e04
+                            user_id:
+                              type: string
+                              example: b5fa73fe-57dd-45ec-897a-7e8c3e5a3683
+                            is_default:
+                              type: boolean
+                              example: false
+                              default: true
+                            team_role:
+                              type: string
+                              example: admin
+                            deleted_at: {}
+                            merchant_options:
+                              type: array
+                            created_at:
+                              type: string
+                              example: '2020-02-20 22:59:16'
+                            updated_at:
+                              type: string
+                              example: '2021-12-10 14:35:14'
+        '401':
+          description: '401'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"error\": \"token_invalid\"\n}"
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: token_invalid
+      deprecated: false
+      tags:
+      - Merchant
+    delete:
+      summary: '**Unlink User from Merchant'
+      description: Unlink a user from a merchant account
+      operationId: unlink-user-from-merchant
+      parameters:
+      - name: merchant_id
+        in: path
+        schema:
+          type: string
+        required: true
+      - name: user_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "\n{\n  \"id\": \"a9a36885-19bf-449b-6e0d-c7c460576e04\",\n  \"mid\": \"000000000\",\n  \"status\": \"ACTIVE\",\n  \"subdomain\": \"\",\n  \"company_name\": \"Test\",\n  \"display_name\": \"Test\",\n  \"contact_name\": \" \",\n  \"contact_email\": \"karina.mills@fattmerchant.com\",\n  \"contact_phone\": \"\",\n  \"address_1\": \"\",\n  \"address_2\": \"\",\n  \"address_city\": \"\",\n  \"address_state\": \"\",\n  \"address_zip\": \"\",\n  \"hosted_payments_token\": \"Test12346\",\n  \"currency\": [\n    \"USD\"\n  ],\n  \"plan\": {\n    \"id\": \"a4b9e249-7525-47c7-af4b-763701c9890b\",\n    \"merchant_id\": \"a6a36885-19bf-449b-be0d-c7c460576e04\",\n    \"user_id\": \"b5fa737e-57dd-45ec-897a-7e8c3e5a3683\",\n    \"name\": \"premium\",\n    \"created_at\": \"2021-06-21 17:48:01\",\n    \"updated_at\": \"2021-06-21 17:48:01\"\n  },\n  \"options\": {\n    \"surcharge\": {\n      \"rate\": 0,\n      \"enabled\": false\n    },\n    \"receipts_emails\": [\n      \"demo@staxpayments.com\"\n    ],\n    \"transaction_limit\": \"50000\",\n    \"hosted_payments_note\": \"\",\n    \"ach_transaction_limit\": \"85000\",\n    \"repeat_method_use_limit\": 999,\n    \"hosted_payments_url_long\": \"https://staxpayments.com/#/pay/Test-DEMO-a93786160d12\",\n    \"repeat_method_use_window\": 43200,\n    \"hosted_payments_url_short\": \"https://paymnt.io/iLBVUd\",\n    \"hosted_payments_success_note\": \"\"\n  },\n  \"notes\": \"\",\n  \"gateway_type\": \"TEST\",\n  \"vendor_keys\": [],\n  \"processor\": \"\",\n  \"partner\": null,\n  \"product_type\": \"\",\n  \"is_enterprise\": false,\n  \"is_payfac\": true,\n  \"is_sandbox\": false,\n  \"fm_billing_schedule_id\": null,\n  \"fee_reconciliation_payment_method_id\": null,\n  \"welcome_email_sent_at\": null,\n  \"created_at\": \"2021-06-21 17:48:01\",\n  \"updated_at\": \"2021-12-07 21:52:47\",\n  \"deleted_at\": null,\n  \"brand\": \"qa\",\n  \"risk_hold\": false,\n  \"branding\": null,\n  \"allow_ach\": true,\n  \"is_portal\": false,\n  \"is_flat_rate\": false,\n  \"allow_credits\": true,\n  \"allow_terminal\": false,\n  \"gateways\": [\n    {\n      \"name\": \"test\",\n      \"type\": \"TEST\"\n    }\n  ],\n  \"is_surcharge_enabled\": false,\n  \"is_trust\": false,\n  \"underwriting_status\": \"APPROVED\",\n  \"underwriting_substatuses\": null,\n  \"allow_cnp_digital_wallet\": false,\n  \"users\": [\n    {\n      \"id\": \"b5fa63fe-57dd-45ec-897a-7e8c3e5a3683\",\n      \"system_admin\": true,\n      \"name\": \"Test Test\",\n      \"email\": \"demo@staxpayments.com\",\n      \"email_verification_sent_at\": \"2021-10-04 19:50:56\",\n      \"email_verified_at\": \"2021-07-12 21:43:43\",\n      \"is_api_key\": false,\n      \"options\": null,\n      \"acknowledgments\": {\n        \"godviewOmniSearchTooltip\": true,\n        \"setPassword\": true,\n        \"godviewWelcome\": true\n      },\n      \"created_at\": \"2020-02-20 22:59:16\",\n      \"updated_at\": \"2021-10-13 15:16:10\",\n      \"deleted_at\": null,\n      \"brand\": \"stax\",\n      \"gravatar\": \"//www.gravatar.com/avatar/663c9f306d08940340b1bf1e332b60a1\",\n      \"team_admin\": true,\n      \"team_enabled\": false,\n      \"team_role\": \"admin\",\n      \"merchant_options\": {\n        \"subscribed_to_weekly_summary\": true\n      },\n      \"is_default\": false,\n      \"brands\": [\n        \"stax\"\n      ],\n      \"pivot\": {\n        \"merchant_id\": \"a9336885-19bf-449b-be0d-c7c460576e04\",\n        \"user_id\": \"b5fa733e-57dd-45ec-897a-7e8c3e5a3683\",\n        \"is_default\": false,\n        \"team_role\": \"admin\",\n        \"deleted_at\": \"2021-12-10 15:24:27\",\n        \"merchant_options\": {\n          \"subscribed_to_weekly_summary\": true\n        },\n        \"created_at\": \"2020-02-20 22:59:16\",\n        \"updated_at\": \"2021-12-10 14:51:50\"\n      }\n    },\n    {\n      \"id\": \"99d2370e-5177-4b59-9708-fec6d4e9dbf0\",\n      \"system_admin\": false,\n      \"name\": \"main\",\n      \"email\": null,\n      \"email_verification_sent_at\": null,\n      \"email_verified_at\": null,\n      \"is_api_key\": true,\n      \"options\": null,\n      \"acknowledgments\": null,\n      \"created_at\": \"2021-06-21 17:49:22\",\n      \"updated_at\": \"2021-06-21 17:49:22\",\n      \"deleted_at\": null,\n      \"brand\": \"stax\",\n      \"gravatar\": \"//www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e\",\n      \"team_admin\": true,\n      \"team_enabled\": true,\n      \"team_role\": \"admin\",\n      \"merchant_options\": [],\n      \"is_default\": false,\n      \"brands\": [\n        \"stax\"\n      ],\n      \"pivot\": {\n        \"merchant_id\": \"a9a36886-19bf-449b-be0d-c7c460576e04\",\n        \"user_id\": \"99d2300e-5176-4b59-9708-fec6d4e9dbf0\",\n        \"is_default\": false,\n        \"team_role\": \"admin\",\n        \"deleted_at\": null,\n        \"merchant_options\": [],\n        \"created_at\": \"2021-06-21 17:49:22\",\n        \"updated_at\": \"2021-06-21 17:49:22\"\n      }\n    }\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: a9a36885-19bf-449b-6e0d-c7c460576e04
+                  mid:
+                    type: string
+                    example: '000000000'
+                  status:
+                    type: string
+                    example: ACTIVE
+                  subdomain:
+                    type: string
+                    example: ''
+                  company_name:
+                    type: string
+                    example: Test
+                  display_name:
+                    type: string
+                    example: Test
+                  contact_name:
+                    type: string
+                    example: ' '
+                  contact_email:
+                    type: string
+                    example: karina.mills@fattmerchant.com
+                  contact_phone:
+                    type: string
+                    example: ''
+                  address_1:
+                    type: string
+                    example: ''
+                  address_2:
+                    type: string
+                    example: ''
+                  address_city:
+                    type: string
+                    example: ''
+                  address_state:
+                    type: string
+                    example: ''
+                  address_zip:
+                    type: string
+                    example: ''
+                  hosted_payments_token:
+                    type: string
+                    example: Test12346
+                  currency:
+                    type: array
+                    items:
+                      type: string
+                      example: USD
+                  plan:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: a4b9e249-7525-47c7-af4b-763701c9890b
+                      merchant_id:
+                        type: string
+                        example: a6a36885-19bf-449b-be0d-c7c460576e04
+                      user_id:
+                        type: string
+                        example: b5fa737e-57dd-45ec-897a-7e8c3e5a3683
+                      name:
+                        type: string
+                        example: premium
+                      created_at:
+                        type: string
+                        example: '2021-06-21 17:48:01'
+                      updated_at:
+                        type: string
+                        example: '2021-06-21 17:48:01'
+                  options:
+                    type: object
+                    properties:
+                      surcharge:
+                        type: object
+                        properties:
+                          rate:
+                            type: integer
+                            example: 0
+                            default: 0
+                          enabled:
+                            type: boolean
+                            example: false
+                            default: true
+                      receipts_emails:
+                        type: array
+                        items:
+                          type: string
+                          example: demo@staxpayments.com
+                      transaction_limit:
+                        type: string
+                        example: '50000'
+                      hosted_payments_note:
+                        type: string
+                        example: ''
+                      ach_transaction_limit:
+                        type: string
+                        example: '85000'
+                      repeat_method_use_limit:
+                        type: integer
+                        example: 999
+                        default: 0
+                      hosted_payments_url_long:
+                        type: string
+                        example: https://staxpayments.com/#/pay/Test-DEMO-a93786160d12
+                      repeat_method_use_window:
+                        type: integer
+                        example: 43200
+                        default: 0
+                      hosted_payments_url_short:
+                        type: string
+                        example: https://paymnt.io/iLBVUd
+                      hosted_payments_success_note:
+                        type: string
+                        example: ''
+                  notes:
+                    type: string
+                    example: ''
+                  gateway_type:
+                    type: string
+                    example: TEST
+                  vendor_keys:
+                    type: array
+                  processor:
+                    type: string
+                    example: ''
+                  partner: {}
+                  product_type:
+                    type: string
+                    example: ''
+                  is_enterprise:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_payfac:
+                    type: boolean
+                    example: true
+                    default: true
+                  is_sandbox:
+                    type: boolean
+                    example: false
+                    default: true
+                  fm_billing_schedule_id: {}
+                  fee_reconciliation_payment_method_id: {}
+                  welcome_email_sent_at: {}
+                  created_at:
+                    type: string
+                    example: '2021-06-21 17:48:01'
+                  updated_at:
+                    type: string
+                    example: '2021-12-07 21:52:47'
+                  deleted_at: {}
+                  brand:
+                    type: string
+                    example: qa
+                  risk_hold:
+                    type: boolean
+                    example: false
+                    default: true
+                  branding: {}
+                  allow_ach:
+                    type: boolean
+                    example: true
+                    default: true
+                  is_portal:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_flat_rate:
+                    type: boolean
+                    example: false
+                    default: true
+                  allow_credits:
+                    type: boolean
+                    example: true
+                    default: true
+                  allow_terminal:
+                    type: boolean
+                    example: false
+                    default: true
+                  gateways:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: test
+                        type:
+                          type: string
+                          example: TEST
+                  is_surcharge_enabled:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_trust:
+                    type: boolean
+                    example: false
+                    default: true
+                  underwriting_status:
+                    type: string
+                    example: APPROVED
+                  underwriting_substatuses: {}
+                  allow_cnp_digital_wallet:
+                    type: boolean
+                    example: false
+                    default: true
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: b5fa63fe-57dd-45ec-897a-7e8c3e5a3683
+                        system_admin:
+                          type: boolean
+                          example: true
+                          default: true
+                        name:
+                          type: string
+                          example: Test Test
+                        email:
+                          type: string
+                          example: demo@staxpayments.com
+                        email_verification_sent_at:
+                          type: string
+                          example: '2021-10-04 19:50:56'
+                        email_verified_at:
+                          type: string
+                          example: '2021-07-12 21:43:43'
+                        is_api_key:
+                          type: boolean
+                          example: false
+                          default: true
+                        options: {}
+                        acknowledgments:
+                          type: object
+                          properties:
+                            godviewOmniSearchTooltip:
+                              type: boolean
+                              example: true
+                              default: true
+                            setPassword:
+                              type: boolean
+                              example: true
+                              default: true
+                            godviewWelcome:
+                              type: boolean
+                              example: true
+                              default: true
+                        created_at:
+                          type: string
+                          example: '2020-02-20 22:59:16'
+                        updated_at:
+                          type: string
+                          example: '2021-10-13 15:16:10'
+                        deleted_at: {}
+                        brand:
+                          type: string
+                          example: stax
+                        gravatar:
+                          type: string
+                          example: //www.gravatar.com/avatar/663c9f306d08940340b1bf1e332b60a1
+                        team_admin:
+                          type: boolean
+                          example: true
+                          default: true
+                        team_enabled:
+                          type: boolean
+                          example: false
+                          default: true
+                        team_role:
+                          type: string
+                          example: admin
+                        merchant_options:
+                          type: object
+                          properties:
+                            subscribed_to_weekly_summary:
+                              type: boolean
+                              example: true
+                              default: true
+                        is_default:
+                          type: boolean
+                          example: false
+                          default: true
+                        brands:
+                          type: array
+                          items:
+                            type: string
+                            example: stax
+                        pivot:
+                          type: object
+                          properties:
+                            merchant_id:
+                              type: string
+                              example: a9336885-19bf-449b-be0d-c7c460576e04
+                            user_id:
+                              type: string
+                              example: b5fa733e-57dd-45ec-897a-7e8c3e5a3683
+                            is_default:
+                              type: boolean
+                              example: false
+                              default: true
+                            team_role:
+                              type: string
+                              example: admin
+                            deleted_at:
+                              type: string
+                              example: '2021-12-10 15:24:27'
+                            merchant_options:
+                              type: object
+                              properties:
+                                subscribed_to_weekly_summary:
+                                  type: boolean
+                                  example: true
+                                  default: true
+                            created_at:
+                              type: string
+                              example: '2020-02-20 22:59:16'
+                            updated_at:
+                              type: string
+                              example: '2021-12-10 14:51:50'
+        '401':
+          description: '401'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"error\": \"token_invalid\"\n}"
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: token_invalid
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"merchant_id\": [\n    \"The selected merchant id is invalid.\"\n  ],\n  \"user_id\": [\n    \"The selected user id is invalid.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  merchant_id:
+                    type: array
+                    items:
+                      type: string
+                      example: The selected merchant id is invalid.
+                  user_id:
+                    type: array
+                    items:
+                      type: string
+                      example: The selected user id is invalid.
+      deprecated: false
+      tags:
+      - Merchant
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: API key for merchant-level operations. Provides access to merchant-specific endpoints including transactions, payments, customer management, and merchant account settings. This key is scoped to a single merchant account and cannot access partner-level functionality.
+    PartnerApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Partner-level API key with elevated privileges. Grants access to all partner operations including merchant management, portfolio oversight, reporting across multiple merchant accounts, and partner-specific administrative functions. Also provides access to all merchant-level operations for accounts under the partner's management.
+    EphemeralAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Temporary authentication token with limited lifespan. Used for short-term access to specific operations, typically generated for secure one-time actions or time-bounded sessions. Automatically expires after a predefined period for enhanced security.

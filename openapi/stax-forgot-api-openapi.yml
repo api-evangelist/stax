@@ -1,0 +1,82 @@
+openapi: 3.2.0
+info:
+  title: stax-api Forgot API
+  version: '0.1'
+servers:
+- url: https://apiprod.fattlabs.com/
+security:
+- ApiKeyAuth: []
+tags:
+- name: Forgot
+paths:
+  /forgot:
+    post:
+      summary: Initiate Password Reset
+      description: Initiate resetting a user's password
+      operationId: initiate-password-reset
+      parameters:
+      - name: email
+        in: query
+        description: The e-mail of an existing user.
+        required: true
+        schema:
+          type: string
+      - name: url
+        in: query
+        description: The URL login reset URL that gets appended with the merchant's token.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "\n[\n  \"email sent\"\n]"
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: email sent
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"url\": [\n    \"The url field is required.\"\n  ],\n  \"email\": [\n    \"The selected email is required.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: array
+                    items:
+                      type: string
+                      example: The url field is required.
+                  email:
+                    type: array
+                    items:
+                      type: string
+                      example: The selected email is required.
+      deprecated: false
+      tags:
+      - Forgot
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: API key for merchant-level operations. Provides access to merchant-specific endpoints including transactions, payments, customer management, and merchant account settings. This key is scoped to a single merchant account and cannot access partner-level functionality.
+    PartnerApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Partner-level API key with elevated privileges. Grants access to all partner operations including merchant management, portfolio oversight, reporting across multiple merchant accounts, and partner-specific administrative functions. Also provides access to all merchant-level operations for accounts under the partner's management.
+    EphemeralAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Temporary authentication token with limited lifespan. Used for short-term access to specific operations, typically generated for secure one-time actions or time-bounded sessions. Automatically expires after a predefined period for enhanced security.

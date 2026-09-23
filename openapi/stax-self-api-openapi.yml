@@ -1,0 +1,613 @@
+openapi: 3.2.0
+info:
+  title: stax-api Self API
+  version: '0.1'
+servers:
+- url: https://apiprod.fattlabs.com/
+security:
+- ApiKeyAuth: []
+tags:
+- name: Self
+paths:
+  /self/exists:
+    get:
+      summary: Check if E-Mail Exists
+      description: Verifies if the inputted email is valid
+      operationId: check-if-e-mail-exists
+      parameters:
+      - name: email
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  true\n}"
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"email\": [\n    \"The user cannot be found\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: array
+                    items:
+                      type: string
+                      example: The user cannot be found
+      deprecated: false
+      tags:
+      - Self
+  /self:
+    post:
+      summary: Create a User Account - Self Registration
+      description: Make a new user account
+      operationId: create-a-user-account-self-registration
+      parameters:
+      - name: email
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: password
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: password_confirmation
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: name
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: url
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "[\n  {\n    \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6bnVsbCwic3ViIjoiZTEwYzg2OWYtZGFmZC00MmQ0LWJjZmItMTM5YjJiOGNhMTY3IiwiaXNzIjoiaHR0cHM6XC9cL2FwaWRldjAxLmZhdHRsYWJzLmNvbVwvc2VsZiIsImlhdCI6MTQ2MzE2MzQ5NywiZXhwIjoxNDYzMjQ5ODk3LCJuYmYiOjE0NjMxNjM0OTcsImp0aSI6ImM2MzZlNTI3OThjNWE3MWQwYmRmMzU2ZGRlYjBmYjFiIn0.nI35JMEPuMoiW_mgvBV5bqKdEYI28lE4a2HyW2KnJjA\",\n    \"user\": {\n      \"name\": \"Daniel Walker\",\n      \"email\": \"contact@example.com\",\n      \"id\": \"e10c869f-dafd-42d4-bcfb-139b2b8ca167\",\n      \"updated_at\": \"2016-05-13 18:18:17\",\n      \"created_at\": \"2016-05-13 18:18:17\",\n      \"email_verification_sent_at\": \"2016-05-13 18:18:17\",\n      \"gravatar\": \"//www.gravatar.com/avatar/acd8040614c912043ee5dcf1748b06d5\",\n      \"team_admin\": null,\n      \"team_enabled\": null\n    },\n    \"merchant\": null\n  }\n]"
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    token:
+                      type: string
+                      example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6bnVsbCwic3ViIjoiZTEwYzg2OWYtZGFmZC00MmQ0LWJjZmItMTM5YjJiOGNhMTY3IiwiaXNzIjoiaHR0cHM6XC9cL2FwaWRldjAxLmZhdHRsYWJzLmNvbVwvc2VsZiIsImlhdCI6MTQ2MzE2MzQ5NywiZXhwIjoxNDYzMjQ5ODk3LCJuYmYiOjE0NjMxNjM0OTcsImp0aSI6ImM2MzZlNTI3OThjNWE3MWQwYmRmMzU2ZGRlYjBmYjFiIn0.nI35JMEPuMoiW_mgvBV5bqKdEYI28lE4a2HyW2KnJjA
+                    user:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: Daniel Walker
+                        email:
+                          type: string
+                          example: contact@example.com
+                        id:
+                          type: string
+                          example: e10c869f-dafd-42d4-bcfb-139b2b8ca167
+                        updated_at:
+                          type: string
+                          example: '2016-05-13 18:18:17'
+                        created_at:
+                          type: string
+                          example: '2016-05-13 18:18:17'
+                        email_verification_sent_at:
+                          type: string
+                          example: '2016-05-13 18:18:17'
+                        gravatar:
+                          type: string
+                          example: //www.gravatar.com/avatar/acd8040614c912043ee5dcf1748b06d5
+                        team_admin: {}
+                        team_enabled: {}
+                    merchant: {}
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"name\": [\n    \"The name field is required.\"\n  ],\n  \"email\": [\n    \"The email has already been taken.\"\n  ],\n  \"password\": [\n    \"The password field is required.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: array
+                    items:
+                      type: string
+                      example: The name field is required.
+                  email:
+                    type: array
+                    items:
+                      type: string
+                      example: The email has already been taken.
+                  password:
+                    type: array
+                    items:
+                      type: string
+                      example: The password field is required.
+      deprecated: false
+      tags:
+      - Self
+    get:
+      summary: Get User and Team's Info
+      description: Return information about the user
+      operationId: get-self-and-teams-info
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"user\": {\n    \"id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n    \"system_admin\": false,\n    \"name\": \"Demo\",\n    \"email\": \"contact@example.com\",\n    \"email_verification_sent_at\": \"2017-03-29 15:27:19\",\n    \"email_verified_at\": \"2017-03-29 15:27:21\",\n    \"created_at\": \"2017-01-11 21:44:02\",\n    \"updated_at\": \"2017-04-24 15:41:58\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650\",\n    \"team_role\": \"admin\",\n    \"team_admin\": true,\n    \"team_enabled\": true\n  },\n  \"merchant\": {\n    \"id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n    \"mid\": \"520000294774\",\n    \"status\": \"ACTIVE\",\n    \"subdomain\": \"demo\",\n    \"company_name\": \"Here\",\n    \"contact_name\": \"Stax\",\n    \"contact_email\": \"contact@example.com\",\n    \"contact_phone\": \"8555503288\",\n    \"address_1\": \"25 Wall Street\",\n    \"address_2\": \"Suite 1\",\n    \"address_city\": \"Orlando\",\n    \"address_state\": \"FL\",\n    \"address_zip\": \"32801\",\n    \"hosted_payments_token\": \"okay\",\n    \"currency\": [\n      \"USD\"\n    ],\n    \"plan\": {\n      \"id\": \"d619a0cc-b7e1-11e6-a0aa-08002777c33d\",\n      \"merchant_id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n      \"user_id\": \"\",\n      \"name\": \"premium\",\n      \"created_at\": \"2016-12-01 16:18:46\",\n      \"updated_at\": \"2016-12-01 16:18:46\"\n    },\n    \"options\": {\n      \"default_dashboard\": \"Summary\",\n      \"social\": {\n        \"website_url\": \"http://google.com\",\n        \"facebook_url\": \"http://google.com\",\n        \"instagram_url\": \"http://google.com\",\n        \"twitter_url\": \"http://google.com\",\n        \"linkedin_url\": \"http://google.com\"\n      },\n      \"hosted_payments_url_long\": \"http://localhost:5432/#/pay/okay\",\n      \"hosted_payments_url_short\": \"\",\n      \"hosted_payments_success_note\": \"31\",\n      \"hosted_payments_note\": \"12\"\n    },\n    \"gateway_type\": \"test\",\n    \"processor\": \"Vantiv\",\n    \"product_type\": \"Terminal\",\n    \"welcome_email_sent_at\": null,\n    \"created_at\": \"2016-12-01 16:18:46\",\n    \"updated_at\": \"2017-04-21 20:15:12\",\n    \"deleted_at\": null,\n    \"gateway_name\": null,\n    \"branding\": {\n      \"id\": \"af82b215-6081-42b0-b494-fbda189ce8f9\",\n      \"merchant_id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n      \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n      \"name\": \"\",\n      \"public_url\": \"https://s3-us-west-2.amazonaws.com/fattpaydocuments/branding/af82b215-6081-42b0-b494-fbda189ce8f9.png\",\n      \"tag\": \"branding\",\n      \"meta\": {\n        \"filesize_bytes\": 3938556,\n        \"filesize\": \"3.94 MB\",\n        \"extension\": \"png\",\n        \"size\": {\n          \"width\": 3072,\n          \"height\": 1728\n        },\n        \"mime\": \"image/png\"\n      },\n      \"created_at\": \"2017-04-19 15:50:41\",\n      \"updated_at\": \"2017-04-19 15:50:52\",\n      \"deleted_at\": null\n    },\n    \"allow_ach\": true\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                      system_admin:
+                        type: boolean
+                        example: false
+                        default: true
+                      name:
+                        type: string
+                        example: Demo
+                      email:
+                        type: string
+                        example: contact@example.com
+                      email_verification_sent_at:
+                        type: string
+                        example: '2017-03-29 15:27:19'
+                      email_verified_at:
+                        type: string
+                        example: '2017-03-29 15:27:21'
+                      created_at:
+                        type: string
+                        example: '2017-01-11 21:44:02'
+                      updated_at:
+                        type: string
+                        example: '2017-04-24 15:41:58'
+                      deleted_at: {}
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650
+                      team_role:
+                        type: string
+                        example: admin
+                      team_admin:
+                        type: boolean
+                        example: true
+                        default: true
+                      team_enabled:
+                        type: boolean
+                        example: true
+                        default: true
+                  merchant:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                      mid:
+                        type: string
+                        example: '520000294774'
+                      status:
+                        type: string
+                        example: ACTIVE
+                      subdomain:
+                        type: string
+                        example: demo
+                      company_name:
+                        type: string
+                        example: Here
+                      contact_name:
+                        type: string
+                        example: Stax
+                      contact_email:
+                        type: string
+                        example: contact@example.com
+                      contact_phone:
+                        type: string
+                        example: '8555503288'
+                      address_1:
+                        type: string
+                        example: 25 Wall Street
+                      address_2:
+                        type: string
+                        example: Suite 1
+                      address_city:
+                        type: string
+                        example: Orlando
+                      address_state:
+                        type: string
+                        example: FL
+                      address_zip:
+                        type: string
+                        example: '32801'
+                      hosted_payments_token:
+                        type: string
+                        example: okay
+                      currency:
+                        type: array
+                        items:
+                          type: string
+                          example: USD
+                      plan:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            example: d619a0cc-b7e1-11e6-a0aa-08002777c33d
+                          merchant_id:
+                            type: string
+                            example: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                          user_id:
+                            type: string
+                            example: ''
+                          name:
+                            type: string
+                            example: premium
+                          created_at:
+                            type: string
+                            example: '2016-12-01 16:18:46'
+                          updated_at:
+                            type: string
+                            example: '2016-12-01 16:18:46'
+                      options:
+                        type: object
+                        properties:
+                          default_dashboard:
+                            type: string
+                            example: Summary
+                          social:
+                            type: object
+                            properties:
+                              website_url:
+                                type: string
+                                example: http://google.com
+                              facebook_url:
+                                type: string
+                                example: http://google.com
+                              instagram_url:
+                                type: string
+                                example: http://google.com
+                              twitter_url:
+                                type: string
+                                example: http://google.com
+                              linkedin_url:
+                                type: string
+                                example: http://google.com
+                          hosted_payments_url_long:
+                            type: string
+                            example: http://localhost:5432/#/pay/okay
+                          hosted_payments_url_short:
+                            type: string
+                            example: ''
+                          hosted_payments_success_note:
+                            type: string
+                            example: '31'
+                          hosted_payments_note:
+                            type: string
+                            example: '12'
+                      gateway_type:
+                        type: string
+                        example: test
+                      processor:
+                        type: string
+                        example: Vantiv
+                      product_type:
+                        type: string
+                        example: Terminal
+                      welcome_email_sent_at: {}
+                      created_at:
+                        type: string
+                        example: '2016-12-01 16:18:46'
+                      updated_at:
+                        type: string
+                        example: '2017-04-21 20:15:12'
+                      deleted_at: {}
+                      gateway_name: {}
+                      branding:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            example: af82b215-6081-42b0-b494-fbda189ce8f9
+                          merchant_id:
+                            type: string
+                            example: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                          user_id:
+                            type: string
+                            example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                          name:
+                            type: string
+                            example: ''
+                          public_url:
+                            type: string
+                            example: https://s3-us-west-2.amazonaws.com/fattpaydocuments/branding/af82b215-6081-42b0-b494-fbda189ce8f9.png
+                          tag:
+                            type: string
+                            example: branding
+                          meta:
+                            type: object
+                            properties:
+                              filesize_bytes:
+                                type: integer
+                                example: 3938556
+                                default: 0
+                              filesize:
+                                type: string
+                                example: 3.94 MB
+                              extension:
+                                type: string
+                                example: png
+                              size:
+                                type: object
+                                properties:
+                                  width:
+                                    type: integer
+                                    example: 3072
+                                    default: 0
+                                  height:
+                                    type: integer
+                                    example: 1728
+                                    default: 0
+                              mime:
+                                type: string
+                                example: image/png
+                          created_at:
+                            type: string
+                            example: '2017-04-19 15:50:41'
+                          updated_at:
+                            type: string
+                            example: '2017-04-19 15:50:52'
+                          deleted_at: {}
+                      allow_ach:
+                        type: boolean
+                        example: true
+                        default: true
+        '401':
+          description: '401'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"error\": \"token_expired\"\n}"
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: token_expired
+      deprecated: false
+      tags:
+      - Self
+    put:
+      summary: Update Your User Info
+      description: Allows the user to update their user information
+      operationId: update-your-user-info
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n  \"system_admin\": false,\n  \"name\": \"Demo\",\n  \"email\": \"contact@example.com\",\n  \"email_verification_sent_at\": \"2017-03-29 15:27:19\",\n  \"email_verified_at\": \"2017-03-29 15:27:21\",\n  \"created_at\": \"2017-01-11 21:44:02\",\n  \"updated_at\": \"2017-04-24 15:41:58\",\n  \"deleted_at\": null,\n  \"gravatar\": \"//www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650\",\n  \"team_role\": \"admin\",\n  \"team_admin\": true,\n  \"team_enabled\": true\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                  system_admin:
+                    type: boolean
+                    example: false
+                    default: true
+                  name:
+                    type: string
+                    example: Demo
+                  email:
+                    type: string
+                    example: contact@example.com
+                  email_verification_sent_at:
+                    type: string
+                    example: '2017-03-29 15:27:19'
+                  email_verified_at:
+                    type: string
+                    example: '2017-03-29 15:27:21'
+                  created_at:
+                    type: string
+                    example: '2017-01-11 21:44:02'
+                  updated_at:
+                    type: string
+                    example: '2017-04-24 15:41:58'
+                  deleted_at: {}
+                  gravatar:
+                    type: string
+                    example: //www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650
+                  team_role:
+                    type: string
+                    example: admin
+                  team_admin:
+                    type: boolean
+                    example: true
+                    default: true
+                  team_enabled:
+                    type: boolean
+                    example: true
+                    default: true
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"email\": [\n    \"The email has already been taken.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: array
+                    items:
+                      type: string
+                      example: The email has already been taken.
+      deprecated: false
+      tags:
+      - Self
+  /self/verify/resend:
+    put:
+      summary: Resend Verification E-Mail
+      description: Resends the verification e-mail for a new user.
+      operationId: resend-verification-e-mail
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "\n{\n  \"id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n  \"system_admin\": false,\n  \"name\": \"demo\",\n  \"email\": \"contact@example.com\",\n  \"email_verification_sent_at\": \"2017-05-12 18:07:27\",\n  \"email_verified_at\": \"2017-03-29 15:27:21\",\n  \"created_at\": \"2017-01-11 21:44:02\",\n  \"updated_at\": \"2017-05-12 18:07:27\",\n  \"deleted_at\": null,\n  \"gravatar\": \"//www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650\",\n  \"team_role\": \"admin\",\n  \"team_admin\": true,\n  \"team_enabled\": true\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                  system_admin:
+                    type: boolean
+                    example: false
+                    default: true
+                  name:
+                    type: string
+                    example: demo
+                  email:
+                    type: string
+                    example: contact@example.com
+                  email_verification_sent_at:
+                    type: string
+                    example: '2017-05-12 18:07:27'
+                  email_verified_at:
+                    type: string
+                    example: '2017-03-29 15:27:21'
+                  created_at:
+                    type: string
+                    example: '2017-01-11 21:44:02'
+                  updated_at:
+                    type: string
+                    example: '2017-05-12 18:07:27'
+                  deleted_at: {}
+                  gravatar:
+                    type: string
+                    example: //www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650
+                  team_role:
+                    type: string
+                    example: admin
+                  team_admin:
+                    type: boolean
+                    example: true
+                    default: true
+                  team_enabled:
+                    type: boolean
+                    example: true
+                    default: true
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "[\n  \"option_not_found\"\n]"
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: option_not_found
+      deprecated: false
+      tags:
+      - Self
+  /self/verify/{token}:
+    get:
+      summary: Verify E-mail Token
+      description: Check if the token is valid.
+      operationId: verify-e-mail-token
+      parameters:
+      - name: token
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"email_verification\": [\n    \"The user is verified\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  email_verification:
+                    type: array
+                    items:
+                      type: string
+                      example: The user is verified
+        '404':
+          description: '404'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"email_verification\": [\n    \"The user cannot be found\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  email_verification:
+                    type: array
+                    items:
+                      type: string
+                      example: The user cannot be found
+      deprecated: false
+      tags:
+      - Self
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: API key for merchant-level operations. Provides access to merchant-specific endpoints including transactions, payments, customer management, and merchant account settings. This key is scoped to a single merchant account and cannot access partner-level functionality.
+    PartnerApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Partner-level API key with elevated privileges. Grants access to all partner operations including merchant management, portfolio oversight, reporting across multiple merchant accounts, and partner-specific administrative functions. Also provides access to all merchant-level operations for accounts under the partner's management.
+    EphemeralAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Temporary authentication token with limited lifespan. Used for short-term access to specific operations, typically generated for secure one-time actions or time-bounded sessions. Automatically expires after a predefined period for enhanced security.

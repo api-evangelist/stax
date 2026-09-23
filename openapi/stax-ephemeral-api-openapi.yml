@@ -1,0 +1,70 @@
+openapi: 3.2.0
+info:
+  title: stax-api Ephemeral API
+  version: '0.1'
+servers:
+- url: https://apiprod.fattlabs.com/
+security:
+- ApiKeyAuth: []
+tags:
+- name: Ephemeral
+paths:
+  /ephemeral:
+    get:
+      summary: Ephemeral Authentication Tokens
+      description: This endpoint accepts a request made with an API Key in the Authorization header and issues an ephemeral authentication token (expiring in 24 hours) in response.
+      operationId: ephemeral-authentication-tokens-1
+      parameters:
+      - name: user_id
+        in: query
+        description: Provide the Stax User ID for whom the ephemeral token should be issued. Leave blank to issue the token for the API Key in the Authorization header.
+        schema:
+          type: string
+      - name: user_email
+        in: query
+        description: Provide the URL-encoded email of the Stax User for whom the ephemeral token should be issued. Leave blank to issue the token for the API Key in the Authorization header.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "[\n    \"token\": \"emphemeralJWTString\"\n]"
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Invalid API Key:
+                  value: "{\n  \"is_api_key\": [\n    \"The bearer token must be an api key\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  is_api_key:
+                    type: array
+                    items:
+                      type: string
+                      example: The bearer token must be an api key
+      deprecated: false
+      tags:
+      - Ephemeral
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: API key for merchant-level operations. Provides access to merchant-specific endpoints including transactions, payments, customer management, and merchant account settings. This key is scoped to a single merchant account and cannot access partner-level functionality.
+    PartnerApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Partner-level API key with elevated privileges. Grants access to all partner operations including merchant management, portfolio oversight, reporting across multiple merchant accounts, and partner-specific administrative functions. Also provides access to all merchant-level operations for accounts under the partner's management.
+    EphemeralAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Temporary authentication token with limited lifespan. Used for short-term access to specific operations, typically generated for secure one-time actions or time-bounded sessions. Automatically expires after a predefined period for enhanced security.

@@ -1,0 +1,69 @@
+openapi: 3.2.0
+info:
+  title: stax-api File{id} API
+  version: '0.1'
+servers:
+- url: https://apiprod.fattlabs.com/
+security:
+- ApiKeyAuth: []
+tags:
+- name: File{id}
+paths:
+  /file{id}:
+    delete:
+      description: ''
+      operationId: delete_file{id}
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              examples:
+                OK:
+                  summary: OK
+                  value:
+                    id: a66bcfb0-8a41-4ef9-99b3-15fe1846bd36
+                    merchant_id: 55394e80-826a-4e04-bafa-2e2d615209cf
+                    user_id: 5aec6f90-69be-48a5-a419-44ff016f364a
+                    name: FILENAMEEDIT
+                    public_url: https://fattpaydocuments.s3.us-west-2.amazonaws.com/a66bcfb0-8a41-4ef9-99b3-15fe1846bd36.png
+                    tag: null
+                    meta:
+                      filesize_bytes: 139295
+                      filesize: 139.3 kB
+                      extension: png
+                      size:
+                        width: 446
+                        height: 496
+                      mime: image/png
+                    created_at: '2025-12-01 19:00:08'
+                    updated_at: '2025-12-03 21:30:36'
+                    deleted_at: '2025-12-05 08:17:56'
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: ID of the file to delete.
+      tags:
+      - File{id}
+      summary: Delete file{id}
+      x-summary-source: derived
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: API key for merchant-level operations. Provides access to merchant-specific endpoints including transactions, payments, customer management, and merchant account settings. This key is scoped to a single merchant account and cannot access partner-level functionality.
+    PartnerApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Partner-level API key with elevated privileges. Grants access to all partner operations including merchant management, portfolio oversight, reporting across multiple merchant accounts, and partner-specific administrative functions. Also provides access to all merchant-level operations for accounts under the partner's management.
+    EphemeralAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Temporary authentication token with limited lifespan. Used for short-term access to specific operations, typically generated for secure one-time actions or time-bounded sessions. Automatically expires after a predefined period for enhanced security.

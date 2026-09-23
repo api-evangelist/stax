@@ -1,0 +1,1599 @@
+openapi: 3.2.0
+info:
+  title: stax-api Query API
+  version: '0.1'
+servers:
+- url: https://apiprod.fattlabs.com/
+security:
+- ApiKeyAuth: []
+tags:
+- name: Query
+paths:
+  /query/statement/v3/ach-rejects:
+    get:
+      summary: ACH Rejections
+      description: ''
+      operationId: ach-rejections
+      parameters:
+      - name: startDate
+        in: query
+        required: true
+        description: YYYY-MM-DD
+        schema:
+          type: string
+          default: ''
+      - name: endDate
+        in: query
+        required: true
+        description: YYYY-MM-DD
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n    \"data\": [\n        {\n            \"ach_reject_transaction_id\": \"redacted-transaction-id\",\n            \"ach_reject_transaction_created_at\": \"2024-08-23T18:39:39.000Z\",\n            \"ach_reject_transaction_amount\": 861.8,\n            \"ach_reject_transaction_timing\": \"post_payout\",\n            \"original_transaction_id\": \"redacted-original-transaction-id\",\n            \"original_transaction_created_at\": \"2024-08-19T16:48:26.000Z\",\n            \"original_transaction_amount\": 861.8,\n            \"deposit_id\": null,\n            \"ach_reject_fee_id\": \"redacted-fee-id\",\n            \"ach_reject_fee_amount\": 15,\n            \"ach_reject_fee_deducted_at\": \"2024-08-23T11:00:58.000Z\"\n        }\n    ],\n    \"summary\": {\n        \"ach_reject_transaction_count\": 1,\n        \"ach_reject_transaction_amount\": 861.8,\n        \"original_transaction_amount\": 861.8,\n        \"ach_reject_fee_amount\": 15\n    },\n    \"total\": 1,\n    \"per_page\": 1000,\n    \"current_page\": 1,\n    \"last_page\": 1,\n    \"next_page_url\": null,\n    \"prev_page_url\": null,\n    \"from\": 1,\n    \"to\": 1\n}"
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        ach_reject_transaction_id:
+                          type: string
+                          example: redacted-transaction-id
+                        ach_reject_transaction_created_at:
+                          type: string
+                          example: '2024-08-23T18:39:39.000Z'
+                        ach_reject_transaction_amount:
+                          type: number
+                          example: 861.8
+                          default: 0
+                        ach_reject_transaction_timing:
+                          type: string
+                          example: post_payout
+                        original_transaction_id:
+                          type: string
+                          example: redacted-original-transaction-id
+                        original_transaction_created_at:
+                          type: string
+                          example: '2024-08-19T16:48:26.000Z'
+                        original_transaction_amount:
+                          type: number
+                          example: 861.8
+                          default: 0
+                        deposit_id: {}
+                        ach_reject_fee_id:
+                          type: string
+                          example: redacted-fee-id
+                        ach_reject_fee_amount:
+                          type: integer
+                          example: 15
+                          default: 0
+                        ach_reject_fee_deducted_at:
+                          type: string
+                          example: '2024-08-23T11:00:58.000Z'
+                  summary:
+                    type: object
+                    properties:
+                      ach_reject_transaction_count:
+                        type: integer
+                        example: 1
+                        default: 0
+                      ach_reject_transaction_amount:
+                        type: number
+                        example: 861.8
+                        default: 0
+                      original_transaction_amount:
+                        type: number
+                        example: 861.8
+                        default: 0
+                      ach_reject_fee_amount:
+                        type: integer
+                        example: 15
+                        default: 0
+                  total:
+                    type: integer
+                    example: 1
+                    default: 0
+                  per_page:
+                    type: integer
+                    example: 1000
+                    default: 0
+                  current_page:
+                    type: integer
+                    example: 1
+                    default: 0
+                  last_page:
+                    type: integer
+                    example: 1
+                    default: 0
+                  next_page_url: {}
+                  prev_page_url: {}
+                  from:
+                    type: integer
+                    example: 1
+                    default: 0
+                  to:
+                    type: integer
+                    example: 1
+                    default: 0
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      tags:
+      - Query
+  /query/statement/v3/volumes/card-processing:
+    get:
+      summary: Card Processing
+      description: ''
+      operationId: card-processing
+      parameters:
+      - name: startDate
+        in: query
+        required: true
+        description: (YYYY-MM-DD)
+        schema:
+          type: string
+          default: ''
+      - name: endDate
+        in: query
+        required: true
+        description: (YYYY-MM-DD)
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n    \"data\": {\n        \"groupByPaymentMethod\": [\n            {\n                \"method\": \"card\",\n                \"bin_type\": \"CREDIT\",\n                \"total_amt\": 0.01\n            },\n            {\n                \"method\": \"bank\",\n                \"bin_type\": \"\",\n                \"total_amt\": 2\n            },\n            {\n                \"method\": \"card\",\n                \"bin_type\": \"DEBIT\",\n                \"total_amt\": 0.02\n            }\n        ],\n        \"groupByTransactionType\": [\n            {\n                \"method\": \"card\",\n                \"is_card_present\": 0,\n                \"total_amt\": 0.02\n            },\n            {\n                \"method\": \"card\",\n                \"is_card_present\": 1,\n                \"total_amt\": 0.01\n            },\n            {\n                \"method\": \"bank\",\n                \"is_card_present\": 0,\n                \"total_amt\": 2\n            }\n        ],\n        \"groupByCardBrand\": [\n            {\n                \"card_type\": \"mastercard\",\n                \"total_amt\": 0.03\n            }\n        ]\n    }\n}"
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      groupByPaymentMethod:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            method:
+                              type: string
+                              example: card
+                            bin_type:
+                              type: string
+                              example: CREDIT
+                            total_amt:
+                              type: number
+                              example: 0.01
+                              default: 0
+                      groupByTransactionType:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            method:
+                              type: string
+                              example: card
+                            is_card_present:
+                              type: integer
+                              example: 0
+                              default: 0
+                            total_amt:
+                              type: number
+                              example: 0.02
+                              default: 0
+                      groupByCardBrand:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            card_type:
+                              type: string
+                              example: mastercard
+                            total_amt:
+                              type: number
+                              example: 0.03
+                              default: 0
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      tags:
+      - Query
+  /query/payment-links:
+    post:
+      summary: Create a Payment Link
+      description: Generate a new payment link to accept payments from customers. Supports both fixed and variable payment options.
+      operationId: create-a-payment-link
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - url
+              - common_name
+              properties:
+                url:
+                  type: string
+                  description: The URL of your application where the payment page is hosted.
+                common_name:
+                  type: string
+                  description: A human-readable name for the payment link. This is an internal name that the customer will not see.
+                link_meta:
+                  properties:
+                    total:
+                      type: number
+                      description: Set total amount for payment link
+                      format: float
+                    memo:
+                      type: string
+                      description: Appears as a message for the customer on a payment screen.
+                    successRedirect:
+                      type: string
+                      description: The URL to which the user will be redirected after payment or tokenization.
+                    frequency:
+                      type: string
+                      description: Specifies the frequency of the recurring payments. This field will only be respected if rrule is true.
+                    rrule:
+                      type: boolean
+                      description: Used to set up recurring payments.
+                    isTotalEditable:
+                      type: boolean
+                      description: Determines whether customers can edit the total amount.
+                    tokenizeOnly:
+                      type: boolean
+                      description: Only allow a payment to be tokenized. When set to true, only memo, successRedirect, buttonText, and active will be valid meta flags.
+                    areCnpDigitalWalletPaymentsAllowed:
+                      type: boolean
+                      description: Determines whether to accept digital wallet (Apple Pay + Google Pay) payments.
+                    areBankPaymentsAllowed:
+                      type: boolean
+                      description: Determines whether to accept bank (ACH) payments.
+                    areCreditCardsPaymentsAllowed:
+                      type: boolean
+                      description: Determines whether to accept card (credit, debit) payments.
+                    arePaypalPaymentsAllowed:
+                      type: boolean
+                      description: Determines whether to accept PayPal payments.
+                    areVenmoPaymentsAllowed:
+                      type: boolean
+                      description: Determines whether to accept Venmo payments.
+                    arePaypalBnplPaymentsAllowed:
+                      type: boolean
+                      description: Determines whether to accept PayPal Buy Now, Pay Later.
+                    buttonText:
+                      type: string
+                      description: The text that will appear on the payment button.
+                    active:
+                      type: number
+                      description: This is the active status of the payment link.
+                    item:
+                      type: string
+                      description: Item description.
+                    price:
+                      type: number
+                      description: Price of the line item.
+                    quantity:
+                      type: number
+                      description: quantity of the item.
+                    unitOfMeasurement:
+                      type: string
+                      description: Unit in which the item is sold. e.g., feet, each, litre, GB.
+                    tax:
+                      type: number
+                      description: Tax amount applied to the line item.
+                    productCode:
+                      type: string
+                      description: Unique product code assigned to the item.
+                  required: []
+                  type: object
+                  description: Contains more details and settings of the payment link.
+                amount:
+                  type: number
+                  description: This is the amount to be paid using the link. When it is set to 0, the value can be edited during payment. When it is set to a value greater than 0, the value cannot be changed during payment, unless isTotalEditable is set to true.
+                  format: float
+                active:
+                  type: number
+                  description: This is the active status of the payment link. Set a value of 1 to make the link active or 0 to make it inactive. An inactive link cannot be used for payment.
+      responses:
+        '201':
+          description: '201'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"status\": 201,\n  \"message\": \"Payment Link created\",\n  \"body\": {\n    \"link_meta\": {\n      \"paymentLinkId\": \"11eda15bbc337c209a1b615ba5112be7\"\n    },\n    \"merchant_id\": \"merchant1\",\n    \"common_name\": \"sameple link\",\n    \"id\": \"11eda15bbc337c209a1b615ba5112be7\",\n    \"tinyurl\": \"https://paymnt.io/nMeuJc\"\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 201
+                    default: 0
+                  message:
+                    type: string
+                    example: Payment Link created
+                  body:
+                    type: object
+                    properties:
+                      link_meta:
+                        type: object
+                        properties:
+                          paymentLinkId:
+                            type: string
+                            example: 11eda15bbc337c209a1b615ba5112be7
+                      merchant_id:
+                        type: string
+                        example: merchant1
+                      common_name:
+                        type: string
+                        example: sameple link
+                      id:
+                        type: string
+                        example: 11eda15bbc337c209a1b615ba5112be7
+                      tinyurl:
+                        type: string
+                        example: https://paymnt.io/nMeuJc
+        '500':
+          description: '500'
+          content:
+            application/json:
+              examples:
+                Invalid funding id:
+                  value: "{\n  \"error\": \"Invalid funding account id\",\n  \"status\": 500,\n  \"message\": \"Generic Error\"\n}"
+                Missing link_meta:
+                  value: "{\n  \"error\": \"link_meta is required\",\n  \"status\": 500,\n  \"message\": \"Generic Error\"\n}"
+              schema:
+                oneOf:
+                - title: Invalid funding id
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: Invalid funding account id
+                    status:
+                      type: integer
+                      example: 500
+                      default: 0
+                    message:
+                      type: string
+                      example: Generic Error
+                - title: Missing link_meta
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: link_meta is required
+                    status:
+                      type: integer
+                      example: 500
+                      default: 0
+                    message:
+                      type: string
+                      example: Generic Error
+      deprecated: false
+      tags:
+      - Query
+    get:
+      summary: List And Filter All Payment Links
+      description: Retrieve all payment links associated with your merchant account, with options for filtering and sorting.
+      operationId: list-and-filter-all-payment-links
+      parameters:
+      - name: active
+        in: query
+        schema:
+          type: boolean
+      - name: keywords[]
+        in: query
+        description: 'Searches across the following fields: common_name, link_meta, amount'
+        schema:
+          type: string
+      - name: order
+        in: query
+        description: Arranges the order of the returned payment links by either ascending or descending.
+        schema:
+          type: string
+          enum:
+          - ASC
+          - DESC
+      - name: sort
+        in: query
+        description: Defines the sorting of the returned payment links.
+        schema:
+          type: string
+          enum:
+          - common_name
+          - amount
+          - created_at
+          - total_sales
+          - total_transactions
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                No results:
+                  value: "{\n  \"data\": {\n    \"current_page\": 1,\n    \"first_page_url\": \"http://localhost:3005/payment-links?page=1\",\n    \"from\": 1,\n    \"last_page\": 0,\n    \"last_page_url\": \"http://localhost:3005/payment-links?page=0\",\n    \"next_page_url\": null,\n    \"path\": \"http://localhost:3005/payment-links\",\n    \"per_page\": 20,\n    \"prev_page_url\": null,\n    \"to\": 0,\n    \"total\": 0,\n    \"data\": []\n  }\n}"
+                Suscessful Results:
+                  value: "{\n  \"data\": {\n    \"current_page\": 1,\n    \"first_page_url\": \"http://localhost:3005/payment-links?page=1\",\n    \"from\": 1,\n    \"last_page\": 1,\n    \"last_page_url\": \"http://localhost:3005/payment-links?page=1\",\n    \"next_page_url\": null,\n    \"path\": \"http://localhost:3005/payment-links\",\n    \"per_page\": 20,\n    \"prev_page_url\": null,\n    \"to\": 4,\n    \"total\": 4,\n    \"data\": [\n      {\n        \"id\": \"11eda17551d9fec08a4793a483489785\",\n        \"merchant_id\": \"merchant1\",\n        \"common_name\": \"sameple link\",\n        \"tinyurl\": \"https://paymnt.io/eBiNgF\",\n        \"link_meta\": {\n          \"paymentLinkId\": \"11eda17551d9fec08a4793a483489785\"\n        },\n        \"active\": 1,\n        \"amount\": 0,\n        \"created_at\": \"2023-01-31T14:41:19.000Z\",\n        \"updated_at\": null,\n        \"total_sales\": 0,\n        \"total_transactions\": 0\n      },\n      {\n        \"id\": \"11eda1746cd4b1309a1b615ba5112be7\",\n        \"merchant_id\": \"merchant1\",\n        \"common_name\": \"sameple link\",\n        \"tinyurl\": \"https://paymnt.io/6QGXt0\",\n        \"link_meta\": {\n          \"total\": 2000,\n          \"paymentLinkId\": \"11eda1746cd4b1309a1b615ba5112be7\"\n        },\n        \"active\": 1,\n        \"amount\": 3000,\n        \"created_at\": \"2023-01-31T14:34:54.000Z\",\n        \"updated_at\": null,\n        \"total_sales\": 0,\n        \"total_transactions\": 0\n      },\n      {\n        \"id\": \"11eda15d8052e4a09a1b615ba5112be7\",\n        \"merchant_id\": \"merchant1\",\n        \"common_name\": \"sameple link\",\n        \"tinyurl\": \"https://paymnt.io/nkCsAQ\",\n        \"link_meta\": {\n          \"total\": 2000,\n          \"paymentLinkId\": \"11eda15d8052e4a09a1b615ba5112be7\"\n        },\n        \"active\": 1,\n        \"amount\": null,\n        \"created_at\": \"2023-01-31T11:50:48.000Z\",\n        \"updated_at\": null,\n        \"total_sales\": 0,\n        \"total_transactions\": 0\n      },\n      {\n        \"id\": \"11eda15bbc337c209a1b615ba5112be7\",\n        \"merchant_id\": \"merchant1\",\n        \"common_name\": \"sameple link\",\n        \"tinyurl\": \"https://paymnt.io/nMeuJc\",\n        \"link_meta\": {\n          \"paymentLinkId\": \"11eda15bbc337c209a1b615ba5112be7\"\n        },\n        \"active\": 1,\n        \"amount\": null,\n        \"created_at\": \"2023-01-31T11:38:09.000Z\",\n        \"updated_at\": null,\n        \"total_sales\": 0,\n        \"total_transactions\": 0\n      }\n    ]\n  }\n}"
+              schema:
+                oneOf:
+                - title: No results
+                  type: object
+                  properties:
+                    data:
+                      type: object
+                      properties:
+                        current_page:
+                          type: integer
+                          example: 1
+                          default: 0
+                        first_page_url:
+                          type: string
+                          example: http://localhost:3005/payment-links?page=1
+                        from:
+                          type: integer
+                          example: 1
+                          default: 0
+                        last_page:
+                          type: integer
+                          example: 0
+                          default: 0
+                        last_page_url:
+                          type: string
+                          example: http://localhost:3005/payment-links?page=0
+                        next_page_url: {}
+                        path:
+                          type: string
+                          example: http://localhost:3005/payment-links
+                        per_page:
+                          type: integer
+                          example: 20
+                          default: 0
+                        prev_page_url: {}
+                        to:
+                          type: integer
+                          example: 0
+                          default: 0
+                        total:
+                          type: integer
+                          example: 0
+                          default: 0
+                        data:
+                          type: array
+                - title: Suscessful Results
+                  type: object
+                  properties:
+                    data:
+                      type: object
+                      properties:
+                        current_page:
+                          type: integer
+                          example: 1
+                          default: 0
+                        first_page_url:
+                          type: string
+                          example: http://localhost:3005/payment-links?page=1
+                        from:
+                          type: integer
+                          example: 1
+                          default: 0
+                        last_page:
+                          type: integer
+                          example: 1
+                          default: 0
+                        last_page_url:
+                          type: string
+                          example: http://localhost:3005/payment-links?page=1
+                        next_page_url: {}
+                        path:
+                          type: string
+                          example: http://localhost:3005/payment-links
+                        per_page:
+                          type: integer
+                          example: 20
+                          default: 0
+                        prev_page_url: {}
+                        to:
+                          type: integer
+                          example: 4
+                          default: 0
+                        total:
+                          type: integer
+                          example: 4
+                          default: 0
+                        data:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                                example: 11eda17551d9fec08a4793a483489785
+                              merchant_id:
+                                type: string
+                                example: merchant1
+                              common_name:
+                                type: string
+                                example: sameple link
+                              tinyurl:
+                                type: string
+                                example: https://paymnt.io/eBiNgF
+                              link_meta:
+                                type: object
+                                properties:
+                                  paymentLinkId:
+                                    type: string
+                                    example: 11eda17551d9fec08a4793a483489785
+                              active:
+                                type: integer
+                                example: 1
+                                default: 0
+                              amount:
+                                type: integer
+                                example: 0
+                                default: 0
+                              created_at:
+                                type: string
+                                example: '2023-01-31T14:41:19.000Z'
+                              updated_at: {}
+                              total_sales:
+                                type: integer
+                                example: 0
+                                default: 0
+                              total_transactions:
+                                type: integer
+                                example: 0
+                                default: 0
+      deprecated: false
+      tags:
+      - Query
+  /query/statement/v3/daily-sales:
+    get:
+      summary: Daily Sales
+      description: This API returns the sales amount for each day of the date interval specified. The total sales, fees, and surcharges, if applicable, per day are returned.
+      operationId: daily-sales
+      parameters:
+      - name: startDate
+        in: query
+        required: true
+        description: YYYY-MM-DD
+        schema:
+          type: string
+          default: '2025-01-01'
+      - name: endDate
+        in: query
+        required: true
+        description: YYYY-MM-DD
+        schema:
+          type: string
+          default: '2025-01-31'
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n    \"data\": [\n        {\n            \"date\": \"2024-08-01\",\n            \"sales_total\": 0.02,\n            \"surcharge_total\": 0,\n            \"fees_total\": 0.2\n        },\n        {\n            \"date\": \"2024-08-12\",\n            \"sales_total\": 0.01,\n            \"surcharge_total\": 0,\n            \"fees_total\": 0.06\n        },\n        {\n            \"date\": \"2024-08-16\",\n            \"sales_total\": 1,\n            \"surcharge_total\": 0,\n            \"fees_total\": 0.11\n        },\n        {\n            \"date\": \"2024-08-19\",\n            \"sales_total\": 1,\n            \"surcharge_total\": 0,\n            \"fees_total\": 0.11\n        }\n    ],\n    \"summary\": {\n        \"sales_total\": 2.03,\n        \"surcharge_total\": 0,\n        \"fees_total\": 0.48\n    }\n}"
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date:
+                          type: string
+                          example: '2024-08-01'
+                        sales_total:
+                          type: number
+                          example: 0.02
+                          default: 0
+                        surcharge_total:
+                          type: integer
+                          example: 0
+                          default: 0
+                        fees_total:
+                          type: number
+                          example: 0.2
+                          default: 0
+                  summary:
+                    type: object
+                    properties:
+                      sales_total:
+                        type: number
+                        example: 2.03
+                        default: 0
+                      surcharge_total:
+                        type: integer
+                        example: 0
+                        default: 0
+                      fees_total:
+                        type: number
+                        example: 0.48
+                        default: 0
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      tags:
+      - Query
+  /query/payment-links/{id}:
+    delete:
+      summary: Delete a Payment Link
+      description: Remove an existing payment link from your merchant account using its unique identifier.
+      operationId: delete-a-payment-link
+      parameters:
+      - name: id
+        in: path
+        description: The id of your payment link
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"status\": 200,\n  \"message\": \"Payment Link Deleted\"\n}"
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                    default: 0
+                  message:
+                    type: string
+                    example: Payment Link Deleted
+      deprecated: false
+      tags:
+      - Query
+    get:
+      summary: Get A Payment Link's Information
+      description: Retrieve detailed information for a specific payment link, including metadata and status.
+      operationId: get-a-payment-links-information
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"data\": {\n    \"id\": \"11edc285c23ba0c0b5ff8d3dfcce6b74\",\n    \"merchant_id\": \"merchant1\",\n    \"common_name\": \"sameple link\",\n    \"tinyurl\": \"https://paymnt.io/RKWBJ5\",\n    \"link_meta\": {\n      \"paymentLinkId\": \"11edc285c23ba0c0b5ff8d3dfcce6b74\"\n    },\n    \"active\": 1,\n    \"amount\": 200,\n    \"created_at\": \"2023-03-14T16:32:07.000Z\",\n    \"updated_at\": null,\n    \"total_sales\": 0,\n    \"total_transactions\": 0\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 11edc285c23ba0c0b5ff8d3dfcce6b74
+                      merchant_id:
+                        type: string
+                        example: merchant1
+                      common_name:
+                        type: string
+                        example: sameple link
+                      tinyurl:
+                        type: string
+                        example: https://paymnt.io/RKWBJ5
+                      link_meta:
+                        type: object
+                        properties:
+                          paymentLinkId:
+                            type: string
+                            example: 11edc285c23ba0c0b5ff8d3dfcce6b74
+                      active:
+                        type: integer
+                        example: 1
+                        default: 0
+                      amount:
+                        type: integer
+                        example: 200
+                        default: 0
+                      created_at:
+                        type: string
+                        example: '2023-03-14T16:32:07.000Z'
+                      updated_at:
+                        type: string
+                        format: date-time
+                      total_sales:
+                        type: integer
+                        example: 0
+                        default: 0
+                      total_transactions:
+                        type: integer
+                        example: 0
+                        default: 0
+      deprecated: false
+      tags:
+      - Query
+    put:
+      summary: Update (or Deactivate) a Payment Link
+      description: Modify attributes of an existing payment link or reactivate a previously deactivated link.
+      operationId: update-a-payment-link
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - url
+              - common_name
+              properties:
+                url:
+                  type: string
+                  description: The URL of your application where the payment page is hosted.
+                common_name:
+                  type: string
+                  description: A human-readable name for the payment link. This is an internal name that the customer will not see.
+                link_meta:
+                  properties:
+                    total:
+                      type: number
+                      description: Set total amount for payment link
+                      format: float
+                    memo:
+                      type: string
+                      description: Appears as a message for the customer on a payment screen.
+                    successRedirect:
+                      type: string
+                      description: The URL to which the user will be redirected after payment or tokenization.
+                    frequency:
+                      type: string
+                      description: Specifies the frequency of the recurring payments. This field will only be respected if rrule is true.
+                    rrule:
+                      type: boolean
+                      description: Used to set up recurring payments.
+                    isTotalEditable:
+                      type: boolean
+                      description: Determines whether customers can edit the total amount.
+                    tokenizeOnly:
+                      type: boolean
+                      description: Only allow a payment to be tokenized. When set to true, only memo, successRedirect, buttonText, and active will be valid meta flags.
+                    areCnpDigitalWalletPaymentsAllowed:
+                      type: boolean
+                      description: Determines whether to accept digital wallet (Apple Pay + Google Pay) payments.
+                    areBankPaymentsAllowed:
+                      type: boolean
+                      description: Determines whether to accept bank (ACH) payments.
+                    ' areCreditCardsPaymentsAllowed':
+                      type: boolean
+                      description: Determines whether to accept card (credit, debit) payments.
+                    arePaypalPaymentsAllowed:
+                      type: boolean
+                      description: Determines whether to accept PayPal payments.
+                    areVenmoPaymentsAllowed:
+                      type: boolean
+                      description: Determines whether to accept Venmo payments.
+                    arePaypalBnplPaymentsAllowed:
+                      type: string
+                      description: Determines whether to accept PayPal Buy Now, Pay Later.
+                    buttonText:
+                      type: string
+                      description: The text that will appear on the payment button.
+                    active:
+                      type: boolean
+                      description: This is the active status of the payment link.
+                  required: []
+                  type: object
+                  description: Contains more details and settings of the payment link.
+                amount:
+                  type: number
+                  description: This is the amount to be paid using the link. When it is set to 0, the value can be edited during payment. When it is set to a value greater than 0, the value cannot be changed during payment, unless isTotalEditable is set to true.
+                  format: float
+                active:
+                  type: boolean
+                  description: This is the active status of the payment link. Set a value of 1 to make the link active or 0 to make it inactive. An inactive link cannot be used for payment.
+                funding:
+                  properties:
+                    account_id:
+                      type: string
+                      description: The funding accounts that will be used to receive payments.
+                    memo:
+                      type: string
+                      description: Additional information displayed to customer on payment page.
+                  required: []
+                  type: object
+                  description: The funding accounts that will be used to receive payments. If no value provided, will default to primary merchant funding account.
+      responses:
+        '201':
+          description: '201'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"status\": 201,\n  \"message\": \"Payment Link created\",\n  \"body\": {\n    \"link_meta\": {\n      \"paymentLinkId\": \"11eda15bbc337c209a1b615ba5112be7\"\n    },\n    \"merchant_id\": \"merchant1\",\n    \"common_name\": \"sameple link\",\n    \"id\": \"11eda15bbc337c209a1b615ba5112be7\",\n    \"tinyurl\": \"https://paymnt.io/nMeuJc\"\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 201
+                    default: 0
+                  message:
+                    type: string
+                    example: Payment Link created
+                  body:
+                    type: object
+                    properties:
+                      link_meta:
+                        type: object
+                        properties:
+                          paymentLinkId:
+                            type: string
+                            example: 11eda15bbc337c209a1b615ba5112be7
+                      merchant_id:
+                        type: string
+                        example: merchant1
+                      common_name:
+                        type: string
+                        example: sameple link
+                      id:
+                        type: string
+                        example: 11eda15bbc337c209a1b615ba5112be7
+                      tinyurl:
+                        type: string
+                        example: https://paymnt.io/nMeuJc
+        '500':
+          description: '500'
+          content:
+            application/json:
+              examples:
+                Invalid funding id:
+                  value: "{\n  \"error\": \"Invalid funding account id\",\n  \"status\": 500,\n  \"message\": \"Generic Error\"\n}"
+                Missing link_meta:
+                  value: "{\n  \"error\": \"link_meta is required\",\n  \"status\": 500,\n  \"message\": \"Generic Error\"\n}"
+              schema:
+                oneOf:
+                - title: Invalid funding id
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: Invalid funding account id
+                    status:
+                      type: integer
+                      example: 500
+                      default: 0
+                    message:
+                      type: string
+                      example: Generic Error
+                - title: Missing link_meta
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: link_meta is required
+                    status:
+                      type: integer
+                      example: 500
+                      default: 0
+                    message:
+                      type: string
+                      example: Generic Error
+      deprecated: false
+      tags:
+      - Query
+  /query/statement/v3/disputes:
+    get:
+      summary: Disputes
+      description: ''
+      operationId: disputes
+      parameters:
+      - name: startDate
+        in: query
+        required: true
+        description: YYYY-MM-DD
+        schema:
+          type: string
+          default: ''
+      - name: endDate
+        in: query
+        required: true
+        description: YYYY-MM-DD
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"data\": [\n    {\n      \"id\": \"DSredacted-dispute-id\",\n      \"date\": \"2024-07-28T02:31:16.000Z\",\n      \"type\": \"HOLD\",\n      \"dispute_amount\": 99,\n      \"fee_amount\": 20\n    }\n  ],\n  \"summary\": {\n    \"dispute_amount_total\": -99,\n    \"fee_amount_total\": 20\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: DSredacted-dispute-id
+                        date:
+                          type: string
+                          example: '2024-07-28T02:31:16.000Z'
+                        type:
+                          type: string
+                          example: HOLD
+                        dispute_amount:
+                          type: integer
+                          example: 99
+                          default: 0
+                        fee_amount:
+                          type: integer
+                          example: 20
+                          default: 0
+                  summary:
+                    type: object
+                    properties:
+                      dispute_amount_total:
+                        type: integer
+                        example: -99
+                        default: 0
+                      fee_amount_total:
+                        type: integer
+                        example: 20
+                        default: 0
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      tags:
+      - Query
+  /query/payment-links/{id}/is-active:
+    get:
+      summary: Get A Payment Link's Active Status
+      description: Check whether a payment link is active or inactive without retrieving full details.
+      operationId: get-a-payment-links-active-status
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      tags:
+      - Query
+  /query/depositDetail:
+    get:
+      summary: Get Details of Specific Deposit
+      description: Shows granular detail about a specific deposit.
+      operationId: get-detail-of-specific-deposit
+      parameters:
+      - name: startDate
+        in: query
+        description: (YYYY-MM-DD) No results before this date will be returned
+        required: true
+        schema:
+          type: string
+      - name: endDate
+        in: query
+        description: (YYYY-MM-DD) No results after this date will be returned
+        required: true
+        schema:
+          type: string
+      - name: batchId
+        in: query
+        description: The id of the batch you are querying
+        schema:
+          type: string
+      - name: timezone
+        in: query
+        description: Stax supports US timezones only. Defaults to UTC
+        schema:
+          type: string
+          enum:
+          - HST
+          - HDT
+          - AKST
+          - AKDT
+          - PDT
+          - PST
+          - MST
+          - MDT
+          - CST
+          - CDT
+          - EST
+          - EDT
+          - UTC
+          default: UTC
+      - name: timeZoneOffset
+        in: query
+        description: Numeric offset value from UTC time (-4, 1, etc.)
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"data\": [\n    {\n      \"batched_at\": \"2019-01-01\",\n      \"batch_id\": \"00001\",\n      \"auth_id\": \"654321\",\n      \"created_at\": \"2019-01-01T18:38:00.000Z\",\n      \"total\": 40,\n      \"method\": \"card\",\n      \"last_four\": \"1896\",\n      \"card_type\": \"visa\",\n      \"fees\": 0.47,\n      \"transaction_id\": \"93870317-c147-482f-b7c0-13ba0e83a253\"\n    },\n    {\n      \"batched_at\": \"2019-01-01\",\n      \"batch_id\": \"00001\",\n      \"auth_id\": \"123456\",\n      \"created_at\": \"2019-01-01T17:59:00.000Z\",\n      \"total\": 41,\n      \"method\": \"card\",\n      \"last_four\": \"3243\",\n      \"card_type\": \"mcrd\",\n      \"fees\": 0.47,\n      \"transaction_id\": \"43870317-c147-482f-b7c0-13ba0e83a253\"\n    },\n    {\n      \"batched_at\": \"2019-01-01\",\n      \"batch_id\": \"00001\",\n      \"auth_id\": \"123456\",\n      \"created_at\": \"2019-01-01T17:49:00.000Z\",\n      \"total\": 35,\n      \"method\": \"card\",\n      \"last_four\": \"0637\",\n      \"card_type\": \"visa\",\n      \"fees\": 0.47,\n      \"transaction_id\": \"83870317-c147-482f-b7c0-13ba0e83a253\"\n    },\n    // [etc]\n  ]\n}"
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      tags:
+      - Query
+  /query/deposit:
+    get:
+      summary: Get List of Deposits
+      description: Shows list of your merchant's deposits filtered by the batched_at date by default
+      operationId: get-list-of-deposits
+      parameters:
+      - name: startDate
+        in: query
+        description: (YYYY-MM-DD HH:mm:ss) No results before this date will be returned
+        required: true
+        schema:
+          type: string
+      - name: endDate
+        in: query
+        description: (YYYY-MM-DD HH:mm:ss) No results after this date will be returned
+        required: true
+        schema:
+          type: string
+      - name: timezone
+        in: query
+        description: Stax supports US timezones only. Defaults to UTC
+        schema:
+          type: string
+          enum:
+          - HST
+          - HDT
+          - AKST
+          - AKDT
+          - PDT
+          - PST
+          - MST
+          - MDT
+          - CST
+          - CDT
+          - EST
+          - EDT
+          - UTC
+          default: UTC
+      - name: timeZoneOffset
+        in: query
+        description: numeric offset value from UTC time (-4, 1, etc.)
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"data\": [\n    {\n      \"batched_at\": \"2019-01-01\",\n      \"batch_id\": \"00001\",\n      \"last_transaction\": \"2019-01-01T18:38:00.000Z\",\n      \"count\": 29,\n      \"sum\": 1379.65,\n      \"avg\": 47.57,\n      \"min\": 10,\n      \"max\": 199.93,\n      \"std\": 33.82\n    },\n    {\n      \"batched_at\": \"2019-01-02\",\n      \"batch_id\": \"00002\",\n      \"last_transaction\": \"2019-01-02T17:28:00.000Z\",\n      \"count\": 18,\n      \"sum\": 706,\n      \"avg\": 39.22,\n      \"min\": 10,\n      \"max\": 75,\n      \"std\": 12.9\n    }\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        batched_at:
+                          type: string
+                          example: '2019-01-01'
+                        batch_id:
+                          type: string
+                          example: '00001'
+                        last_transaction:
+                          type: string
+                          example: '2019-01-01T18:38:00.000Z'
+                        count:
+                          type: integer
+                          example: 29
+                          default: 0
+                        sum:
+                          type: number
+                          example: 1379.65
+                          default: 0
+                        avg:
+                          type: number
+                          example: 47.57
+                          default: 0
+                        min:
+                          type: integer
+                          example: 10
+                          default: 0
+                        max:
+                          type: number
+                          example: 199.93
+                          default: 0
+                        std:
+                          type: number
+                          example: 33.82
+                          default: 0
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      tags:
+      - Query
+  /query/statement/v3/adjustments:
+    get:
+      summary: Refund and Adjustments
+      description: ''
+      operationId: refund-and-adjustments
+      parameters:
+      - name: startDate
+        in: query
+        required: true
+        description: YYYY-MM-DD
+        schema:
+          type: string
+          default: ''
+      - name: endDate
+        in: query
+        required: true
+        description: YYYY-MM-DD
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"data\": [\n    {\n      \"id\": \"redacted-refund-1\",\n      \"transaction_id\": \"redacted-transaction-id-1\",\n      \"batch_id\": \"redacted-batch-id\",\n      \"type\": \"refund\",\n      \"subtype\": null,\n      \"amount\": 217.5,\n      \"created_at\": \"2024-02-14T16:48:51.000Z\"\n    },\n    {\n      \"id\": \"11ee02f21cd6a3d5cccba85de9ee707b\",\n      \"transaction_id\": \"1b9f50e0-a4f1-4153-8f28-9e2f7ced3d66\",\n      \"batch_id\": \"11eedb477e29181eccdaad9f093a0c00\",\n      \"type\": \"refund\",\n      \"subtype\": null,\n      \"amount\": 292.5,\n      \"created_at\": \"2024-02-14T16:52:15.000Z\"\n    }\n  ],\n  \"summary\": {\n    \"adjustments_count\": 2,\n    \"adjustments_amount\": 510\n  },\n  \"total\": 2,\n  \"per_page\": 1000,\n  \"current_page\": 1,\n  \"last_page\": 1,\n  \"next_page_url\": null,\n  \"prev_page_url\": null,\n  \"from\": 1,\n  \"to\": 2\n}"
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: redacted-refund-1
+                        transaction_id:
+                          type: string
+                          example: redacted-transaction-id-1
+                        batch_id:
+                          type: string
+                          example: redacted-batch-id
+                        type:
+                          type: string
+                          example: refund
+                        subtype: {}
+                        amount:
+                          type: number
+                          example: 217.5
+                          default: 0
+                        created_at:
+                          type: string
+                          example: '2024-02-14T16:48:51.000Z'
+                  summary:
+                    type: object
+                    properties:
+                      adjustments_count:
+                        type: integer
+                        example: 2
+                        default: 0
+                      adjustments_amount:
+                        type: integer
+                        example: 510
+                        default: 0
+                  total:
+                    type: integer
+                    example: 2
+                    default: 0
+                  per_page:
+                    type: integer
+                    example: 1000
+                    default: 0
+                  current_page:
+                    type: integer
+                    example: 1
+                    default: 0
+                  last_page:
+                    type: integer
+                    example: 1
+                    default: 0
+                  next_page_url: {}
+                  prev_page_url: {}
+                  from:
+                    type: integer
+                    example: 1
+                    default: 0
+                  to:
+                    type: integer
+                    example: 2
+                    default: 0
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      tags:
+      - Query
+  /query/statement/v3/surcharges:
+    get:
+      summary: Surcharging
+      description: ''
+      operationId: surcharging-1
+      parameters:
+      - name: startDate
+        in: query
+        required: true
+        description: YYYY-MM-DD
+        schema:
+          type: string
+          default: ''
+      - name: endDate
+        in: query
+        required: true
+        description: YYYY-MM-DD
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: " \"data\": [\n        {\n            \"card_type\": \"mastercard\",\n            \"sales_amount\": 0,\n            \"surcharges_amount\": 0,\n            \"surcharges_count\": 0\n        }\n    ],\n    \"summary\": {\n        \"sales_amount\": 0,\n        \"surcharges_amount\": 0,\n        \"surcharges_count\": 0\n    }{} \"data\": [\n        {\n            \"card_type\": \"mastercard\",\n            \"sales_amount\": 0,\n            \"surcharges_amount\": 0,\n            \"surcharges_count\": 0\n        }\n    ],\n    \"summary\": {\n        \"sales_amount\": 0,\n        \"surcharges_amount\": 0,\n        \"surcharges_count\": 0\n    }"
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      tags:
+      - Query
+  /query/statistics/teamSummary:
+    get:
+      summary: Team Summary
+      description: Returns a list of stats about the current team.
+      operationId: team-summary
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"charge_count_success\": 3,\n  \"refund_count_success\": 0,\n  \"charge_count_fail\": 1,\n  \"invoice_count\": 56,\n  \"scheduled_invoice_count\": 0,\n  \"customer_count\": 222,\n  \"user_count\": 11,\n  \"file_count\": 3\n}"
+              schema:
+                type: object
+                properties:
+                  charge_count_success:
+                    type: integer
+                    example: 3
+                    default: 0
+                  refund_count_success:
+                    type: integer
+                    example: 0
+                    default: 0
+                  charge_count_fail:
+                    type: integer
+                    example: 1
+                    default: 0
+                  invoice_count:
+                    type: integer
+                    example: 56
+                    default: 0
+                  scheduled_invoice_count:
+                    type: integer
+                    example: 0
+                    default: 0
+                  customer_count:
+                    type: integer
+                    example: 222
+                    default: 0
+                  user_count:
+                    type: integer
+                    example: 11
+                    default: 0
+                  file_count:
+                    type: integer
+                    example: 3
+                    default: 0
+      deprecated: false
+      tags:
+      - Query
+  /query/payment-links/{id}/update-stats:
+    put:
+      summary: Update A Payment Link's Stats
+      description: Modify the sales statistics of an existing payment link, including updating the total sales and transaction count.
+      operationId: update-a-payment-links-stats
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - total
+              properties:
+                total:
+                  type: number
+                  description: The total amount made from the single transaction.
+                  format: float
+      responses:
+        '201':
+          description: '201'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"status\": 200,\n  \"message\": \"Payment Link Updated\",\n  \"body\": {\n    \"total\": 300\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                    default: 0
+                  message:
+                    type: string
+                    example: Payment Link Updated
+                  body:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 300
+                        default: 0
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      tags:
+      - Query
+  /query/statement/v3/volumes/card-type:
+    get:
+      summary: Volumes by card type
+      description: ''
+      operationId: volumes-by-card-type
+      parameters:
+      - name: startDate
+        in: query
+        required: true
+        description: YYYY-MM-DD
+        schema:
+          type: string
+          default: ''
+      - name: endDate
+        in: query
+        required: true
+        description: YYYY-MM-DD
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n    \"data\": [\n        {\n            \"is_card_present\": 0,\n            \"card_brand\": \"visa\",\n            \"bin_type\": \"DEBIT\",\n            \"rate\": 3.36,\n            \"total_charges\": 16521.52,\n            \"use_count\": 34,\n            \"rate_fees\": 555.12,\n            \"per_transaction_fees\": 10.2,\n            \"interchange_fees_amount\": 0,\n            \"total_fees\": 565.32\n        },\n        {\n            \"is_card_present\": 0,\n            \"card_brand\": \"ACH\",\n            \"bin_type\": \"ACH\",\n            \"rate\": 1,\n            \"total_charges\": 64845.81,\n            \"use_count\": 49,\n            \"rate_fees\": 298.31,\n            \"per_transaction_fees\": 0,\n            \"interchange_fees_amount\": 0,\n            \"total_fees\": 298.31\n        },\n        {\n            \"is_card_present\": 0,\n            \"card_brand\": \"visa\",\n            \"bin_type\": \"CREDIT\",\n            \"rate\": 3.36,\n            \"total_charges\": 146266.33,\n            \"use_count\": 92,\n            \"rate_fees\": 4914.54,\n            \"per_transaction_fees\": 27.6,\n            \"interchange_fees_amount\": 0,\n            \"total_fees\": 4942.14\n        },\n        {\n            \"is_card_present\": 0,\n            \"card_brand\": \"mastercard\",\n            \"bin_type\": \"DEBIT\",\n            \"rate\": 3.36,\n            \"total_charges\": 27726.12,\n            \"use_count\": 21,\n            \"rate_fees\": 931.57,\n            \"per_transaction_fees\": 6.3,\n            \"interchange_fees_amount\": 0,\n            \"total_fees\": 937.87\n        },\n        {\n            \"is_card_present\": 0,\n            \"card_brand\": \"mastercard\",\n            \"bin_type\": \"CREDIT\",\n            \"rate\": 3.36,\n            \"total_charges\": 17690.57,\n            \"use_count\": 26,\n            \"rate_fees\": 594.39,\n            \"per_transaction_fees\": 7.8,\n            \"interchange_fees_amount\": 0,\n            \"total_fees\": 602.19\n        },\n        {\n            \"is_card_present\": 0,\n            \"card_brand\": \"discover\",\n            \"bin_type\": \"CREDIT\",\n            \"rate\": 3.36,\n            \"total_charges\": 5829,\n            \"use_count\": 4,\n            \"rate_fees\": 195.86,\n            \"per_transaction_fees\": 1.2,\n            \"interchange_fees_amount\": 0,\n            \"total_fees\": 197.06\n        },\n        {\n            \"is_card_present\": 0,\n            \"card_brand\": \"amex\",\n            \"bin_type\": \"CREDIT\",\n            \"rate\": 3.92,\n            \"total_charges\": 21639.96,\n            \"use_count\": 13,\n            \"rate_fees\": 848.28,\n            \"per_transaction_fees\": 3.9,\n            \"interchange_fees_amount\": 0,\n            \"total_fees\": 852.18\n        }\n    ],\n    \"summary\": {\n        \"total_charges\": 300519.31,\n        \"use_count\": 239,\n        \"rate_fees\": 8338.07,\n        \"per_transaction_fees\": 57,\n        \"interchange_fees_amount\": 0,\n        \"total_fees\": 8395.07\n    }\n}"
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        is_card_present:
+                          type: integer
+                          example: 0
+                          default: 0
+                        card_brand:
+                          type: string
+                          example: visa
+                        bin_type:
+                          type: string
+                          example: DEBIT
+                        rate:
+                          type: number
+                          example: 3.36
+                          default: 0
+                        total_charges:
+                          type: number
+                          example: 16521.52
+                          default: 0
+                        use_count:
+                          type: integer
+                          example: 34
+                          default: 0
+                        rate_fees:
+                          type: number
+                          example: 555.12
+                          default: 0
+                        per_transaction_fees:
+                          type: number
+                          example: 10.2
+                          default: 0
+                        interchange_fees_amount:
+                          type: integer
+                          example: 0
+                          default: 0
+                        total_fees:
+                          type: number
+                          example: 565.32
+                          default: 0
+                  summary:
+                    type: object
+                    properties:
+                      total_charges:
+                        type: number
+                        example: 300519.31
+                        default: 0
+                      use_count:
+                        type: integer
+                        example: 239
+                        default: 0
+                      rate_fees:
+                        type: number
+                        example: 8338.07
+                        default: 0
+                      per_transaction_fees:
+                        type: integer
+                        example: 57
+                        default: 0
+                      interchange_fees_amount:
+                        type: integer
+                        example: 0
+                        default: 0
+                      total_fees:
+                        type: number
+                        example: 8395.07
+                        default: 0
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      tags:
+      - Query
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: API key for merchant-level operations. Provides access to merchant-specific endpoints including transactions, payments, customer management, and merchant account settings. This key is scoped to a single merchant account and cannot access partner-level functionality.
+    PartnerApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Partner-level API key with elevated privileges. Grants access to all partner operations including merchant management, portfolio oversight, reporting across multiple merchant accounts, and partner-specific administrative functions. Also provides access to all merchant-level operations for accounts under the partner's management.
+    EphemeralAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Temporary authentication token with limited lifespan. Used for short-term access to specific operations, typically generated for secure one-time actions or time-bounded sessions. Automatically expires after a predefined period for enhanced security.

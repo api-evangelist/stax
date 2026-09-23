@@ -1,0 +1,825 @@
+openapi: 3.2.0
+info:
+  title: stax-api Admin API
+  version: '0.1'
+servers:
+- url: https://apiprod.fattlabs.com/
+security:
+- ApiKeyAuth: []
+tags:
+- name: Admin
+paths:
+  /admin/enroll:
+    post:
+      summary: Enroll a Merchant
+      description: Simultaneously create a merchant, registers the merchant, and creates a user record in a single request, associating them together.
+      operationId: enroll-a-merchant
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                skip_account_page:
+                  type: boolean
+                  description: Set to true to skip the setPassword page for the user when logging in.
+                hide_prefilled_fields:
+                  type: boolean
+                  description: When a field is pre-populated, it will not be displayed to a merchant. This can declutter the information presented to the merchant to be filled out.
+                registration:
+                  properties:
+                    pricing_plan:
+                      type: string
+                      description: Must be a valid pricing plan for the requesting user's Brand.
+                      default: test-pricing
+                    business_email:
+                      type: string
+                      description: The email for the business.
+                    email:
+                      type: string
+                      description: The principal owner's email.
+                    business_legal_name:
+                      type: string
+                      description: Merchant business legal name. 100 character max.
+                    business_dba:
+                      type: string
+                      description: Merchant business 'Doing Business As' name. Should be same as legal name if no DBA exists.
+                    business_website:
+                      type: string
+                      description: Merchant business website address (include http://). 100 character max.
+                    business_phone_number:
+                      type: string
+                      description: 'Merchant business phone number. Format: (999) 999-9999, 9999999999, or 999-999-9999.'
+                    business_fax:
+                      type: string
+                      description: 'Merchant fax number. Format: (999) 999-9999, 9999999999, or 999-999-9999.'
+                    business_address_1:
+                      type: string
+                      description: Merchant business address line 1. 100 character max.
+                    business_address_2:
+                      type: string
+                      description: Merchant business address line 2. 100 character max.
+                    business_address_city:
+                      type: string
+                      description: Merchant business city.
+                    business_address_state:
+                      type: string
+                      description: Two-letter state abbreviation (e.g., FL).
+                    business_address_zip:
+                      type: string
+                      description: Merchant business ZIP code.
+                    business_address_country:
+                      type: string
+                      description: Merchant business country. 2 character max.
+                    business_open_date:
+                      type: string
+                      description: 'Merchant business open date. Format: MM/DD/YYYY.'
+                    business_tax_id:
+                      type: string
+                      description: 'Merchant business tax ID. Format: 12-3456789.'
+                    company_type:
+                      type: string
+                      description: 'Entity type. Values: A (Association/Estate/Trust), G (Government), S (Individual/Sole Proprietor), F (Financial Institution), L (LLC), E (Tax-Exempt 501C), P (Partnership), V (Private Corporation), B (Public Corporation), R (SEC-Registered Entity).'
+                    entity_ownership_type:
+                      type: string
+                      description: Ownership type (e.g., PRIVATE).
+                    first_name:
+                      type: string
+                      description: Merchant owner/signer first name. 100 character max.
+                    last_name:
+                      type: string
+                      description: Merchant owner/signer last name. 100 character max.
+                    title:
+                      type: string
+                      description: Merchant owner title (e.g., Mr Prez).
+                    job_title:
+                      type: string
+                      description: Merchant owner job title. Same as title.
+                    phone_number:
+                      type: string
+                      description: 'Owner/signer phone number. Format: (999) 999-9999.'
+                    user_dob:
+                      type: string
+                      description: 'Owner date of birth. Format: MM/DD/YYYY.'
+                    user_ssn:
+                      type: string
+                      description: Primary owner/signer Social Security Number.
+                    owner_address_1:
+                      type: string
+                      description: Owner/signer address line 1.
+                    owner_address_2:
+                      type: string
+                      description: Owner/signer address line 2.
+                    owner_address_city:
+                      type: string
+                      description: Owner/signer city.
+                    owner_address_state:
+                      type: string
+                      description: Owner/signer two-letter state abbreviation.
+                    owner_address_zip:
+                      type: string
+                      description: Owner/signer ZIP/postal code.
+                    owner_address_country:
+                      type: string
+                      description: Owner/signer country (e.g., USA).
+                    principal_owners_name:
+                      type: string
+                      description: Merchant owner principal first and last name.
+                    service_you_provide:
+                      type: string
+                      description: Description of the merchant's main service or product. 200 character max.
+                    annual_volume:
+                      type: string
+                      description: Merchant annual credit card volume. 100 character max.
+                    avg_trans_size:
+                      type: string
+                      description: Merchant average transaction size.
+                    highest_trans_amount:
+                      type: string
+                      description: Merchant reported highest credit card transaction amount.
+                    card_present_percent:
+                      type: string
+                      description: Percentage of volume where the card is physically present (e.g., terminal transactions).
+                    card_not_present_percent:
+                      type: string
+                      description: Percentage of volume where the card is not present (e.g., online or keyed-in transactions).
+                    card_swiped_percent:
+                      type: string
+                      description: Percentage of volume from card-swiped transactions.
+                    moto_percent:
+                      type: string
+                      description: Percentage of volume taken via mail order/telephone order. Typically the same as card_not_present_percent.
+                    internet:
+                      type: string
+                      description: Percentage of volume taken over the internet.
+                    b2b_percent:
+                      type: string
+                      description: Merchant business-to-business volume percentage.
+                    international:
+                      type: string
+                      description: Merchant international volume percentage.
+                    refund_policy:
+                      type: string
+                      description: 'Merchant refund policy. Values: N (No Refunds), E (Merchandise Exchange Only), T (30 Days or Fewer), O (Other).'
+                    bank_routing_number:
+                      type: string
+                      description: Billing bank routing number.
+                    bank_account_number:
+                      type: string
+                      description: Billing bank account number.
+                    bank_account_owner_name:
+                      type: string
+                      description: Billing bank account owner name.
+                    secondary_bank_routing_number:
+                      type: string
+                      description: Secondary bank routing number.
+                    secondary_bank_account_number:
+                      type: string
+                      description: Secondary bank account number.
+                    secondary_bank_account_purpose:
+                      type: string
+                      description: Purpose of the secondary bank account (e.g., fees).
+                    chosen_processing_method:
+                      type: string
+                      description: How the merchant will process payments (e.g., api).
+                    underwriting_status:
+                      type: string
+                      description: Underwriting status to set (e.g., APPROVED).
+                    field_permissions:
+                      type: string
+                      description: JSON object that manually controls field permissions.
+                    amex_direct_number:
+                      type: integer
+                      description: If you have over a million in AMEX sales, AMEX will have provided a 10-digit direct number.
+                    amex_annual_volume:
+                      type: string
+                      default: ''
+                      description: The predicted annual gross sales of AMEX cards.
+                    electronic_signature:
+                      type: string
+                    credit_inquiry_electronic_signature:
+                      type: string
+                    application_agreed_at:
+                      type: string
+                    countersigned_at:
+                      type: string
+                    signature_status:
+                      type: string
+                    meta:
+                      type: array
+                      items:
+                        properties:
+                          owner_citizenship:
+                            type: string
+                            description: 3 character ISO country code for company representative, eg. ALA.
+                          ownership_percentage:
+                            type: string
+                            description: The ownership percentage for primary owner, eg. 50.
+                          representatives:
+                            type: array
+                            items:
+                              properties:
+                                title:
+                                  type: string
+                                  description: Position within the organization.
+                                first_name:
+                                  type: string
+                                  description: Name of representative.
+                                last_name:
+                                  type: string
+                                  description: Surname of representative.
+                                email:
+                                  type: string
+                                  description: Representative email.
+                                ownership_percentage:
+                                  type: string
+                                  description: Ownership percentage for company representatives, eg. 50
+                                phone:
+                                  type: string
+                                  description: Representative phone number.
+                                address_1:
+                                  type: string
+                                address_2:
+                                  type: string
+                                address_city:
+                                  type: string
+                                address_state:
+                                  type: string
+                                  description: State (two letter) (ex. FL).
+                                address_zip:
+                                  type: string
+                                citizenship:
+                                  type: string
+                                  description: 3 character ISO country code for company representative, eg. ALA.
+                                ssn:
+                                  type: string
+                                  description: Representative social security number.
+                                type:
+                                  type: string
+                                  enum:
+                                  - Beneficial Owner
+                                  - Guarantor
+                                  description: Type of owner.
+                              type: object
+                            description: Any additional representatives (required for any owner/representative with 25% or more ownership).
+                        type: object
+                  required:
+                  - pricing_plan
+                  - business_email
+                  - email
+                  type: object
+                user:
+                  properties:
+                    email:
+                      type: string
+                      description: Provide the user's email if they exist; all other details will be ignored. For best practice, provide the rest of the details to ensure user creation. User.email must not be a Stax Connect level user.
+                    name:
+                      type: string
+                      description: User's full name. This is required for new users.
+                    password:
+                      type: string
+                      description: (required for new user).
+                    password_confirmation:
+                      type: string
+                      description: (required for new user).
+                  required:
+                  - email
+                  type: object
+                merchant:
+                  properties:
+                    plan:
+                      type: string
+                      description: The plan which sets Stax Pay configuration.
+                      default: premium
+                    company_name:
+                      type: string
+                      description: Name of the company.
+                    contact_email:
+                      type: string
+                      description: Email for communication.
+                    hosted_payments_token:
+                      type: string
+                      description: Each merchant record has a unique identifier for StaxJs. If not specified, one is autogenerated with the company name and a random string.
+                  required:
+                  - plan
+                  - company_name
+                  - contact_email
+                  type: object
+            examples:
+              Example Request:
+                summary: Example Request
+                value: "{\n    \"skip_account_page\": true,\n    \"merchant\": {\n        \"plan\":\"premium\",\n        \"company_name\": \"Stax\",\n        \"contact_name\": \"James Holden\",\n        \"contact_email\": \"James.Holden@example.com\",\n        \"contact_phone\": \"4035551234\",\n        \"address_1\": \"25 Wall Street\",\n        \"address_2\": \"Suite 1\",\n        \"address_city\": \"Orlando\",\n        \"address_state\": \"FL\",\n        \"address_zip\": \"32801\",\n        \"hosted_payments_token\": \"Stax-c3073a83d4a2\",\n        \"currency\": [\"USD\"],\n        \"status\": \"PENDING\",\n    },\n    \"registration\": {\n        \"pricing_plan\": \"test-pricing\",\n        \"underwriting_status\": \"APPROVED\",\n        \"first_name\": \"Post\",\n        \"last_name\": \"Man\",\n        \"email\": \"postman@example.com\",\n        \"title\": \"Mr Prez\",\n        \"company_type\": \"A\",\n        \"entity_ownership_type\": \"PRIVATE\",\n        \"business_phone_number\": \"5555555555\",\n        \"business_legal_name\": \"Consulting by Post\",\n        \"business_dba\": \"Post's Consulting\",\n        \"business_website\": \"https://example.com/\",\n        \"business_fax\": \"5555555555\",\n        \"business_email\": \"postman@example.com\",\n        \"owner_address_1\": \"618 E South St\",\n        \"owner_address_2\": \"Suite 510\",\n        \"owner_address_city\": \"Orlando\",\n        \"owner_address_state\": \"\",\n        \"owner_address_zip\": \"55555\",\n        \"owner_address_country\": \"USA\",\n        \"meta\": {\n          \"ownership_percentage\": \"100\",\n          \"owner_citizenship\":\"ALA\",\n          \"representatives\": [\n            {\n              \"title\": \"king supreme ceo\",\n              \"first_name\": \"David\",\n              \"last_name\": \"Sandra\",\n              \"email\": \"davesandra344@gmail.com\",\n              \"ownership_percentage\": \"40\",\n              \"phone\": \"5555555555\",\n              \"address_1\": \"100 S Orange Ave\",\n              \"address_2\": \"Suite 400\",\n              \"address_city\": \"Orlando\",\n              \"address_state\": \"CA\",\n              \"address_zip\": \"55555\",\n              \"citizenship\":\"ALB\",\n              \"ssn\": \"123445666\",\n              \"type\": \"Beneficial Owner\"\n            }\n          ]\n        },\n        \"business_tax_id\": \"123456789\",\n        \"business_open_date\": \"12/25/2020\",\n        \"job_title\": \"Mr Prez\",\n        \"service_you_provide\": \"consulting services\",\n        \"annual_volume\": \"1000\",\n        \"highest_trans_amount\": \"100000\",\n        \"card_not_present_percent\": \"100\",\n        \"bank_routing_number\": \"021000021\",\n        \"bank_account_number\": \"9876543210\",\n        \"bank_account_owner_name\": \"Post Man\",\n        \"secondary_bank_routing_number\": \"021000021\",\n        \"secondary_bank_account_number\": \"9876543210\",\n        \"secondary_bank_account_purpose\": \"fees\",\n        \"principal_owners_name\": \"Post Man\",\n        \"chosen_processing_method\": \"api\"\n    },\n    \"user\": {\n        \"name\": \"James Holden\",\n        \"email\": \"James.Holden@example.com\",\n        \"team_role\": \"staff\",\n        \"team_enabled\": true,\n        \"password\": \"YesYouNeedToProvideThisAndAConfirmationToCreateAUser\",\n        \"password_confirmation\": \"YesYouNeedToProvideThisAndAConfirmationToCreateAUser\"\n    }\n}"
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value:
+                    token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJnb2RVc2VyIjpudWxsLCJtZXJjaGFudCI6IjdmZTk3ZTBmLTJlN2EtNDgxNy04NzJiLTZlYjg2ZWVhODQyYyIsInN1YiI6IjQwZmU4YTUyLWZiNzEtNGJlYy04OZZZZZZZZZZGMxOGE1MCIsImJyYW5kIjoiZmF0dG1lcmNoYW50ZZZZZZZZZZZZZZbGwiLCJpYXQiOjE2MzA2NzQ1NzUsImV4cCI6MTYzMTAyMDE3NSwibmJmIjoxNjMwNjc0NTc1LCJqdGkiOiJHclA2RTd5ZFlRTDdUS04yIiwiYXNzdW1pbmciOmZhbHNlfQ.zKFWYDSoUajuVq-n-7dlDwjAXvC44weYDBk8Y2C1qn8
+                    user:
+                      id: 40fe8a52-fb71-4bec-89b3-a48f1dc18a50
+                      system_admin: false
+                      name: James Holden
+                      email: James.Holden@example.com
+                      email_verification_sent_at: null
+                      email_verified_at: null
+                      created_at: '2021-09-03 13:09:34'
+                      updated_at: '2021-09-03 13:09:34'
+                      is_default: false
+                      is_api_key: false
+                      deleted_at: null
+                      gravatar: //www.gravatar.com/avatar/3bb87cb08d869fcf9a21748861bcec08
+                      team_role: admin
+                      team_admin: true
+                      team_enabled: true
+                      merchant_options: []
+                      acknowledgments:
+                        setPassword: true
+                      options: null
+                      brand: fattmerchant
+                    merchant:
+                      id: 7fe97e0f-2e7a-4817-872b-6eb86eea842c
+                      mid: ''
+                      status: PENDING
+                      subdomain: ''
+                      company_name: Stax
+                      display_name: Fattmerchant
+                      contact_name: Fattmerchant
+                      contact_email: info2@fattmerchant.com
+                      contact_phone: '8555503288'
+                      address_1: 25 Wall Street
+                      address_2: Suite 1
+                      address_city: Orlando
+                      address_state: FL
+                      address_zip: '32801'
+                      hosted_payments_token: Fattmerchant-c3073a83d4a2
+                      currency:
+                      - USD
+                      plan:
+                        id: 42392492-ee45-41ea-8c43-a40a41ab1ba2
+                        merchant_id: 7fe97e0f-2e7a-4817-872b-6eb86eea842c
+                        user_id: 40fe8a52-fb71-4bec-89b3-a48f1dc18a50
+                        name: test
+                        created_at: '2021-09-03 13:09:34'
+                        updated_at: '2021-09-03 13:09:34'
+                      options: null
+                      gateway_type: null
+                      processor: ''
+                      partner: null
+                      product_type: Other
+                      is_enterprise: false
+                      is_payfac: true
+                      is_sandbox: false
+                      is_test_mode: 0
+                      fm_billing_schedule_id: null
+                      fee_reconciliation_payment_method_id: null
+                      welcome_email_sent_at: null
+                      created_at: '2021-09-03 13:09:34'
+                      updated_at: '2021-09-03 13:09:34'
+                      deleted_at: null
+                      brand: fattmerchant
+                      risk_hold: false
+                      branding: null
+                      allow_ach: false
+                      is_portal: false
+                      is_flat_rate: true
+                      allow_credits: false
+                      allow_terminal: false
+                      gateways: []
+                      is_surcharge_enabled: false
+                      is_trust: false
+                      underwriting_status: null
+                      underwriting_substatuses: null
+                      allow_cnp_digital_wallet: false
+                      registration:
+                        merchant_id: 7fe97e0f-2e7a-4817-872b-6eb86eea842c
+                        user_id: 40fe8a52-fb71-4bec-89b3-a48f1dc18a50
+                        electronic_signature: null
+                        credit_inquiry_electronic_signature: null
+                        application_agreed_at: null
+                        countersigned_at: null
+                        signature_status: null
+                        application_status: null
+                        underwriting_status: null
+                        underwriting_substatuses: null
+                        underwriting_note: null
+                        meta:
+                          owner_citizenship: ALA
+                          ownership_percentage: '40'
+                          representatives:
+                          - title: king supreme ceo
+                            first_name: David
+                            last_name: Sandra
+                            email: davesandra344@gmail.com
+                            ownership_percentage: '40'
+                            phone: '5555555555'
+                            address_1: 100 S Orange Ave
+                            address_2: Suite 400
+                            address_city: Orlando
+                            address_state: CA
+                            address_zip: '55555'
+                            citizenship: ALB
+                            ssn: '123445666'
+                            type: Beneficial Owner
+                        first_name: null
+                        last_name: null
+                        email: null
+                        title: null
+                        company_type: null
+                        entity_ownership_type: PRIVATE
+                        phone_number: null
+                        source: null
+                        promo_code: null
+                        ref_code: null
+                        plan: null
+                        fm_pc_name: null
+                        business_legal_name: Consulting by Post
+                        business_dba: null
+                        business_website: null
+                        business_fax: null
+                        business_email: null
+                        business_address_1: null
+                        business_address_2: null
+                        business_address_city: null
+                        business_address_state: null
+                        business_address_zip: null
+                        business_address_country: null
+                        owner_address_1: ''
+                        owner_address_2: ''
+                        owner_address_city: ''
+                        owner_address_state: ''
+                        owner_address_zip: ''
+                        owner_address_country: ''
+                        user_ip: null
+                        user_ssn: null
+                        user_dob: null
+                        business_phone_number: null
+                        business_tax_id: null
+                        business_open_date: null
+                        job_title: null
+                        refund_policy: null
+                        reason_for_applying: null
+                        service_you_provide: null
+                        annual_volume: null
+                        avg_trans_size: null
+                        highest_trans_amount: null
+                        card_present_percent: null
+                        card_not_present_percent: null
+                        card_swiped_percent: null
+                        moto_percent: null
+                        b2b_percent: null
+                        bank_routing_number: null
+                        bank_account_number: null
+                        bank_account_owner_name: null
+                        secondary_bank_routing_number: null
+                        secondary_bank_account_number: null
+                        secondary_bank_account_owner_name: null
+                        secondary_bank_account_type: null
+                        secondary_bank_account_purpose: null
+                        principal_owners_name: null
+                        chosen_plan: null
+                        chosen_processing_method: null
+                        plan_txamnt: '.15'
+                        plan_dcamnt: '2.99'
+                        plan_ach_cap: '9999'
+                        plan_ach_txamnt: '0'
+                        plan_ach_dcamnt: '1.00'
+                        plan_nabu: null
+                        referred_by: null
+                        created_at: '2021-09-03 13:09:34'
+                        updated_at: '2021-09-03 13:09:35'
+                        deleted_at: null
+                        paper_statement: false
+                        num_of_locs: ''
+                        addl_loc: false
+                        addl_loc_main_mid: ''
+                        internet: ''
+                        international: ''
+                        mcc: ''
+                        proc_change: ''
+                        seasonal_flag: false
+                        seasonal_months: ''
+                        bus_type: ''
+                        sub_bus_type: ''
+                        special_proc: ''
+                        pos_software_publisher: ''
+                        pos_software_name: ''
+                        pos_software_version: ''
+                        site_inspection: ''
+                        location_type: ''
+                        network: ''
+                        bank_account_type: ''
+                        mcc_addl_desc: ''
+                        business_location_address_1: null
+                        business_location_address_2: null
+                        business_location_address_city: null
+                        business_location_address_country: null
+                        business_location_address_state: null
+                        business_location_address_zip: null
+                        business_location_email: null
+                        business_location_fax: null
+                        business_location_phone_number: null
+                        note: null
+                        credit_qual_disc_rate: '2.99'
+                        credit_qual_trans_fee: '.15'
+                        credit_mid_disc_rate: '2.99'
+                        credit_mid_trans_fee: '.15'
+                        credit_non_disc_rate: '2.99'
+                        credit_non_trans_fee: '.15'
+                        amex_qual_disc_rate: '3.5'
+                        amex_qual_trans_fee: '.15'
+                        amex_mid_disc_rate: '3.5'
+                        amex_mid_trans_fee: '.15'
+                        amex_non_disc_rate: '3.5'
+                        amex_non_trans_fee: '.15'
+                        is_flat_rate: true
+                        pricing_plan: finix
+                        finix_merchant_id: ''
+                        finix_identity_id: ''
+                        annual_gross_ach_revenue: null
+                        avg_ach_transaction: null
+                        largest_ach_transaction: null
+                        cp_transaction_rate: '2.99'
+                        cp_per_item_rate: '.15'
+                        cp_amex_rate: '3.5'
+                        cp_amex_per_item_rate: '.15'
+                        warnings: null
+                        merchant_autoverification_authorization: null
+                        chargeback_percent: null
+                        annual_gross_shopping_cart_revenue: null
+                        avg_shopping_cart_transaction: null
+                        largest_shopping_cart_transaction: null
+                        shopping_cart_card_present_percent: null
+                        shopping_cart_b2b_percent: null
+                        shopping_cart_international: null
+                        cp_credit_surcharge_rate: null
+                        cnp_credit_surcharge_rate: null
+                        cp_debit_trans_fee: null
+                        cnp_debit_trans_fee: null
+                        cp_debit_discount_rate: null
+                        cnp_debit_discount_rate: null
+                        files: []
+                        brand: fattmerchant
+                        underwriting_substatus: null
+                        empty_required_fields:
+                        - business_dba
+                        - business_address_1
+                        - business_address_city
+                        - business_address_state
+                        - business_address_zip
+                        - business_tax_id
+                        - business_open_date
+                        - service_you_provide
+                        - annual_volume
+                        - avg_trans_size
+                        - highest_trans_amount
+                        - card_present_percent
+                        - b2b_percent
+                        - international
+                        - refund_policy
+                        - bank_account_owner_name
+                        - bank_routing_number
+                        - bank_account_number
+                        - title
+                        - user_dob
+                        - user_ssn
+                        - first_name
+                        - last_name
+                        - email
+                        - phone_number
+                        - owner_address_1
+                        - owner_address_city
+                        - owner_address_state
+                        - owner_address_zip
+                        latest_file_uploaded_at: null
+                    registration:
+                      business_legal_name: Consulting by Post
+                      pricing_plan: test-pricing
+                      user_id: 40fe8a52-fb71-4bec-89b3-a48f1dc18a50
+                      merchant_id: 7fe97e0f-2e7a-4817-872b-6eb86eea842c
+                      updated_at: '2021-09-03 13:09:35'
+                      created_at: '2021-09-03 13:09:34'
+                      plan_txamnt: '.15'
+                      cp_per_item_rate: '.15'
+                      credit_mid_trans_fee: '.15'
+                      credit_non_trans_fee: '.15'
+                      credit_qual_trans_fee: '.15'
+                      amex_qual_trans_fee: '.15'
+                      amex_mid_trans_fee: '.15'
+                      amex_non_trans_fee: '.15'
+                      cp_amex_per_item_rate: '.15'
+                      plan_ach_txamnt: '0'
+                      plan_ach_cap: '9999'
+                      plan_dcamnt: '2.99'
+                      cp_transaction_rate: '2.99'
+                      credit_qual_disc_rate: '2.99'
+                      credit_mid_disc_rate: '2.99'
+                      credit_non_disc_rate: '2.99'
+                      cp_amex_rate: '3.5'
+                      amex_qual_disc_rate: '3.5'
+                      amex_mid_disc_rate: '3.5'
+                      amex_non_disc_rate: '3.5'
+                      plan_ach_dcamnt: '1.00'
+                      is_flat_rate: true
+                      cp_credit_surcharge_rate: null
+                      cnp_credit_surcharge_rate: null
+                      cp_debit_trans_fee: null
+                      cnp_debit_trans_fee: null
+                      cp_debit_discount_rate: null
+                      cnp_debit_discount_rate: null
+                      files: []
+                      brand: fattmerchant
+                      underwriting_substatus: null
+                      empty_required_fields:
+                      - business_dba
+                      - business_address_1
+                      - business_address_city
+                      - business_address_state
+                      - business_address_zip
+                      - business_tax_id
+                      - business_open_date
+                      - service_you_provide
+                      - annual_volume
+                      - avg_trans_size
+                      - highest_trans_amount
+                      - card_present_percent
+                      - b2b_percent
+                      - international
+                      - refund_policy
+                      - bank_account_owner_name
+                      - bank_routing_number
+                      - bank_account_number
+                      - title
+                      - user_dob
+                      - user_ssn
+                      - first_name
+                      - last_name
+                      - email
+                      - phone_number
+                      - owner_address_1
+                      - owner_address_city
+                      - owner_address_state
+                      - owner_address_zip
+                      latest_file_uploaded_at: null
+                      merchant:
+                        id: 7fe97e0f-2e7a-4817-872b-6eb86eea842c
+                        mid: ''
+                        status: PENDING
+                        subdomain: ''
+                        company_name: Fattmerchant
+                        display_name: Fattmerchant
+                        contact_name: Fattmerchant
+                        contact_email: info2@fattmerchant.com
+                        contact_phone: '8555503288'
+                        address_1: 25 Wall Street
+                        address_2: Suite 1
+                        address_city: Orlando
+                        address_state: FL
+                        address_zip: '32801'
+                        hosted_payments_token: Fattmerchant-c3073a83d4a2
+                        currency:
+                        - USD
+                        plan:
+                          id: 42392492-ee45-41ea-8c43-a40a41ab1ba2
+                          merchant_id: 7fe97e0f-2e7a-4817-872b-6eb86eea842c
+                          user_id: 40fe8a52-fb71-4bec-89b3-a48f1dc18a50
+                          name: test
+                          created_at: '2021-09-03 13:09:34'
+                          updated_at: '2021-09-03 13:09:34'
+                        options: null
+                        notes: ''
+                        gateway_type: null
+                        vendor_keys: null
+                        processor: ''
+                        partner: null
+                        product_type: Other
+                        is_enterprise: false
+                        is_payfac: true
+                        is_sandbox: false
+                        is_test_mode: 0
+                        fm_billing_schedule_id: null
+                        fee_reconciliation_payment_method_id: null
+                        welcome_email_sent_at: null
+                        created_at: '2021-09-03 13:09:34'
+                        updated_at: '2021-09-03 13:09:34'
+                        deleted_at: null
+                        brand: fattmerchant
+                        risk_hold: false
+                        branding: null
+                        allow_ach: false
+                        is_portal: false
+                        is_flat_rate: true
+                        allow_credits: false
+                        allow_terminal: false
+                        gateways: []
+                        is_surcharge_enabled: false
+                        is_trust: false
+                        underwriting_status: null
+                        underwriting_substatuses: null
+                        allow_cnp_digital_wallet: false
+                      user:
+                        id: 40fe8a52-fb71-4bec-89b3-a48f1dc18a50
+                        system_admin: false
+                        name: James Holden
+                        email: James.Holden@example.com
+                        email_verification_sent_at: null
+                        email_verified_at: null
+                        is_api_key: false
+                        options: null
+                        acknowledgments:
+                          setPassword: true
+                        created_at: '2021-09-03 13:09:34'
+                        updated_at: '2021-09-03 13:09:34'
+                        deleted_at: null
+                        brand: fattmerchant
+                        gravatar: //www.gravatar.com/avatar/3bb87cb08d869fcf9a21748861bcec08
+                        team_admin: null
+                        team_enabled: null
+                        team_role: null
+                        merchant_options: []
+                        is_default: false
+                        brands:
+                        - fattmerchant
+                    message: User James.Holden@example.com created, linked to merchant 7fe97e0f-2e7a-4817-872b-6eb86eea842c
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJnb2RVc2VyIjpudWxsLCJtZXJjaGFudCI6IjdmZTk3ZTBmLTJlN2EtNDgxNy04NzJiLTZlYjg2ZWVhODQyYyIsInN1YiI6IjQwZmU4YTUyLWZiNzEtNGJlYy04OZZZZZZZZZZGMxOGE1MCIsImJyYW5kIjoiZmF0dG1lcmNoYW50ZZZZZZZZZZZZZZbGwiLCJpYXQiOjE2MzA2NzQ1NzUsImV4cCI6MTYzMTAyMDE3NSwibmJmIjoxNjMwNjc0NTc1LCJqdGkiOiJHclA2RTd5ZFlRTDdUS04yIiwiYXNzdW1pbmciOmZhbHNlfQ.zKFWYDSoUajuVq-n-7dlDwjAXvC44weYDBk8Y2C1qn8
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 40fe8a52-fb71-4bec-89b3-a48f1dc18a50
+                      system_admin:
+                        type: boolean
+                        example: false
+                        default: true
+                      name:
+                        type: string
+                        example: James Holden
+                      email:
+                        type: string
+                        example: James.Holden@example.com
+                  merchant:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 7fe97e0f-2e7a-4817-872b-6eb86eea842c
+                      status:
+                        type: string
+                        example: PENDING
+                      company_name:
+                        type: string
+                        example: Stax
+                  registration:
+                    type: object
+                    properties:
+                      business_legal_name:
+                        type: string
+                        example: Consulting by Post
+                      pricing_plan:
+                        type: string
+                        example: test-pricing
+                      user_id:
+                        type: string
+                        example: 40fe8a52-fb71-4bec-89b3-a48f1dc18a50
+                      merchant_id:
+                        type: string
+                        example: 7fe97e0f-2e7a-4817-872b-6eb86eea842c
+                  message:
+                    type: string
+                    example: User James.Holden@example.com created, linked to merchant 7fe97e0f-2e7a-4817-872b-6eb86eea842c
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n        \"merchant.company_name\": [\n            \"The merchant.company name field is required when registration.business legal name is not present.\"\n        ],\n        \"merchant.contact_email\": [\n            \"The merchant.contact email field is required.\"\n        ],\n        \"merchant.plan\": [\n            \"The merchant.plan field is required.\"\n        ],\n        \"user.name\": [\n            \"The user.name field is required.\"\n        ],\n        \"user.password\": [\n            \"The user.password field is required.\"\n        ],\n        \"user.email\": [\n            \"The user.email field is required.\"\n        ],\n        \"user.brand\": [\n            \"Existing user brand must match api key brand\"\n        ],\n        \"registration.business_legal_name\": [\n            \"The registration.business legal name field is required when merchant.company name is not present.\"\n        ],\n        \"registration.pricing_plan\": [\n            \"The registration.pricing plan field is required.\"\n        ],\n        \"errors\": [\n            \"You do not have permission to request tokens for other users.\"\n        ]\n    }"
+      security:
+      - PartnerApiKey: []
+      tags:
+      - Admin
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: API key for merchant-level operations. Provides access to merchant-specific endpoints including transactions, payments, customer management, and merchant account settings. This key is scoped to a single merchant account and cannot access partner-level functionality.
+    PartnerApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Partner-level API key with elevated privileges. Grants access to all partner operations including merchant management, portfolio oversight, reporting across multiple merchant accounts, and partner-specific administrative functions. Also provides access to all merchant-level operations for accounts under the partner's management.
+    EphemeralAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Temporary authentication token with limited lifespan. Used for short-term access to specific operations, typically generated for secure one-time actions or time-bounded sessions. Automatically expires after a predefined period for enhanced security.

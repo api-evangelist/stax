@@ -1,0 +1,507 @@
+openapi: 3.2.0
+info:
+  title: stax-api File API
+  version: '0.1'
+servers:
+- url: https://apiprod.fattlabs.com/
+security:
+- ApiKeyAuth: []
+tags:
+- name: File
+paths:
+  /file:
+    post:
+      description: ''
+      operationId: post_file
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              examples:
+                OK:
+                  summary: OK
+                  value:
+                    merchant_id: 55394e80-826a-4e04-bafa-2e2d615209cf
+                    user_id: 0dcb6380-962a-4b9d-b318-81e5625d0316
+                    name: Test Energy Drink Image
+                    tag: generic
+                    id: 497da262-d9b3-4d24-920f-25c9c27522b4
+                    updated_at: '2025-11-20 20:46:05'
+                    created_at: '2025-11-20 20:46:05'
+                    public_url: https://fattpaydocuments.s3.us-west-2.amazonaws.com/generic/497da262-d9b3-4d24-920f-25c9c27522b4.jpg
+                    meta:
+                      filesize_bytes: 7384
+                      filesize: 7.38 kB
+                      extension: jpg
+                      size:
+                        width: 225
+                        height: 225
+                      mime: image/jpeg
+      parameters: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name for the file.
+                tag:
+                  type: string
+                  description: Description to classify the file type (e.g., generic, product-image).
+                file:
+                  type: string
+                  format: binary
+                  description: The pathway to the file being uploaded.
+              required:
+              - name
+              - tag
+              - file
+            examples:
+              New Example:
+                summary: New Example
+                value: 'curl --location ''https://apiprod.fattlabs.com/file'' \
+
+                  --header ''Accept: application/json'' \
+
+                  --header ''Content-Type: application/json'' \
+
+                  --header ''Authorization: Bearer ‘ey…’ \
+
+                  --form ''name="Test Energy Drink Image"'' \
+
+                  --form ''tag="generic"'' \
+
+                  --form ''file=@"/Users/testuser/Downloads/energydrink.jpeg"''}'
+      tags:
+      - File
+      summary: Post file
+      x-summary-source: derived
+    get:
+      description: ''
+      operationId: get_file
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              examples:
+                OK:
+                  summary: OK
+                  value:
+                    current_page: 1
+                    data:
+                    - id: a66bcfb0-8a41-4ef9-99b3-15fe1846bd36
+                      merchant_id: 55394e80-826a-4e04-bafa-2e2d615209cf
+                      user_id: 5aec6f90-69be-48a5-a419-44ff016f364a
+                      name: Screenshot 2025-11-20 at 2.06.58 PM.png
+                      public_url: https://fattpaydocuments.s3.us-west-2.amazonaws.com/a66bcfb0-8a41-4ef9-99b3-15fe1846bd36.png
+                      tag: null
+                      meta:
+                        filesize_bytes: 139295
+                        filesize: 139.3 kB
+                        extension: png
+                        size:
+                          width: 446
+                          height: 496
+                        mime: image/png
+                      created_at: '2025-12-01 19:00:08'
+                      updated_at: '2025-12-01 19:00:08'
+                      deleted_at: null
+                    - id: 864ab716-6277-40d8-aed5-271ff878296d
+                      merchant_id: 55394e80-826a-4e04-bafa-2e2d615209cf
+                      user_id: 5aec6f90-69be-48a5-a419-44ff016f364a
+                      name: ''
+                      public_url: https://fattpaydocuments.s3.us-west-2.amazonaws.com/itemThumbnail/864ab716-6277-40d8-aed5-271ff878296d.png
+                      tag: itemThumbnail
+                      meta:
+                        filesize_bytes: 45272
+                        filesize: 45.27 kB
+                        extension: png
+                        size:
+                          width: 222
+                          height: 223
+                        mime: image/png
+                      created_at: '2025-11-20 21:04:34'
+                      updated_at: '2025-11-20 21:04:34'
+                      deleted_at: null
+                    - id: 497da262-d9b3-4d24-920f-25c9c27522b4
+                      merchant_id: 55394e80-826a-4e04-bafa-2e2d615209cf
+                      user_id: 0dcb6380-962a-4b9d-b318-81e5625d0316
+                      name: Test Energy Drink Image
+                      public_url: https://fattpaydocuments.s3.us-west-2.amazonaws.com/generic/497da262-d9b3-4d24-920f-25c9c27522b4.jpg
+                      tag: generic
+                      meta:
+                        filesize_bytes: 7384
+                        filesize: 7.38 kB
+                        extension: jpg
+                        size:
+                          width: 225
+                          height: 225
+                        mime: image/jpeg
+                      created_at: '2025-11-20 20:46:05'
+                      updated_at: '2025-11-20 20:46:05'
+                      deleted_at: null
+                    first_page_url: http://apiprod.fattlabs.com/file?page=1
+                    from: 1
+                    last_page: 1
+                    last_page_url: http://apiprod.fattlabs.com/file?page=1
+                    links:
+                    - url: null
+                      label: '&laquo; Previous'
+                      active: false
+                    - url: http://apiprod.fattlabs.com/file?page=1
+                      label: '1'
+                      active: true
+                    - url: null
+                      label: Next &raquo;
+                      active: false
+                    next_page_url: null
+                    path: http://apiprod.fattlabs.com/file
+                    per_page: 20
+                    prev_page_url: null
+                    to: 3
+                    total: 3
+      parameters: []
+      tags:
+      - File
+      summary: Get file
+      x-summary-source: derived
+  /file/dispute/{evidenceFileId}:
+    delete:
+      summary: Delete Evidence for Dispute
+      description: This route handles requests to delete a given evidence file.
+      operationId: delete-evidence-for-dispute
+      parameters:
+      - name: evidenceFileId
+        in: path
+        description: A unique identifier for an evidence file.
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"b268c536-ba18-49da-83fa-914511f590f7\",\n  \"merchant_id\": \"merchant1\",\n  \"user_id\": \"user1\",\n  \"name\": \"receipt evidence\",\n  \"path\": \"dispute/b268c536-ba18-49da-83fa-914511f590f7.png\",\n  \"public_url\": \"https://contractors-dev-bucket.s3.us-west-2.amazonaws.com/dispute/b268c536-ba18-49da-83fa-914511f590f7.png\",\n  \"tag\": \"dispute\",\n  \"meta\": {\n    \"filesize_bytes\": 7640,\n    \"filesize\": \"0.08 kB\",\n    \"extension\": \"png\",\n    \"size\": {\n      \"width\": 698,\n      \"height\": 165\n    },\n    \"mime\": \"image/png\"\n  },\n  \"created_at\": \"2020-01-24 18:46:49\",\n  \"updated_at\": \"2020-02-11 17:31:03\",\n  \"deleted_at\": \"2020-02-11 17:31:03\"\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: b268c536-ba18-49da-83fa-914511f590f7
+                  merchant_id:
+                    type: string
+                    example: merchant1
+                  user_id:
+                    type: string
+                    example: user1
+                  name:
+                    type: string
+                    example: receipt evidence
+                  path:
+                    type: string
+                    example: dispute/b268c536-ba18-49da-83fa-914511f590f7.png
+                  public_url:
+                    type: string
+                    example: https://contractors-dev-bucket.s3.us-west-2.amazonaws.com/dispute/b268c536-ba18-49da-83fa-914511f590f7.png
+                  tag:
+                    type: string
+                    example: dispute
+                  meta:
+                    type: object
+                    properties:
+                      filesize_bytes:
+                        type: integer
+                        example: 7640
+                        default: 0
+                      filesize:
+                        type: string
+                        example: 0.08 kB
+                      extension:
+                        type: string
+                        example: png
+                      size:
+                        type: object
+                        properties:
+                          width:
+                            type: integer
+                            example: 698
+                            default: 0
+                          height:
+                            type: integer
+                            example: 165
+                            default: 0
+                      mime:
+                        type: string
+                        example: image/png
+                  created_at:
+                    type: string
+                    example: '2020-01-24 18:46:49'
+                  updated_at:
+                    type: string
+                    example: '2020-02-11 17:31:03'
+                  deleted_at:
+                    type: string
+                    example: '2020-02-11 17:31:03'
+      deprecated: false
+      tags:
+      - File
+  /file/{id}:
+    put:
+      description: ''
+      operationId: put_file{id}
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              examples:
+                OK:
+                  summary: OK
+                  value:
+                    id: a66bcfb0-8a41-4ef9-99b3-15fe1846bd36
+                    merchant_id: 55394e80-826a-4e04-bafa-2e2d615209cf
+                    user_id: 5aec6f90-69be-48a5-a419-44ff016f364a
+                    name: FILENAMEEDIT
+                    public_url: https://fattpaydocuments.s3.us-west-2.amazonaws.com/a66bcfb0-8a41-4ef9-99b3-15fe1846bd36.png
+                    tag: null
+                    meta:
+                      filesize_bytes: 139295
+                      filesize: 139.3 kB
+                      extension: png
+                      size:
+                        width: 446
+                        height: 496
+                      mime: image/png
+                    created_at: '2025-12-01 19:00:08'
+                    updated_at: '2025-12-03 21:30:36'
+                    deleted_at: null
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: ID of the file to edit.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name of the file.
+                tag:
+                  type: string
+                  description: Description of the the file, typically a type like thinbnail or product-closeup, etc.)
+                file:
+                  type: string
+                  format: binary
+                  description: The pathway to the file being uploaded.
+      tags:
+      - File
+      summary: Put file{id}
+      x-summary-source: derived
+    get:
+      description: ''
+      operationId: get_file{id}
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  tag:
+                    type: string
+              examples:
+                OK:
+                  summary: OK
+                  value:
+                    id: a66bcfb0-8a41-4ef9-99b3-15fe1846bd36
+                    merchant_id: 55394e80-826a-4e04-bafa-2e2d615209cf
+                    user_id: 5aec6f90-69be-48a5-a419-44ff016f364a
+                    name: FILENAMEEDIT
+                    public_url: https://fattpaydocuments.s3.us-west-2.amazonaws.com/a66bcfb0-8a41-4ef9-99b3-15fe1846bd36.png
+                    tag: null
+                    meta:
+                      filesize_bytes: 139295
+                      filesize: 139.3 kB
+                      extension: png
+                      size:
+                        width: 446
+                        height: 496
+                      mime: image/png
+                    created_at: '2025-12-01 19:00:08'
+                    updated_at: '2025-12-03 21:30:36'
+                    deleted_at: null
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: The file ID to retrieve information.
+      tags:
+      - File
+      summary: Get file{id}
+      x-summary-source: derived
+  /file/{tag}:
+    get:
+      description: ''
+      operationId: get_file{tag}
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  tag:
+                    type: string
+              examples:
+                OK:
+                  summary: OK
+                  value: "{   \"generic\",\n    \"itemThumbnail\",\n null\n)"
+      parameters:
+      - in: path
+        name: tag
+        schema:
+          type: string
+        required: true
+        description: The tag of the file to retrieve.
+      tags:
+      - File
+      summary: Get file{tag}
+      x-summary-source: derived
+  /file/dispute:
+    post:
+      summary: Upload Evidence for Dispute
+      description: This route handles requests to upload evidence files associated with a merchant's dispute.
+      operationId: upload-evidence-for-dispute
+      parameters: []
+      responses:
+        '201':
+          description: '201'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"merchant_id\": \"merchant1\",\n  \"user_id\": \"user1\",\n  \"name\": \"receipt evidence\",\n  \"tag\": \"dispute\",\n  \"id\": \"b268c536-ba18-49da-83fa-914511f590f7\",\n  \"updated_at\": \"2020-01-24 18:46:49\",\n  \"created_at\": \"2020-01-24 18:46:48\",\n  \"path\": \"dispute/b268c536-ba18-49da-83fa-914511f590f7.png\",\n  \"public_url\": \"https://contractors-dev-bucket.s3.us-west-2.amazonaws.com/dispute/b268c536-ba18-49da-83fa-914511f590f7.png\",\n  \"meta\": {\n    \"filesize_bytes\": 7640,\n    \"filesize\": \"0.08 kB\",\n    \"extension\": \"png\",\n    \"size\": {\n      \"width\": 698,\n      \"height\": 165\n    },\n    \"mime\": \"image/png\"\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  merchant_id:
+                    type: string
+                    example: merchant1
+                  user_id:
+                    type: string
+                    example: user1
+                  name:
+                    type: string
+                    example: receipt evidence
+                  tag:
+                    type: string
+                    example: dispute
+                  id:
+                    type: string
+                    example: b268c536-ba18-49da-83fa-914511f590f7
+                  updated_at:
+                    type: string
+                    example: '2020-01-24 18:46:49'
+                  created_at:
+                    type: string
+                    example: '2020-01-24 18:46:48'
+                  path:
+                    type: string
+                    example: dispute/b268c536-ba18-49da-83fa-914511f590f7.png
+                  public_url:
+                    type: string
+                    example: https://contractors-dev-bucket.s3.us-west-2.amazonaws.com/dispute/b268c536-ba18-49da-83fa-914511f590f7.png
+                  meta:
+                    type: object
+                    properties:
+                      filesize_bytes:
+                        type: integer
+                        example: 7640
+                        default: 0
+                      filesize:
+                        type: string
+                        example: 0.08 kB
+                      extension:
+                        type: string
+                        example: png
+                      size:
+                        type: object
+                        properties:
+                          width:
+                            type: integer
+                            example: 698
+                            default: 0
+                          height:
+                            type: integer
+                            example: 165
+                            default: 0
+                      mime:
+                        type: string
+                        example: image/png
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n    \"error\": ['This dispute has passed the respond by date. No new documents can be uploaded at this time.'],\n}"
+      deprecated: false
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                dispute_id:
+                  type: string
+                  description: The id of the dispute to associate with this evidence file.
+                name:
+                  type: string
+                  description: The name value to assign to this evidence file.
+                file:
+                  type: string
+                  format: binary
+                  description: 'The evidence file. It must be less than 10MB, must have one of the following extensions: .jpeg, .pdf, .png, or .tiff.'
+              required:
+              - dispute_id
+              - name
+              - file
+      tags:
+      - File
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: API key for merchant-level operations. Provides access to merchant-specific endpoints including transactions, payments, customer management, and merchant account settings. This key is scoped to a single merchant account and cannot access partner-level functionality.
+    PartnerApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Partner-level API key with elevated privileges. Grants access to all partner operations including merchant management, portfolio oversight, reporting across multiple merchant accounts, and partner-specific administrative functions. Also provides access to all merchant-level operations for accounts under the partner's management.
+    EphemeralAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Temporary authentication token with limited lifespan. Used for short-term access to specific operations, typically generated for secure one-time actions or time-bounded sessions. Automatically expires after a predefined period for enhanced security.

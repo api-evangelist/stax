@@ -1,0 +1,1053 @@
+openapi: 3.2.0
+info:
+  title: stax-api Customer API
+  version: '0.1'
+servers:
+- url: https://apiprod.fattlabs.com/
+security:
+- ApiKeyAuth: []
+tags:
+- name: Customer
+paths:
+  /customer:
+    post:
+      summary: Create Customer
+      description: Create and store customer records tied to their merchant accounts.
+      operationId: create-customer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstname:
+                  type: string
+                  description: 'Max: 255. Required if no lastname, email, company supplied'
+                lastname:
+                  type: string
+                  description: 'Max: 255. Required if no firstname, email, company supplied'
+                email:
+                  type: string
+                  description: 'Max: 255. Required if no firstname, lastname, company supplied'
+                company:
+                  type: string
+                  description: 'Max: 255. Required if no firstname, lastname, email supplied'
+                phone:
+                  type: string
+                  description: 'Matching regex: /[0-9]{10,15}/'
+                address_1:
+                  type: string
+                  description: 'Max: 255'
+                address_2:
+                  type: string
+                  description: 'Max: 255'
+                address_city:
+                  type: string
+                  description: 'Max: 255'
+                address_state:
+                  type: string
+                  description: 'Max: 2 Use the two-letter state abbreviation.'
+                address_zip:
+                  type: string
+                  description: 'Max: 16'
+                address_country:
+                  type: string
+                  description: 'Max: 3'
+                notes:
+                  type: string
+                  description: 'Max: 21844.  For internal notes only; not visible to customers in invoices or communications.'
+                reference:
+                  type: string
+                  description: 'Max: 255. This field is for the merchant''s internal use.'
+                files:
+                  type: array
+                  description: Array of strings(50) where each index is a valid file_id
+                  items:
+                    type: string
+                cc_emails:
+                  type: array
+                  description: Array of strings(255) where each index is a valid email address.
+                  items:
+                    type: string
+                cc_sms:
+                  type: array
+                  description: Array of strings(255) where each item is a valid phone number.
+                  items:
+                    type: string
+                allow_invoice_credit_card_payments:
+                  type: boolean
+                options:
+                  type: object
+                  description: Additional customer options such as custom fields
+                  properties:
+                    customer_custom_fields:
+                      type: array
+                      items:
+                        properties:
+                          id:
+                            type: string
+                            description: Unique identifier for the custom field
+                          name:
+                            type: string
+                            description: Display name of the custom field
+                          placeholder:
+                            type: string
+                            description: Placeholder text for the field (can be empty)
+                          required:
+                            type: boolean
+                            description: Whether the field is required
+                          visible:
+                            type: boolean
+                            description: Whether the field is visible in the UI
+                          type:
+                            type: string
+                            enum:
+                            - text
+                            description: The data type of the field value
+                          value:
+                            type: string
+                            description: The actual value stored in the custom field
+                        type: object
+                      description: An array of custom field objects that contain additional customer information.
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value:
+                    id: 59327746-fbca-4fb6-adf0-e88c99245548
+                    firstname: John
+                    lastname: Smith
+                    company: ABC INC
+                    email: contact@example.com
+                    cc_emails:
+                    - demo@abc.com
+                    phone: '1234567898'
+                    address_1: 123 Rite Way
+                    address_2: Unit 12
+                    address_city: Orlando
+                    address_state: FL
+                    address_zip: '32801'
+                    address_country: USA
+                    notes: null
+                    reference: BARTLE
+                    options:
+                      customer_custom_fields:
+                      - id: 95b5-fce4-08e6-e60b-c26e
+                        name: Intenal ID
+                        placeholder: Add an internal tracking ID
+                        required: false
+                        visible: true
+                        type: text
+                        value: '0123456'
+                    created_at: '2017-05-08 19:13:41'
+                    updated_at: '2017-05-08 19:13:41'
+                    deleted_at: null
+                    gravatar: //www.gravatar.com/avatar/45357c125af15b6df8864a71a653bea2
+                    has_address: true
+                    missing_address_components: []
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 59327746-fbca-4fb6-adf0-e88c99245548
+                  firstname:
+                    type: string
+                    example: John
+                  lastname:
+                    type: string
+                    example: Smith
+                  company:
+                    type: string
+                    example: ABC INC
+                  email:
+                    type: string
+                    example: contact@example.com
+                  cc_emails:
+                    type: array
+                    items:
+                      type: string
+                      example: demo@abc.com
+                  phone:
+                    type: string
+                    example: '1234567898'
+                  address_1:
+                    type: string
+                    example: 123 Rite Way
+                  address_2:
+                    type: string
+                    example: Unit 12
+                  address_city:
+                    type: string
+                    example: Orlando
+                  address_state:
+                    type: string
+                    example: FL
+                  address_zip:
+                    type: string
+                    example: '32801'
+                  address_country:
+                    type: string
+                    example: USA
+                  notes: {}
+                  reference:
+                    type: string
+                    example: BARTLE
+                  options: {}
+                  created_at:
+                    type: string
+                    example: '2017-05-08 19:13:41'
+                  updated_at:
+                    type: string
+                    example: '2017-05-08 19:13:41'
+                  deleted_at: {}
+                  gravatar:
+                    type: string
+                    example: //www.gravatar.com/avatar/45357c125af15b6df8864a71a653bea2
+                  has_address:
+                    type: boolean
+                    example: true
+                    default: true
+                  missing_address_components:
+                    type: array
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"firstname\": [\n    \"The firstname field is required when none of lastname / email / company are present.\"\n  ],\n  \"lastname\": [\n    \"The lastname field is required when none of firstname / email / company are present.\"\n  ],\n  \"email\": [\n    \"The email field is required when none of firstname / lastname / company are present.\"\n  ],\n  \"company\": [\n    \"The company field is required when none of firstname / lastname / email are present.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  firstname:
+                    type: array
+                    items:
+                      type: string
+                      example: The firstname field is required when none of lastname / email / company are present.
+                  lastname:
+                    type: array
+                    items:
+                      type: string
+                      example: The lastname field is required when none of firstname / email / company are present.
+                  email:
+                    type: array
+                    items:
+                      type: string
+                      example: The email field is required when none of firstname / lastname / company are present.
+                  company:
+                    type: array
+                    items:
+                      type: string
+                      example: The company field is required when none of firstname / lastname / email are present.
+      tags:
+      - Customer
+    get:
+      summary: Find all Customer
+      description: Retrieve a list of customers associated with a merchant's account.
+      operationId: find-all-customers
+      parameters:
+      - name: firstname
+        in: query
+        description: 'Max: 255. Required if no lastname, email, company supplied'
+        schema:
+          type: string
+      - name: lastname
+        in: query
+        description: 'Max: 255. Required if no firstname, email, company supplied'
+        schema:
+          type: string
+      - name: email
+        in: query
+        description: 'Max: 255. Required if no firstname, lastname, company supplied'
+        schema:
+          type: string
+      - name: company
+        in: query
+        description: 'Max: 255. Required if no firstname, lastname, email supplied'
+        schema:
+          type: string
+      - name: phone
+        in: query
+        description: 'Matching regex: /[0-9]{10,15}/'
+        schema:
+          type: string
+      - name: address_1
+        in: query
+        description: 'Max: 255'
+        schema:
+          type: string
+      - name: address_2
+        in: query
+        description: 'Max: 255'
+        schema:
+          type: string
+      - name: address_city
+        in: query
+        description: 'Max: 255'
+        schema:
+          type: string
+      - name: address_state
+        in: query
+        description: 'Max: 2'
+        schema:
+          type: string
+      - name: address_zip
+        in: query
+        description: 'Max: 16'
+        schema:
+          type: string
+      - name: address_country
+        in: query
+        description: 'Max: 3'
+        schema:
+          type: string
+      - name: notes
+        in: query
+        description: 'Max: 21844.  For internal notes only; not visible to customers in invoices or communications.'
+        schema:
+          type: string
+      - name: reference
+        in: query
+        description: 'Max: 255. This field is for the merchant''s internal use.'
+        schema:
+          type: string
+      - name: files
+        in: query
+        description: Array of strings(50) where each index is a valid file_id
+        schema:
+          type: array
+          items:
+            type: string
+      - name: cc_emails
+        in: query
+        description: Array of strings(255) where each index is a valid email address
+        schema:
+          type: array
+          items:
+            type: string
+      - name: cc_sms
+        in: query
+        description: Array of strings(255) where each index is a valid email address
+        schema:
+          type: array
+          items:
+            type: string
+      - name: allow_invoice_credit_card_payments
+        in: query
+        schema:
+          type: boolean
+      - name: keywords[]
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"total\": 2,\n  \"per_page\": 50,\n  \"current_page\": 1,\n  \"last_page\": 1,\n  \"next_page_url\": null,\n  \"prev_page_url\": null,\n  \"from\": 1,\n  \"to\": 2,\n  \"data\": [\n    {\n      \"id\": \"5ff4e048-c9f3-4993-81be-f7253d132c19\",\n      \"firstname\": \"John\",\n      \"lastname\": \"Smith\",\n      \"company\": \"ABC INC\",\n      \"email\": \"john@abc.com\",\n      \"cc_emails\": null,\n      \"phone\": \"1234567898\",\n      \"address_1\": \"123 Rite Way\",\n      \"address_2\": \"Unit 12\",\n      \"address_city\": \"Orlando\",\n      \"address_state\": \"FL\",\n      \"address_zip\": \"32801\",\n      \"address_country\": \"USA\",\n      \"notes\": \"\",\n      \"reference\": \"\",\n      \"options\": null,\n      \"created_at\": \"2016-04-26 13:52:10\",\n      \"updated_at\": \"2016-04-26 13:52:10\",\n      \"deleted_at\": null,\n      \"gravatar\": \"//www.gravatar.com/avatar/144fa42eb34883ecb00cbc3f81a060a1\",\n      \"has_address\": true,\n      \"missing_address_components\": []\n    },\n    {\n      \"id\": \"c20db54e-4078-46d9-9c09-2287612c8840\",\n      \"firstname\": \"John\",\n      \"lastname\": \"Smith\",\n      \"company\": \"ABC INC\",\n      \"email\": \"john@abc.com\",\n      \"cc_emails\": null,\n      \"phone\": \"1234567898\",\n      \"address_1\": \"123 Rite Way\",\n      \"address_2\": \"Unit 12\",\n      \"address_city\": \"Orlando\",\n      \"address_state\": \"FL\",\n      \"address_zip\": \"32801\",\n      \"notes\": \"\",\n      \"reference\": \"\",\n      \"options\": null,\n      \"created_at\": \"2016-04-25 15:24:03\",\n      \"updated_at\": \"2016-04-25 15:24:03\",\n      \"deleted_at\": null,\n      \"gravatar\": \"//www.gravatar.com/avatar/144fa42eb34883ecb00cbc3f81a060a1\",\n      \"has_address\": true,\n      \"missing_address_components\": []\n    }\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 2
+                    default: 0
+                  per_page:
+                    type: integer
+                    example: 50
+                    default: 0
+                  current_page:
+                    type: integer
+                    example: 1
+                    default: 0
+                  last_page:
+                    type: integer
+                    example: 1
+                    default: 0
+                  next_page_url: {}
+                  prev_page_url: {}
+                  from:
+                    type: integer
+                    example: 1
+                    default: 0
+                  to:
+                    type: integer
+                    example: 2
+                    default: 0
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: 5ff4e048-c9f3-4993-81be-f7253d132c19
+                        firstname:
+                          type: string
+                          example: John
+                        lastname:
+                          type: string
+                          example: Smith
+                        company:
+                          type: string
+                          example: ABC INC
+                        email:
+                          type: string
+                          example: john@abc.com
+                        cc_emails: {}
+                        phone:
+                          type: string
+                          example: '1234567898'
+                        address_1:
+                          type: string
+                          example: 123 Rite Way
+                        address_2:
+                          type: string
+                          example: Unit 12
+                        address_city:
+                          type: string
+                          example: Orlando
+                        address_state:
+                          type: string
+                          example: FL
+                        address_zip:
+                          type: string
+                          example: '32801'
+                        address_country:
+                          type: string
+                          example: USA
+                        notes:
+                          type: string
+                          example: ''
+                        reference:
+                          type: string
+                          example: ''
+                        options: {}
+                        created_at:
+                          type: string
+                          example: '2016-04-26 13:52:10'
+                        updated_at:
+                          type: string
+                          example: '2016-04-26 13:52:10'
+                        deleted_at: {}
+                        gravatar:
+                          type: string
+                          example: //www.gravatar.com/avatar/144fa42eb34883ecb00cbc3f81a060a1
+                        has_address:
+                          type: boolean
+                          example: true
+                          default: true
+                        missing_address_components:
+                          type: array
+      deprecated: false
+      tags:
+      - Customer
+  /customer/{id}:
+    delete:
+      summary: Delete a Customer
+      description: To soft delete a customer
+      operationId: delete-a-customer
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n  \"firstname\": \"John\",\n  \"lastname\": \"Smith\",\n  \"company\": \"ABC INC\",\n  \"email\": \"demo@abc.com\",\n  \"cc_emails\": [\n    \"demo1@abc.com\",\n    \"demo2@abc.com\"\n  ],\n  \"phone\": \"1234567898\",\n  \"address_1\": \"123 Rite Way\",\n  \"address_2\": \"Unit 12\",\n  \"address_city\": \"Orlando\",\n  \"address_state\": \"FL\",\n  \"address_zip\": \"32801\",\n  \"address_country\": \"USA\",\n  \"notes\": null,\n  \"reference\": \"BARTLE\",\n  \"options\": null,\n  \"created_at\": \"2017-05-08 19:22:51\",\n  \"updated_at\": \"2017-05-08 19:23:46\",\n  \"deleted_at\": \"2020-03-29 15:46:00\",\n  \"gravatar\": \"//www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061\",\n  \"has_address\": true,\n  \"missing_address_components\": []\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: d45ee88c-8b27-4be8-8d81-77dda1b81826
+                  firstname:
+                    type: string
+                    example: John
+                  lastname:
+                    type: string
+                    example: Smith
+                  company:
+                    type: string
+                    example: ABC INC
+                  email:
+                    type: string
+                    example: demo@abc.com
+                  cc_emails:
+                    type: array
+                    items:
+                      type: string
+                      example: demo1@abc.com
+                  phone:
+                    type: string
+                    example: '1234567898'
+                  address_1:
+                    type: string
+                    example: 123 Rite Way
+                  address_2:
+                    type: string
+                    example: Unit 12
+                  address_city:
+                    type: string
+                    example: Orlando
+                  address_state:
+                    type: string
+                    example: FL
+                  address_zip:
+                    type: string
+                    example: '32801'
+                  address_country:
+                    type: string
+                    example: USA
+                  notes: {}
+                  reference:
+                    type: string
+                    example: BARTLE
+                  options: {}
+                  created_at:
+                    type: string
+                    example: '2017-05-08 19:22:51'
+                  updated_at:
+                    type: string
+                    example: '2017-05-08 19:23:46'
+                  deleted_at:
+                    type: string
+                    example: '2020-03-29 15:46:00'
+                  gravatar:
+                    type: string
+                    example: //www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061
+                  has_address:
+                    type: boolean
+                    example: true
+                    default: true
+                  missing_address_components:
+                    type: array
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"customer not found\"\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: customer not found
+      deprecated: false
+      tags:
+      - Customer
+    get:
+      summary: Get a Customer's Information
+      description: Retrieves detailed information about a specific customer using their unique ID
+      operationId: get-a-customers-information
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n  \"firstname\": \"John\",\n  \"lastname\": \"Smith\",\n  \"company\": \"ABC INC\",\n  \"email\": \"contact@example.com\",\n  \"cc_emails\": [\n    \"demo@abc.com\"\n  ],\n  \"phone\": \"1234567898\",\n  \"address_1\": \"123 Rite Way\",\n  \"address_2\": \"Unit 12\",\n  \"address_city\": \"Orlando\",\n  \"address_state\": \"FL\",\n  \"address_zip\": \"32801\",\n  \"address_country\": \"USA\",\n  \"notes\": null,\n  \"reference\": \"BARTLE\",\n  \"options\": null,\n  \"created_at\": \"2017-05-08 19:22:51\",\n  \"updated_at\": \"2017-05-08 19:22:51\",\n  \"deleted_at\": null,\n  \"gravatar\": \"//www.gravatar.com/avatar/45357c125af15b6df8864a71a653bea2\",\n  \"has_address\": true,\n  \"missing_address_components\": []\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: d45ee88c-8b27-4be8-8d81-77dda1b81826
+                  firstname:
+                    type: string
+                    example: John
+                  lastname:
+                    type: string
+                    example: Smith
+                  company:
+                    type: string
+                    example: ABC INC
+                  email:
+                    type: string
+                    example: contact@example.com
+                  cc_emails:
+                    type: array
+                    items:
+                      type: string
+                      example: demo@abc.com
+                  phone:
+                    type: string
+                    example: '1234567898'
+                  address_1:
+                    type: string
+                    example: 123 Rite Way
+                  address_2:
+                    type: string
+                    example: Unit 12
+                  address_city:
+                    type: string
+                    example: Orlando
+                  address_state:
+                    type: string
+                    example: FL
+                  address_zip:
+                    type: string
+                    example: '32801'
+                  address_country:
+                    type: string
+                    example: USA
+                  notes: {}
+                  reference:
+                    type: string
+                    example: BARTLE
+                  options: {}
+                  created_at:
+                    type: string
+                    example: '2017-05-08 19:22:51'
+                  updated_at:
+                    type: string
+                    example: '2017-05-08 19:22:51'
+                  deleted_at: {}
+                  gravatar:
+                    type: string
+                    example: //www.gravatar.com/avatar/45357c125af15b6df8864a71a653bea2
+                  has_address:
+                    type: boolean
+                    example: true
+                    default: true
+                  missing_address_components:
+                    type: array
+        '404':
+          description: '404'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"customer not found\"\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: customer not found
+      deprecated: false
+      tags:
+      - Customer
+    put:
+      summary: Update Customer Information
+      description: Modify an existing customer record in your merchant account.
+      operationId: update-customer-info
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n  \"firstname\": \"John\",\n  \"lastname\": \"Smith\",\n  \"company\": \"ABC INC\",\n  \"email\": \"demo@abc.com\",\n  \"cc_emails\": [\n    \"demo1@abc.com\",\n    \"demo2@abc.com\"\n  ],\n  \"phone\": \"1234567898\",\n  \"address_1\": \"123 Rite Way\",\n  \"address_2\": \"Unit 12\",\n  \"address_city\": \"Orlando\",\n  \"address_state\": \"FL\",\n  \"address_zip\": \"32801\",\n  \"address_country\": \"USA\",\n  \"notes\": null,\n  \"reference\": \"BARTLE\",\n  \"options\": null,\n  \"created_at\": \"2017-05-08 19:22:51\",\n  \"updated_at\": \"2017-05-08 19:23:46\",\n  \"deleted_at\": null,\n  \"gravatar\": \"//www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061\",\n  \"has_address\": true,\n  \"missing_address_components\": []\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: d45ee88c-8b27-4be8-8d81-77dda1b81826
+                  firstname:
+                    type: string
+                    example: John
+                  lastname:
+                    type: string
+                    example: Smith
+                  company:
+                    type: string
+                    example: ABC INC
+                  email:
+                    type: string
+                    example: demo@abc.com
+                  cc_emails:
+                    type: array
+                    items:
+                      type: string
+                      example: demo1@abc.com
+                  phone:
+                    type: string
+                    example: '1234567898'
+                  address_1:
+                    type: string
+                    example: 123 Rite Way
+                  address_2:
+                    type: string
+                    example: Unit 12
+                  address_city:
+                    type: string
+                    example: Orlando
+                  address_state:
+                    type: string
+                    example: FL
+                  address_zip:
+                    type: string
+                    example: '32801'
+                  address_country:
+                    type: string
+                    example: USA
+                  notes: {}
+                  reference:
+                    type: string
+                    example: BARTLE
+                  options: {}
+                  created_at:
+                    type: string
+                    example: '2017-05-08 19:22:51'
+                  updated_at:
+                    type: string
+                    example: '2017-05-08 19:23:46'
+                  deleted_at: {}
+                  gravatar:
+                    type: string
+                    example: //www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061
+                  has_address:
+                    type: boolean
+                    example: true
+                    default: true
+                  missing_address_components:
+                    type: array
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"firstname\": [\n    \"The firstname field is required when none of lastname / email / company are present.\"\n  ],\n  \"lastname\": [\n    \"The lastname field is required when none of firstname / email / company are present.\"\n  ],\n  \"email\": [\n    \"The email field is required when none of firstname / lastname / company are present.\"\n  ],\n  \"company\": [\n    \"The company field is required when none of firstname / lastname / email are present.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  firstname:
+                    type: array
+                    items:
+                      type: string
+                      example: The firstname field is required when none of lastname / email / company are present.
+                  lastname:
+                    type: array
+                    items:
+                      type: string
+                      example: The lastname field is required when none of firstname / email / company are present.
+                  email:
+                    type: array
+                    items:
+                      type: string
+                      example: The email field is required when none of firstname / lastname / company are present.
+                  company:
+                    type: array
+                    items:
+                      type: string
+                      example: The company field is required when none of firstname / lastname / email are present.
+      deprecated: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                firstname:
+                  type: string
+                  description: 'Max: 255. Required if no lastname, email, company supplied'
+                lastname:
+                  type: string
+                  description: 'Max: 255. Required if no firstname, email, company supplied'
+                email:
+                  type: string
+                  description: 'Max: 255. Required if no firstname, lastname, company supplied'
+                company:
+                  type: string
+                  description: 'Max: 255. Required if no firstname, lastname, email supplied'
+                phone:
+                  type: string
+                  description: 'Matching regex: /[0-9]{10,15}/'
+                address_1:
+                  type: string
+                  description: 'Max: 255'
+                address_2:
+                  type: string
+                  description: 'Max: 255'
+                address_city:
+                  type: string
+                  description: 'Max: 255'
+                address_state:
+                  type: string
+                  description: 'Max: 2'
+                address_zip:
+                  type: string
+                  description: 'Max: 16'
+                address_country:
+                  type: string
+                  description: 'Max: 3'
+                notes:
+                  type: string
+                  description: 'For internal notes only; not visible to customers in invoices or communications. Max: 21844'
+                reference:
+                  type: string
+                  description: 'This field is for the merchant''s internal use. Max: 255. '
+                files:
+                  type: array
+                  description: Array of strings(50) where each index is a valid file_id
+                  items:
+                    type: string
+                cc_emails:
+                  type: array
+                  description: Array of strings(255) where each index is a valid email address
+                  items:
+                    type: string
+                cc_sms:
+                  type: array
+                  description: Array of strings(255) where each index is a valid phone number
+                  items:
+                    type: string
+                allow_invoice_credit_card_payments:
+                  type: boolean
+                options:
+                  type: object
+                  properties:
+                    customer_custom_fields:
+                      type: array
+                      items:
+                        properties:
+                          id:
+                            type: string
+                            description: Unique identifier for the custom field
+                          name:
+                            type: string
+                            description: Display name of the custom field
+                          placeholder:
+                            type: string
+                            description: Placeholder text for the field (can be empty)
+                          required:
+                            type: boolean
+                            description: Whether the field is required
+                          visible:
+                            type: boolean
+                            description: Whether the field is visible in the UI
+                          type:
+                            type: string
+                            description: The data type of the field value
+                            enum:
+                            - text
+                          value:
+                            type: string
+                            description: The actual value stored in the custom field
+                        type: object
+                      description: An array of custom field objects that contain additional customer information.
+                  description: Additional customer options such as custom fields
+              type: object
+      tags:
+      - Customer
+  /customer/{customerId}/payment-method:
+    get:
+      summary: Get all Payment Methods for a Customer
+      description: Retrieves a non-paginated data array of all non-deleted payment methods associated with a customer.
+      operationId: get-all-payment-methods-for-a-customer
+      parameters:
+      - name: customerId
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "[\n  {\n    \"id\": \"7e3a83ea-6770-41f7-9b28-7ea1a3ae33e7\",\n    \"customer_id\": \"35e4cfa9-d87e-45fc-84da-a6bdce2c3330\",\n    \"merchant_id\": \"85c58c65-4da7-4f99-acb0-afa885874572\",\n    \"user_id\": \"hosted-payments\",\n    \"nickname\": \"VISA: Bob Smithers (ending in: 1111)\",\n    \"has_cvv\": 0,\n    \"is_default\": 0,\n    \"method\": \"card\",\n    \"person_name\": \"Bob Smithers\",\n    \"card_type\": \"visa\",\n    \"card_last_four\": \"1111\",\n    \"card_exp\": \"032022\",\n    \"bank_name\": null,\n    \"bank_type\": null,\n    \"bank_holder_type\": null,\n    \"address_1\": null,\n    \"address_2\": null,\n    \"address_city\": null,\n    \"address_state\": null,\n    \"address_zip\": \"999999\",\n    \"address_country\": null,\n    \"purged_at\": null,\n    \"deleted_at\": null,\n    \"created_at\": \"2018-08-03 17:59:10\",\n    \"updated_at\": \"2018-08-03 17:59:10\",\n    \"card_exp_datetime\": \"2022-03-31 23:59:59\",\n    \"is_usable_in_vt\": true,\n    \"is_tokenized\": true,\n    \"customer\": {\n      \"id\": \"35e4cfa9-d87e-45fc-84da-a6bdce2c3330\",\n      \"firstname\": \"John\",\n      \"lastname\": \"Smith\",\n      \"company\": \"ABC INC\",\n      \"email\": \"webpaymentstest@test.com\",\n      \"cc_emails\": [],\n      \"cc_sms\": null,\n      \"phone\": \"1234567898\",\n      \"address_1\": \"123 Rite Way\",\n      \"address_2\": \"Unit 12\",\n      \"address_city\": \"Orlando\",\n      \"address_state\": \"FL\",\n      \"address_zip\": \"32801\",\n      \"address_country\": \"USA\",\n      \"notes\": null,\n      \"reference\": \"\",\n      \"options\": null,\n      \"created_at\": \"2018-07-27 19:08:48\",\n      \"updated_at\": \"2018-07-27 19:08:48\",\n      \"deleted_at\": null,\n      \"allow_invoice_credit_card_payments\": true,\n      \"gravatar\": \"//www.gravatar.com/avatar/18dd69e3959903c248ac613b51bc7f8e\"\n    }\n  },\n  {\n    \"id\": \"403e043d-2971-4062-adc7-7e64f7882786\",\n    \"customer_id\": \"35e4cfa9-d87e-45fc-84da-a6bdce2c3330\",\n    \"merchant_id\": \"85c58c65-4da7-4f99-acb0-afa885874572\",\n    \"user_id\": \"a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8\",\n    \"nickname\": \"personal savings, BANK INC (ending in: 3210)\",\n    \"has_cvv\": 0,\n    \"is_default\": 1,\n    \"method\": \"bank\",\n    \"person_name\": \"Bob Smith\",\n    \"card_type\": null,\n    \"card_last_four\": \"3210\",\n    \"card_exp\": null,\n    \"bank_name\": \"Bank INC\",\n    \"bank_type\": \"savings\",\n    \"bank_holder_type\": \"personal\",\n    \"address_1\": null,\n    \"address_2\": null,\n    \"address_city\": null,\n    \"address_state\": null,\n    \"address_zip\": null,\n    \"address_country\": null,\n    \"purged_at\": null,\n    \"deleted_at\": null,\n    \"created_at\": \"2018-08-02 21:06:04\",\n    \"updated_at\": \"2018-08-02 21:06:04\",\n    \"card_exp_datetime\": [],\n    \"is_usable_in_vt\": true,\n    \"is_tokenized\": true,\n    \"customer\": {\n      \"id\": \"35e4cfa9-d87e-45fc-84da-a6bdce2c3330\",\n      \"firstname\": \"John\",\n      \"lastname\": \"Smith\",\n      \"company\": \"ABC INC\",\n      \"email\": \"webpaymentstest@test.com\",\n      \"cc_emails\": [],\n      \"cc_sms\": null,\n      \"phone\": \"1234567898\",\n      \"address_1\": \"123 Rite Way\",\n      \"address_2\": \"Unit 12\",\n      \"address_city\": \"Orlando\",\n      \"address_state\": \"FL\",\n      \"address_zip\": \"32801\",\n      \"address_country\": \"USA\",\n      \"notes\": null,\n      \"reference\": \"\",\n      \"options\": null,\n      \"created_at\": \"2018-07-27 19:08:48\",\n      \"updated_at\": \"2018-07-27 19:08:48\",\n      \"deleted_at\": null,\n      \"allow_invoice_credit_card_payments\": true,\n      \"gravatar\": \"//www.gravatar.com/avatar/18dd69e3959903c248ac613b51bc7f8e\"\n    }\n  }\n]"
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: 7e3a83ea-6770-41f7-9b28-7ea1a3ae33e7
+                    customer_id:
+                      type: string
+                      example: 35e4cfa9-d87e-45fc-84da-a6bdce2c3330
+                    merchant_id:
+                      type: string
+                      example: 85c58c65-4da7-4f99-acb0-afa885874572
+                    user_id:
+                      type: string
+                      example: hosted-payments
+                    nickname:
+                      type: string
+                      example: 'VISA: Bob Smithers (ending in: 1111)'
+                    has_cvv:
+                      type: integer
+                      example: 0
+                      default: 0
+                    is_default:
+                      type: integer
+                      example: 0
+                      default: 0
+                    method:
+                      type: string
+                      example: card
+                    person_name:
+                      type: string
+                      example: Bob Smithers
+                    card_type:
+                      type: string
+                      example: visa
+                    card_last_four:
+                      type: string
+                      example: '1111'
+                    card_exp:
+                      type: string
+                      example: '032022'
+                    bank_name: {}
+                    bank_type: {}
+                    bank_holder_type: {}
+                    address_1: {}
+                    address_2: {}
+                    address_city: {}
+                    address_state: {}
+                    address_zip:
+                      type: string
+                      example: '999999'
+                    address_country: {}
+                    purged_at: {}
+                    deleted_at: {}
+                    created_at:
+                      type: string
+                      example: '2018-08-03 17:59:10'
+                    updated_at:
+                      type: string
+                      example: '2018-08-03 17:59:10'
+                    card_exp_datetime:
+                      type: string
+                      example: '2022-03-31 23:59:59'
+                    is_usable_in_vt:
+                      type: boolean
+                      example: true
+                      default: true
+                    is_tokenized:
+                      type: boolean
+                      example: true
+                      default: true
+                    customer:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: 35e4cfa9-d87e-45fc-84da-a6bdce2c3330
+                        firstname:
+                          type: string
+                          example: John
+                        lastname:
+                          type: string
+                          example: Smith
+                        company:
+                          type: string
+                          example: ABC INC
+                        email:
+                          type: string
+                          example: webpaymentstest@test.com
+                        cc_emails:
+                          type: array
+                        cc_sms: {}
+                        phone:
+                          type: string
+                          example: '1234567898'
+                        address_1:
+                          type: string
+                          example: 123 Rite Way
+                        address_2:
+                          type: string
+                          example: Unit 12
+                        address_city:
+                          type: string
+                          example: Orlando
+                        address_state:
+                          type: string
+                          example: FL
+                        address_zip:
+                          type: string
+                          example: '32801'
+                        address_country:
+                          type: string
+                          example: USA
+                        notes: {}
+                        reference:
+                          type: string
+                          example: ''
+                        options: {}
+                        created_at:
+                          type: string
+                          example: '2018-07-27 19:08:48'
+                        updated_at:
+                          type: string
+                          example: '2018-07-27 19:08:48'
+                        deleted_at: {}
+                        allow_invoice_credit_card_payments:
+                          type: boolean
+                          example: true
+                          default: true
+                        gravatar:
+                          type: string
+                          example: //www.gravatar.com/avatar/18dd69e3959903c248ac613b51bc7f8e
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Invalid ID:
+                  value: "{\n  \"id\": [\n    \"The selected id is invalid.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: array
+                    items:
+                      type: string
+                      example: The selected id is invalid.
+      deprecated: false
+      tags:
+      - Customer
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: API key for merchant-level operations. Provides access to merchant-specific endpoints including transactions, payments, customer management, and merchant account settings. This key is scoped to a single merchant account and cannot access partner-level functionality.
+    PartnerApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Partner-level API key with elevated privileges. Grants access to all partner operations including merchant management, portfolio oversight, reporting across multiple merchant accounts, and partner-specific administrative functions. Also provides access to all merchant-level operations for accounts under the partner's management.
+    EphemeralAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Temporary authentication token with limited lifespan. Used for short-term access to specific operations, typically generated for secure one-time actions or time-bounded sessions. Automatically expires after a predefined period for enhanced security.

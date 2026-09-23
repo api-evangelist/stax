@@ -1,0 +1,426 @@
+openapi: 3.2.0
+info:
+  title: stax-api Credit API
+  version: '0.1'
+servers:
+- url: https://apiprod.fattlabs.com/
+security:
+- ApiKeyAuth: []
+tags:
+- name: Credit
+paths:
+  /credit:
+    post:
+      summary: Credit A Payment Method
+      description: ''
+      operationId: credit-a-payment-method
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - total
+              - payment_method_id
+              properties:
+                total:
+                  type: number
+                  description: A float that is required and will be the amount a customer is charged
+                  format: float
+                payment_method_id:
+                  type: string
+                  description: An existing payment_method_id within Stax.
+                meta:
+                  properties:
+                    subtotal:
+                      type: string
+                    tax:
+                      type: string
+                    memo:
+                      type: string
+                    reference:
+                      type: string
+                    ' lineItems':
+                      properties:
+                        price:
+                          type: string
+                          description: Can contain any json object
+                        quantity:
+                          type: string
+                        item:
+                          type: string
+                          description: Name of line item
+                        details:
+                          type: string
+                          description: Description of line item
+                        id:
+                          type: string
+                      required:
+                      - price
+                      - quantity
+                      - item
+                      - details
+                      type: object
+                  required: []
+                  type: object
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"85f59225-9a58-4b6e-8aae-f0ffe625e486\",\n  \"invoice_id\": \"\",\n  \"reference_id\": \"\",\n  \"recurring_transaction_id\": \"\",\n  \"type\": \"credit\",\n  \"source\": null,\n  \"merchant_id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n  \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n  \"customer_id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n  \"payment_method_id\": \"d3050b19-77d9-44ac-9851-b1d1680a7684\",\n  \"is_manual\": null,\n  \"success\": true,\n  \"message\": null,\n  \"meta\": {\n    \"memo\": \"Refund for Subscription\",\n    \"subtotal\": \"1.00\",\n    \"tax\": \"0\"\n  },\n  \"total\": 1,\n  \"method\": \"card\",\n  \"pre_auth\": false,\n  \"last_four\": \"1111\",\n  \"receipt_email_at\": null,\n  \"receipt_sms_at\": null,\n  \"created_at\": \"2017-05-08 20:25:28\",\n  \"updated_at\": \"2017-05-08 20:25:28\",\n  \"total_refunded\": null,\n  \"is_refundable\": false,\n  \"is_voided\": null,\n  \"is_voidable\": false,\n  \"schedule_id\": null,\n  \"customer\": {\n    \"id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n    \"firstname\": \"John\",\n    \"lastname\": \"Smith\",\n    \"company\": \"ABC INC\",\n    \"email\": \"demo@abc.com\",\n    \"cc_emails\": [\n      \"demo1@abc.com\",\n      \"demo2@abc.com\"\n    ],\n    \"phone\": \"1234567898\",\n    \"address_1\": \"123 Rite Way\",\n    \"address_2\": \"Unit 12\",\n    \"address_city\": \"Orlando\",\n    \"address_state\": \"FL\",\n    \"address_zip\": \"32801\",\n    \"address_country\": \"USA\",\n    \"notes\": null,\n    \"reference\": \"BARTLE\",\n    \"options\": \"\",\n    \"created_at\": \"2017-05-08 19:22:51\",\n    \"updated_at\": \"2017-05-08 19:23:46\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061\"\n  },\n  \"child_transactions\": [],\n  \"files\": [],\n  \"payment_method\": {\n    \"id\": \"d3050b19-77d9-44ac-9851-b1d1680a7684\",\n    \"customer_id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n    \"merchant_id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n    \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n    \"nickname\": \"VISA: Steven Smith Jr. (ending in: 1111)\",\n    \"is_default\": 1,\n    \"method\": \"card\",\n    \"person_name\": \"Steven Smith Jr.\",\n    \"card_type\": \"visa\",\n    \"card_last_four\": \"1111\",\n    \"card_exp\": \"042019\",\n    \"bank_name\": null,\n    \"bank_type\": null,\n    \"bank_holder_type\": null,\n    \"address_1\": null,\n    \"address_2\": null,\n    \"address_city\": null,\n    \"address_state\": null,\n    \"address_zip\": \"32944\",\n    \"address_country\": \"USA\",\n    \"purged_at\": null,\n    \"deleted_at\": null,\n    \"created_at\": \"2017-05-08 19:41:03\",\n    \"updated_at\": \"2017-05-08 19:41:03\",\n    \"card_exp_datetime\": \"2019-04-30 23:59:59\",\n    \"customer\": {\n      \"id\": \"d45ee88c-8b27-4be8-8d81-77dda1b81826\",\n      \"firstname\": \"John\",\n      \"lastname\": \"Smith\",\n      \"company\": \"ABC INC\",\n      \"email\": \"demo@abc.com\",\n      \"cc_emails\": [\n        \"demo1@abc.com\",\n        \"demo2@abc.com\"\n      ],\n      \"phone\": \"1234567898\",\n      \"address_1\": \"123 Rite Way\",\n      \"address_2\": \"Unit 12\",\n      \"address_city\": \"Orlando\",\n      \"address_state\": \"FL\",\n      \"address_zip\": \"32801\",\n      \"address_country\": \"USA\",\n      \"notes\": null,\n      \"reference\": \"BARTLE\",\n      \"options\": \"\",\n      \"created_at\": \"2017-05-08 19:22:51\",\n      \"updated_at\": \"2017-05-08 19:23:46\",\n      \"deleted_at\": null,\n      \"gravatar\": \"//www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061\"\n    }\n  },\n  \"user\": {\n    \"id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n    \"system_admin\": false,\n    \"name\": \"Demo\",\n    \"email\": \"contact@example.com\",\n    \"email_verification_sent_at\": \"2017-03-29 15:27:19\",\n    \"email_verified_at\": \"2017-03-29 15:27:21\",\n    \"is_api_key\": false,\n    \"created_at\": \"2017-01-11 21:44:02\",\n    \"updated_at\": \"2017-04-24 15:41:58\",\n    \"deleted_at\": null,\n    \"gravatar\": \"//www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650\",\n    \"team_admin\": null,\n    \"team_enabled\": null,\n    \"team_role\": null\n  }\n}\n"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 85f59225-9a58-4b6e-8aae-f0ffe625e486
+                  invoice_id:
+                    type: string
+                    example: ''
+                  reference_id:
+                    type: string
+                    example: ''
+                  recurring_transaction_id:
+                    type: string
+                    example: ''
+                  type:
+                    type: string
+                    example: credit
+                  source: {}
+                  merchant_id:
+                    type: string
+                    example: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                  user_id:
+                    type: string
+                    example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                  customer_id:
+                    type: string
+                    example: d45ee88c-8b27-4be8-8d81-77dda1b81826
+                  payment_method_id:
+                    type: string
+                    example: d3050b19-77d9-44ac-9851-b1d1680a7684
+                  is_manual: {}
+                  success:
+                    type: boolean
+                    example: true
+                    default: true
+                  message: {}
+                  meta:
+                    type: object
+                    properties:
+                      memo:
+                        type: string
+                        example: Refund for Subscription
+                      subtotal:
+                        type: string
+                        example: '1.00'
+                      tax:
+                        type: string
+                        example: '0'
+                  total:
+                    type: integer
+                    example: 1
+                    default: 0
+                  method:
+                    type: string
+                    example: card
+                  pre_auth:
+                    type: boolean
+                    example: false
+                    default: true
+                  last_four:
+                    type: string
+                    example: '1111'
+                  receipt_email_at: {}
+                  receipt_sms_at: {}
+                  created_at:
+                    type: string
+                    example: '2017-05-08 20:25:28'
+                  updated_at:
+                    type: string
+                    example: '2017-05-08 20:25:28'
+                  total_refunded: {}
+                  is_refundable:
+                    type: boolean
+                    example: false
+                    default: true
+                  is_voided: {}
+                  is_voidable:
+                    type: boolean
+                    example: false
+                    default: true
+                  schedule_id: {}
+                  customer:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: d45ee88c-8b27-4be8-8d81-77dda1b81826
+                      firstname:
+                        type: string
+                        example: John
+                      lastname:
+                        type: string
+                        example: Smith
+                      company:
+                        type: string
+                        example: ABC INC
+                      email:
+                        type: string
+                        example: demo@abc.com
+                      cc_emails:
+                        type: array
+                        items:
+                          type: string
+                          example: demo1@abc.com
+                      phone:
+                        type: string
+                        example: '1234567898'
+                      address_1:
+                        type: string
+                        example: 123 Rite Way
+                      address_2:
+                        type: string
+                        example: Unit 12
+                      address_city:
+                        type: string
+                        example: Orlando
+                      address_state:
+                        type: string
+                        example: FL
+                      address_zip:
+                        type: string
+                        example: '32801'
+                      address_country:
+                        type: string
+                        example: USA
+                      notes: {}
+                      reference:
+                        type: string
+                        example: BARTLE
+                      options:
+                        type: string
+                        example: ''
+                      created_at:
+                        type: string
+                        example: '2017-05-08 19:22:51'
+                      updated_at:
+                        type: string
+                        example: '2017-05-08 19:23:46'
+                      deleted_at: {}
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061
+                  child_transactions:
+                    type: array
+                  files:
+                    type: array
+                  payment_method:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: d3050b19-77d9-44ac-9851-b1d1680a7684
+                      customer_id:
+                        type: string
+                        example: d45ee88c-8b27-4be8-8d81-77dda1b81826
+                      merchant_id:
+                        type: string
+                        example: dd36b936-1eb7-4ece-bebc-b514c6a36ebd
+                      user_id:
+                        type: string
+                        example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                      nickname:
+                        type: string
+                        example: 'VISA: Steven Smith Jr. (ending in: 1111)'
+                      is_default:
+                        type: integer
+                        example: 1
+                        default: 0
+                      method:
+                        type: string
+                        example: card
+                      person_name:
+                        type: string
+                        example: Steven Smith Jr.
+                      card_type:
+                        type: string
+                        example: visa
+                      card_last_four:
+                        type: string
+                        example: '1111'
+                      card_exp:
+                        type: string
+                        example: 042019
+                      bank_name: {}
+                      bank_type: {}
+                      bank_holder_type: {}
+                      address_1: {}
+                      address_2: {}
+                      address_city: {}
+                      address_state: {}
+                      address_zip:
+                        type: string
+                        example: '32944'
+                      address_country:
+                        type: string
+                        example: USA
+                      purged_at: {}
+                      deleted_at: {}
+                      created_at:
+                        type: string
+                        example: '2017-05-08 19:41:03'
+                      updated_at:
+                        type: string
+                        example: '2017-05-08 19:41:03'
+                      card_exp_datetime:
+                        type: string
+                        example: '2019-04-30 23:59:59'
+                      customer:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            example: d45ee88c-8b27-4be8-8d81-77dda1b81826
+                          firstname:
+                            type: string
+                            example: John
+                          lastname:
+                            type: string
+                            example: Smith
+                          company:
+                            type: string
+                            example: ABC INC
+                          email:
+                            type: string
+                            example: demo@abc.com
+                          cc_emails:
+                            type: array
+                            items:
+                              type: string
+                              example: demo1@abc.com
+                          phone:
+                            type: string
+                            example: '1234567898'
+                          address_1:
+                            type: string
+                            example: 123 Rite Way
+                          address_2:
+                            type: string
+                            example: Unit 12
+                          address_city:
+                            type: string
+                            example: Orlando
+                          address_state:
+                            type: string
+                            example: FL
+                          address_zip:
+                            type: string
+                            example: '32801'
+                          address_country:
+                            type: string
+                            example: USA
+                          notes: {}
+                          reference:
+                            type: string
+                            example: BARTLE
+                          options:
+                            type: string
+                            example: ''
+                          created_at:
+                            type: string
+                            example: '2017-05-08 19:22:51'
+                          updated_at:
+                            type: string
+                            example: '2017-05-08 19:23:46'
+                          deleted_at: {}
+                          gravatar:
+                            type: string
+                            example: //www.gravatar.com/avatar/fe3e929dd80f1653c3a4b82812660061
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                      system_admin:
+                        type: boolean
+                        example: false
+                        default: true
+                      name:
+                        type: string
+                        example: Demo
+                      email:
+                        type: string
+                        example: contact@example.com
+                      email_verification_sent_at:
+                        type: string
+                        example: '2017-03-29 15:27:19'
+                      email_verified_at:
+                        type: string
+                        example: '2017-03-29 15:27:21'
+                      is_api_key:
+                        type: boolean
+                        example: false
+                        default: true
+                      created_at:
+                        type: string
+                        example: '2017-01-11 21:44:02'
+                      updated_at:
+                        type: string
+                        example: '2017-04-24 15:41:58'
+                      deleted_at: {}
+                      gravatar:
+                        type: string
+                        example: //www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650
+                      team_admin: {}
+                      team_enabled: {}
+                      team_role: {}
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"payment_method_id\": [\n    \"The selected payment method id is invalid.\"\n  ],\n  \"total\": [\n    \"The total field is required.\"\n  ],\n  \"meta\": [\n    \"The meta field is required.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  payment_method_id:
+                    type: array
+                    items:
+                      type: string
+                      example: The selected payment method id is invalid.
+                  total:
+                    type: array
+                    items:
+                      type: string
+                      example: The total field is required.
+                  meta:
+                    type: array
+                    items:
+                      type: string
+                      example: The meta field is required.
+      deprecated: false
+      tags:
+      - Credit
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: API key for merchant-level operations. Provides access to merchant-specific endpoints including transactions, payments, customer management, and merchant account settings. This key is scoped to a single merchant account and cannot access partner-level functionality.
+    PartnerApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Partner-level API key with elevated privileges. Grants access to all partner operations including merchant management, portfolio oversight, reporting across multiple merchant accounts, and partner-specific administrative functions. Also provides access to all merchant-level operations for accounts under the partner's management.
+    EphemeralAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Temporary authentication token with limited lifespan. Used for short-term access to specific operations, typically generated for secure one-time actions or time-bounded sessions. Automatically expires after a predefined period for enhanced security.

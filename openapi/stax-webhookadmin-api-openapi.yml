@@ -1,0 +1,320 @@
+openapi: 3.2.0
+info:
+  title: stax-api Webhookadmin API
+  version: '0.1'
+servers:
+- url: https://apiprod.fattlabs.com/
+security:
+- ApiKeyAuth: []
+tags:
+- name: Webhookadmin
+paths:
+  /webhookadmin/webhook/brand:
+    post:
+      summary: Create Partner Level Webhook for your brand
+      description: Creates a webhook that triggers for all merchant accounts under your partner brand.
+      operationId: create-partner-level-webhook-for-your-brand
+      parameters: []
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"a1069804-48f3-48fe-aa3f-654fbbc395aa\",\n  \"user_id\": \"\",\n  \"merchant_id\": null,\n  \"reference_id\": null,\n  \"url\": \"https://requestb.in/13q0j\",\n  \"event\": \"update_transaction\",\n  \"created_at\": \"2020-03-20 02:29:30\",\n  \"updated_at\": \"2020-03-20 02:29:30\",\n  \"deleted_at\": null,\n  \"brand_level\": \"fattmerchant\",\n  \"meta\": {\n    \"response_code\": \"200\",\n    \"webhook_retry_frequency\": 10,\n    \"webhook_retry_count\": 5\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: a1069804-48f3-48fe-aa3f-654fbbc395aa
+                  user_id:
+                    type: string
+                    example: ''
+                  merchant_id: {}
+                  reference_id: {}
+                  url:
+                    type: string
+                    example: https://requestb.in/13q0j
+                  event:
+                    type: string
+                    example: update_transaction
+                  created_at:
+                    type: string
+                    example: '2020-03-20 02:29:30'
+                  updated_at:
+                    type: string
+                    example: '2020-03-20 02:29:30'
+                  deleted_at: {}
+                  brand_level:
+                    type: string
+                    example: fattmerchant
+                  meta:
+                    type: object
+                    properties:
+                      response_code:
+                        type: string
+                        example: '200'
+                      webhook_retry_frequency:
+                        type: integer
+                        example: 10
+                        default: 0
+                      webhook_retry_count:
+                        type: integer
+                        example: 5
+                        default: 0
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"target_url\": [\n    \"The target url field is required.\"\n  ],\n  \"event_name\": [\n    \"The event field is required.\"\n  ],\n  \"meta.webhook_retry_frequency\": [\n    \"The meta.webhook_retry_frequency field must be greater than 1\"\n  ],\n  \"meta.webhook_retry_count\": [\n    \"The meta.webhook_retry_count field must be between or equal to 1 and 100\"\n  ],\n  \"meta.response_code\": [\n    \"The meta.response_code field is required\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  target_url:
+                    type: array
+                    items:
+                      type: string
+                      example: The target url field is required.
+                  event_name:
+                    type: array
+                    items:
+                      type: string
+                      example: The event field is required.
+                  meta.webhook_retry_frequency:
+                    type: array
+                    items:
+                      type: string
+                      example: The meta.webhook_retry_frequency field must be greater than 1
+                  meta.webhook_retry_count:
+                    type: array
+                    items:
+                      type: string
+                      example: The meta.webhook_retry_count field must be between or equal to 1 and 100
+                  meta.response_code:
+                    type: array
+                    items:
+                      type: string
+                      example: The meta.response_code field is required
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                target_url:
+                  type: string
+                  description: The URL which will accept the data when the web hook is triggered.
+                event_name:
+                  type: string
+                  description: The event which will trigger the web hook.
+                  enum:
+                  - create_dispute
+                  - create_deposit
+                  - create_invoice
+                  - create_payment_method
+                  - create_transaction
+                  - create_user
+                  - update_dispute
+                  - update_payment_method
+                  - update_transaction
+                  - update_transaction_settled
+                  - create_merchant
+                  - update_underwriting
+                  - update_merchant_status
+                  - update_electronic_signature
+                  - fee_statement_ready
+                meta.response_code:
+                  type: string
+                  description: The expected response code from your webhook endpoint. Required if meta.webhook_retry_frequency or meta.webhook_retry_count is passed.
+                meta.webhook_retry_frequency:
+                  type: integer
+                  format: int32
+                  description: How often (in minutes) the webhook will retry if webhook fails to return expected meta.response_code. Defaults to 5 if not passed. Requires a valid meta.response_code.
+                'meta.webhook_retry_count ':
+                  type: integer
+                  description: How many times the webhook will attempt to retry. Defaults to 1 if not passed. Requires a valid meta.response_code.
+                  format: int32
+              type: object
+      security:
+      - PartnerApiKey: []
+      tags:
+      - Webhookadmin
+    get:
+      summary: Get all Partner Level Webhooks for your brand
+      description: ''
+      operationId: get-all-partner-level-webhooks-for-your-brand
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "[\n  {\n    \"id\": \"WH11ebfa619d7b0930745294713ecd118\",\n    \"user_id\": \"\",\n    \"merchant_id\": null,\n    \"reference_id\": null,\n    \"url\": \"https://requestb.in/13q0j/update_merchant_status\",\n    \"event\": \"update_merchant_status\",\n    \"created_at\": \"2021-08-10T05:04:33.000Z\",\n    \"updated_at\": \"2021-08-10T05:04:33.000Z\",\n    \"deleted_at\": null,\n    \"brand_level\": \"fattmerchant\"\n  },\n  {\n    \"id\": \"WH11ebfa628f8523437d9f94713ecd118\",\n    \"user_id\": \"\",\n    \"merchant_id\": null,\n    \"reference_id\": null,\n    \"url\": \"https://requestb.in/13q0j/update_underwriting\",\n    \"event\": \"update_underwriting\",\n    \"created_at\": \"2021-08-10T05:11:19.000Z\",\n    \"updated_at\": \"2021-08-10T05:11:19.000Z\",\n    \"deleted_at\": null,\n    \"brand_level\": \"fattmerchant\"\n  },\n  {\n    \"id\": \"WH14378bc022cd70bc96674cc0279cae\",\n    \"user_id\": \"\",\n    \"merchant_id\": null,\n    \"reference_id\": null,\n    \"url\": \"https://requestb.in/13q0j/update_transaction_settled\",\n    \"event\": \"update_merchant_status\",\n    \"created_at\": \"2021-08-11T13:55:13.000Z\",\n    \"updated_at\": \"2021-08-11T13:55:13.000Z\",\n    \"deleted_at\": null,\n    \"brand_level\": \"fattmerchant\"\n  }\n]"
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: WH11ebfa619d7b0930745294713ecd118
+                    user_id:
+                      type: string
+                      example: ''
+                    merchant_id: {}
+                    reference_id: {}
+                    url:
+                      type: string
+                      example: https://requestb.in/13q0j/update_merchant_status
+                    event:
+                      type: string
+                      example: update_merchant_status
+                    created_at:
+                      type: string
+                      example: '2021-08-10T05:04:33.000Z'
+                    updated_at:
+                      type: string
+                      example: '2021-08-10T05:04:33.000Z'
+                    deleted_at: {}
+                    brand_level:
+                      type: string
+                      example: fattmerchant
+      deprecated: false
+      security:
+      - PartnerApiKey: []
+      tags:
+      - Webhookadmin
+  /webhookadmin/webhook/brand/{webhook_id}:
+    delete:
+      summary: Delete a Partner Level Webhook for your brand
+      description: ''
+      operationId: delete-a-partner-level-webhook-for-your-brand
+      parameters:
+      - name: webhook_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"WH11ebfaabc029cd70bc96674cc0279c55\",\n  \"user_id\": \"\",\n  \"merchant_id\": null,\n  \"reference_id\": null,\n  \"url\": \"https://requestb.in/13q0j/update_merchant_status\",\n  \"event\": \"update_merchant_status\",\n  \"created_at\": \"2021-08-11T13:55:13.000Z\",\n  \"updated_at\": \"2021-08-11T13:55:13.000Z\",\n  \"deleted_at\": \"2021-08-11T14:21:51.000Z\",\n  \"brand_level\": \"fattmerchant\"\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: WH11ebfaabc029cd70bc96674cc0279c55
+                  user_id:
+                    type: string
+                    example: ''
+                  merchant_id: {}
+                  reference_id: {}
+                  url:
+                    type: string
+                    example: https://requestb.in/13q0j/update_merchant_status
+                  event:
+                    type: string
+                    example: update_merchant_status
+                  created_at:
+                    type: string
+                    example: '2021-08-11T13:55:13.000Z'
+                  updated_at:
+                    type: string
+                    example: '2021-08-11T13:55:13.000Z'
+                  deleted_at:
+                    type: string
+                    example: '2021-08-11T14:21:51.000Z'
+                  brand_level:
+                    type: string
+                    example: fattmerchant
+      deprecated: false
+      security:
+      - PartnerApiKey: []
+      tags:
+      - Webhookadmin
+    get:
+      summary: Get a specific Partner Level Webhook for your brand
+      description: ''
+      operationId: get-a-specific-partner-level-webhook-for-your-brand
+      parameters:
+      - name: webhook_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"WH11ebfa619d7b0930745294713ecd118\",\n  \"user_id\": \"\",\n  \"merchant_id\": null,\n  \"reference_id\": null,\n  \"url\": \"https://requestb.in/13q0j/update_merchant_status\",\n  \"event\": \"update_merchant_status\",\n  \"created_at\": \"2021-08-10T05:04:33.000Z\",\n  \"updated_at\": \"2021-08-10T05:04:33.000Z\",\n  \"deleted_at\": null,\n  \"brand_level\": \"fattmerchant\"\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: WH11ebfa619d7b0930745294713ecd118
+                  user_id:
+                    type: string
+                    example: ''
+                  merchant_id: {}
+                  reference_id: {}
+                  url:
+                    type: string
+                    example: https://requestb.in/13q0j/update_merchant_status
+                  event:
+                    type: string
+                    example: update_merchant_status
+                  created_at:
+                    type: string
+                    example: '2021-08-10T05:04:33.000Z'
+                  updated_at:
+                    type: string
+                    example: '2021-08-10T05:04:33.000Z'
+                  deleted_at: {}
+                  brand_level:
+                    type: string
+                    example: fattmerchant
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      security:
+      - PartnerApiKey: []
+      tags:
+      - Webhookadmin
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: API key for merchant-level operations. Provides access to merchant-specific endpoints including transactions, payments, customer management, and merchant account settings. This key is scoped to a single merchant account and cannot access partner-level functionality.
+    PartnerApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Partner-level API key with elevated privileges. Grants access to all partner operations including merchant management, portfolio oversight, reporting across multiple merchant accounts, and partner-specific administrative functions. Also provides access to all merchant-level operations for accounts under the partner's management.
+    EphemeralAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Temporary authentication token with limited lifespan. Used for short-term access to specific operations, typically generated for secure one-time actions or time-bounded sessions. Automatically expires after a predefined period for enhanced security.

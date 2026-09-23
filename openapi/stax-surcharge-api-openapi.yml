@@ -1,0 +1,74 @@
+openapi: 3.2.0
+info:
+  title: stax-api Surcharge API
+  version: '0.1'
+servers:
+- url: https://apiprod.fattlabs.com/
+security:
+- ApiKeyAuth: []
+tags:
+- name: Surcharge
+paths:
+  /surcharge/review:
+    get:
+      summary: Review a Transaction's Surcharge Information
+      description: ''
+      operationId: review-a-transactions-surcharge-information
+      parameters:
+      - name: payment_method_id
+        in: query
+        description: Tokenized payment method id
+        schema:
+          type: string
+        required: true
+      - name: total
+        in: query
+        description: Transaction subtotal
+        schema:
+          type: string
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"bin_type\": \"CREDIT\",\n  \"surcharge_rate\": 1.5,\n  \"surcharge_amount\": 0.18,\n  \"total_with_surcharge_amount\": 12.18\n}"
+              schema:
+                type: object
+                properties:
+                  bin_type:
+                    type: string
+                    example: CREDIT
+                  surcharge_rate:
+                    type: number
+                    example: 1.5
+                    default: 0
+                  surcharge_amount:
+                    type: number
+                    example: 0.18
+                    default: 0
+                  total_with_surcharge_amount:
+                    type: number
+                    example: 12.18
+                    default: 0
+      deprecated: false
+      tags:
+      - Surcharge
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: API key for merchant-level operations. Provides access to merchant-specific endpoints including transactions, payments, customer management, and merchant account settings. This key is scoped to a single merchant account and cannot access partner-level functionality.
+    PartnerApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Partner-level API key with elevated privileges. Grants access to all partner operations including merchant management, portfolio oversight, reporting across multiple merchant accounts, and partner-specific administrative functions. Also provides access to all merchant-level operations for accounts under the partner's management.
+    EphemeralAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Temporary authentication token with limited lifespan. Used for short-term access to specific operations, typically generated for secure one-time actions or time-bounded sessions. Automatically expires after a predefined period for enhanced security.

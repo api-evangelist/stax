@@ -1,0 +1,2210 @@
+openapi: 3.2.0
+info:
+  title: stax-api Team API
+  version: '0.1'
+servers:
+- url: https://apiprod.fattlabs.com/
+security:
+- ApiKeyAuth: []
+tags:
+- name: Team
+paths:
+  /team/options:
+    put:
+      summary: Add/Update Team Settings
+      description: Adds team/merchant options, also known as team settings, to a team
+      operationId: addupdate-team-settings
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"aa7766b2-242f-43b9-9476-3c9018f0ce52\",\n  \"mid\": \"\",\n  \"status\": \"PENDING\",\n  \"subdomain\": \"\",\n  \"company_name\": \"Stax\",\n  \"contact_name\": \"Stax\",\n  \"contact_email\": \"contact@example.com\",\n  \"contact_phone\": \"8555503288\",\n  \"address_1\": \"25 Wall Street\",\n  \"address_2\": \"Suite 1\",\n  \"address_city\": \"Orlando\",\n  \"address_state\": \"FL\",\n  \"address_zip\": \"32801\",\n  \"hosted_payments_token\": \"BARTLE-_\",\n  \"currency\": [\n    \"USD\"\n  ],\n  \"plan\": {\n    \"id\": \"f92fee2b-fdae-4474-988c-c8f2df92772a\",\n    \"merchant_id\": \"aa7766b2-242f-43b9-9476-3c9018f0ce52\",\n    \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n    \"name\": null,\n    \"created_at\": \"2017-05-15 18:41:25\",\n    \"updated_at\": \"2017-05-15 18:41:25\"\n  },\n  \"options\": {\n    \"hosted_payments_url_long\": \"http://localhost.app:5477/#/pay/BARTLE-_\",\n    \"hosted_payments_url_short\": \"http://bit.ly/1RofD0T\",\n    \"hosted_payments_success_note\": \"Success Note\",\n    \"hosted_payments_note\": \"Page Memo\",\n    \"webpayment_customer_matching_enabled\": false\n  },\n  \"gateway_type\": null,\n  \"processor\": \"\",\n  \"product_type\": \"\",\n  \"welcome_email_sent_at\": null,\n  \"created_at\": \"2017-05-15 17:02:37\",\n  \"updated_at\": \"2017-05-15 21:52:16\",\n  \"deleted_at\": null,\n  \"gateway_name\": null,\n  \"branding\": {\n    \"id\": \"81218dbb-74ad-480e-958e-839ced6e6962\",\n    \"merchant_id\": \"aa7766b2-242f-43b9-9476-3c9018f0ce52\",\n    \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n    \"name\": \"Bugu the Catu\",\n    \"public_url\": \"https://s3-us-west-2.amazonaws.com/fattpaydocuments/branding/81218dbb-74ad-480e-958e-839ced6e6962.png\",\n    \"tag\": \"branding\",\n    \"meta\": {\n      \"filesize_bytes\": 109524,\n      \"filesize\": \"1.1 kB\",\n      \"extension\": \"png\",\n      \"size\": {\n        \"width\": 537,\n        \"height\": 512\n      },\n      \"mime\": \"image/png\"\n    },\n    \"created_at\": \"2017-05-15 19:15:53\",\n    \"updated_at\": \"2017-05-15 19:15:56\",\n    \"deleted_at\": null\n  },\n  \"allow_ach\": false\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: aa7766b2-242f-43b9-9476-3c9018f0ce52
+                  mid:
+                    type: string
+                    example: ''
+                  status:
+                    type: string
+                    example: PENDING
+                  subdomain:
+                    type: string
+                    example: ''
+                  company_name:
+                    type: string
+                    example: Stax
+                  contact_name:
+                    type: string
+                    example: Stax
+                  contact_email:
+                    type: string
+                    example: contact@example.com
+                  contact_phone:
+                    type: string
+                    example: '8555503288'
+                  address_1:
+                    type: string
+                    example: 25 Wall Street
+                  address_2:
+                    type: string
+                    example: Suite 1
+                  address_city:
+                    type: string
+                    example: Orlando
+                  address_state:
+                    type: string
+                    example: FL
+                  address_zip:
+                    type: string
+                    example: '32801'
+                  hosted_payments_token:
+                    type: string
+                    example: BARTLE-_
+                  currency:
+                    type: array
+                    items:
+                      type: string
+                      example: USD
+                  plan:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: f92fee2b-fdae-4474-988c-c8f2df92772a
+                      merchant_id:
+                        type: string
+                        example: aa7766b2-242f-43b9-9476-3c9018f0ce52
+                      user_id:
+                        type: string
+                        example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                      name: {}
+                      created_at:
+                        type: string
+                        example: '2017-05-15 18:41:25'
+                      updated_at:
+                        type: string
+                        example: '2017-05-15 18:41:25'
+                  options:
+                    type: object
+                    properties:
+                      hosted_payments_url_long:
+                        type: string
+                        example: http://localhost.app:5477/#/pay/BARTLE-_
+                      hosted_payments_url_short:
+                        type: string
+                        example: http://bit.ly/1RofD0T
+                      hosted_payments_success_note:
+                        type: string
+                        example: Success Note
+                      hosted_payments_note:
+                        type: string
+                        example: Page Memo
+                      webpayment_customer_matching_enabled:
+                        type: boolean
+                        example: false
+                        default: true
+                  gateway_type: {}
+                  processor:
+                    type: string
+                    example: ''
+                  product_type:
+                    type: string
+                    example: ''
+                  welcome_email_sent_at: {}
+                  created_at:
+                    type: string
+                    example: '2017-05-15 17:02:37'
+                  updated_at:
+                    type: string
+                    example: '2017-05-15 21:52:16'
+                  deleted_at: {}
+                  gateway_name: {}
+                  branding:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 81218dbb-74ad-480e-958e-839ced6e6962
+                      merchant_id:
+                        type: string
+                        example: aa7766b2-242f-43b9-9476-3c9018f0ce52
+                      user_id:
+                        type: string
+                        example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                      name:
+                        type: string
+                        example: Bugu the Catu
+                      public_url:
+                        type: string
+                        example: https://s3-us-west-2.amazonaws.com/fattpaydocuments/branding/81218dbb-74ad-480e-958e-839ced6e6962.png
+                      tag:
+                        type: string
+                        example: branding
+                      meta:
+                        type: object
+                        properties:
+                          filesize_bytes:
+                            type: integer
+                            example: 109524
+                            default: 0
+                          filesize:
+                            type: string
+                            example: 1.1 kB
+                          extension:
+                            type: string
+                            example: png
+                          size:
+                            type: object
+                            properties:
+                              width:
+                                type: integer
+                                example: 537
+                                default: 0
+                              height:
+                                type: integer
+                                example: 512
+                                default: 0
+                          mime:
+                            type: string
+                            example: image/png
+                      created_at:
+                        type: string
+                        example: '2017-05-15 19:15:53'
+                      updated_at:
+                        type: string
+                        example: '2017-05-15 19:15:56'
+                      deleted_at:
+                        type: string
+                        format: date-time
+                  allow_ach:
+                    type: boolean
+                    example: false
+                    default: true
+      deprecated: false
+      tags:
+      - Team
+  /team/option/advanced_customizations:
+    put:
+      description: ''
+      operationId: post_teamoptionadvanced_customizations
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              examples:
+                OK:
+                  summary: OK
+                  value:
+                    id: '{merchant_id}'
+                    mid: '{processor_merchant_id}'
+                    status: ACTIVE
+                    subdomain: '{merchant_subdomain}'
+                    company_name: '{company_name}'
+                    display_name: '{display_name}'
+                    contact_name: '{contact_name}'
+                    contact_email: '{contact_email}'
+                    contact_phone: '{contact_phone}'
+                    address_1: '{address_line_1}'
+                    address_2: '{address_line_2}'
+                    address_city: '{city}'
+                    address_state: '{state}'
+                    address_zip: '{zip_code}'
+                    hosted_payments_token: '{webpayments_token}'
+                    plan:
+                      id: '{plan_id}'
+                      merchant_id: '{merchant_id}'
+                      user_id: '{user_id}'
+                      name: null
+                      created_at: '{timestamp}'
+                      updated_at: '{timestamp}'
+                    options:
+                      receipts_emails:
+                      - '{receipt_email}'
+                      merchant_copy_email_receipt_options:
+                        notify_options_all: true
+                      webpayment_button_color: '{hex_color}'
+                      webpayment_redirect_link: '{redirect_url}'
+                      advanced_customization:
+                        hosted_custom_fields:
+                        - placeholder: '{field_placeholder}'
+                          required: true
+                          visible: true
+                          id: '{field_id}'
+                          name: '{field_name}'
+                          type: text
+                    currency:
+                    - USD
+                    gateway_type: ACH
+                    processor: '{processor_name}'
+                    partner: null
+                    product_type: '{product_type}'
+                    is_enterprise: false
+                    is_payfac: false
+                    is_sandbox: false
+                    is_test_mode: 0
+                    fm_billing_schedule_id: null
+                    fee_reconciliation_payment_method_id: null
+                    welcome_email_sent_at: null
+                    activated_at: null
+                    created_at: '{timestamp}'
+                    updated_at: '{timestamp}'
+                    deleted_at: null
+                    brand: '{brand_name}'
+                    risk_hold: false
+                    merchant_processor_application: iso
+                    reference: null
+                    branding: null
+                    allow_ach: true
+                    allow_paypal: true
+                    require_address: false
+                    is_portal: false
+                    is_flat_rate: false
+                    allow_credits: true
+                    allow_terminal: false
+                    gateways:
+                    - name: '{gateway_name}'
+                      type: '{gateway_type}'
+                      processor_mid: '{processor_mid}'
+                    is_surcharge_enabled: false
+                    cnp_credit_surcharge_rate: null
+                    is_trust: false
+                    underwriting_status: null
+                    underwriting_substatuses: null
+                    allow_cnp_digital_wallet: false
+                    registration:
+                      merchant_id: '{merchant_id}'
+                      user_id: '{user_id}'
+                      electronic_signature:
+                        ip: '{ip_address}'
+                        email: '{signer_email}'
+                        user_id: '{user_id}'
+                        timestamp: '{timestamp}'
+                        browser_agent: '{user_agent}'
+                        signed_terms_and_conditions: '{terms_url}'
+                      credit_inquiry_electronic_signature: null
+                      application_agreed_at: '{timestamp}'
+                      countersigned_at: '{timestamp}'
+                      signature_status: SIGNED
+                      application_status: null
+                      underwriting_status: null
+                      underwriting_substatuses: null
+                      underwriting_note: null
+                      meta:
+                        ownership_percentage: '{percentage}'
+                        owner_citizenship: '{country}'
+                        representatives: []
+                      first_name: '{first_name}'
+                      last_name: '{last_name}'
+                      email: '{email}'
+                      title: '{job_title}'
+                      company_type: '{entity_type}'
+                      entity_ownership_type: PRIVATE
+                      phone_number: '{phone}'
+                      source: null
+                      promo_code: null
+                      ref_code: null
+                      plan: '{plan_name}'
+                      fm_pc_name: null
+                      business_legal_name: '{legal_name}'
+                      business_dba: '{dba_name}'
+                      business_website: '{website_url}'
+                      business_fax: null
+                      business_email: null
+                      business_address_1: '{business_address_line_1}'
+                      business_address_2: null
+                      business_address_city: '{city}'
+                      business_address_state: '{state}'
+                      business_address_zip: '{zip}'
+                      business_address_country: '{country}'
+                      owner_address_1: '{owner_address_line_1}'
+                      owner_address_2: '{owner_address_line_2}'
+                      owner_address_city: '{city}'
+                      owner_address_state: '{state}'
+                      owner_address_zip: '{zip}'
+                      owner_address_country: '{country}'
+                      user_ip: '{ip_address}'
+                      user_ssn: '{ssn}'
+                      user_dob: '{date_of_birth}'
+                      business_phone_number: '{phone}'
+                      business_tax_id: '{ein}'
+                      business_open_date: '{date}'
+                      job_title: '{job_title}'
+                      refund_policy: '{refund_policy_code}'
+                      reason_for_applying: '{reason}'
+                      service_you_provide: '{mcc_description}'
+                      annual_volume: '{amount}'
+                      avg_trans_size: '{amount}'
+                      highest_trans_amount: '{amount}'
+                      card_present_percent: '{percentage}'
+                      card_not_present_percent: '{percentage}'
+                      card_swiped_percent: null
+                      moto_percent: null
+                      b2b_percent: '{percentage}'
+                      bank_routing_number: '{routing_number}'
+                      bank_account_number: '{account_number}'
+                      bank_account_owner_name: '{account_owner}'
+                      secondary_bank_routing_number: null
+                      secondary_bank_account_number: null
+                      secondary_bank_account_owner_name: null
+                      secondary_bank_account_type: null
+                      secondary_bank_account_purpose: null
+                      principal_owners_name: '{owner_name}'
+                      chosen_plan: null
+                      chosen_processing_method: '{processing_method}'
+                      plan_txamnt: '{transaction_fee}'
+                      plan_dcamnt: '{discount_rate}'
+                      plan_ach_cap: '{ach_cap}'
+                      plan_ach_txamnt: '{ach_transaction_fee}'
+                      plan_ach_dcamnt: '{ach_discount_rate}'
+                      plan_nabu: null
+                      referred_by: null
+                      created_at: '{timestamp}'
+                      updated_at: '{timestamp}'
+                      deleted_at: null
+                      paper_statement: false
+                      num_of_locs: '{number}'
+                      addl_loc: false
+                      addl_loc_main_mid: '{mid}'
+                      internet: '{percentage}'
+                      international: '{percentage}'
+                      mcc: '{mcc_code}'
+                      proc_change: '{processor_change_reason}'
+                      seasonal_flag: false
+                      seasonal_months: '{months}'
+                      bus_type: '{business_type_code}'
+                      sub_bus_type: '{sub_business_type}'
+                      special_proc: '{special_processing}'
+                      pos_software_publisher: '{publisher}'
+                      pos_software_name: '{software_name}'
+                      pos_software_version: '{version}'
+                      site_inspection: '{inspection_status}'
+                      location_type: '{location_type}'
+                      network: '{network}'
+                      bank_account_type: '{account_type}'
+                      mcc_addl_desc: '{description}'
+                      business_location_address_1: '{location_address_line_1}'
+                      business_location_address_2: null
+                      business_location_address_city: '{city}'
+                      business_location_address_country: '{country}'
+                      business_location_address_state: '{state}'
+                      business_location_address_zip: '{zip}'
+                      business_location_email: null
+                      business_location_fax: null
+                      business_location_phone_number: '{phone}'
+                      note: null
+                      credit_qual_disc_rate: '{rate}'
+                      credit_qual_trans_fee: '{fee}'
+                      credit_mid_disc_rate: '{rate}'
+                      credit_mid_trans_fee: '{fee}'
+                      credit_non_disc_rate: '{rate}'
+                      credit_non_trans_fee: '{fee}'
+                      amex_qual_disc_rate: '{rate}'
+                      amex_qual_trans_fee: '{fee}'
+                      amex_mid_disc_rate: '{rate}'
+                      amex_mid_trans_fee: '{fee}'
+                      amex_non_disc_rate: '{rate}'
+                      amex_non_trans_fee: '{fee}'
+                      is_flat_rate: false
+                      pricing_plan: '{pricing_plan_name}'
+                      finix_merchant_id: null
+                      finix_identity_id: null
+                      annual_gross_ach_revenue: '{amount}'
+                      avg_ach_transaction: '{amount}'
+                      largest_ach_transaction: '{amount}'
+                      cp_transaction_rate: '{rate}'
+                      cp_per_item_rate: '{fee}'
+                      cp_amex_rate: '{rate}'
+                      cp_amex_per_item_rate: '{fee}'
+                      warnings: []
+                      merchant_autoverification_authorization:
+                        ip: '{ip_address}'
+                        email: '{email}'
+                        user_id: '{user_id}'
+                        timestamp: '{timestamp}'
+                        browser_agent: '{user_agent}'
+                      chargeback_percent: null
+                      annual_gross_shopping_cart_revenue: '{amount}'
+                      avg_shopping_cart_transaction: '{amount}'
+                      largest_shopping_cart_transaction: '{amount}'
+                      shopping_cart_card_present_percent: '{percentage}'
+                      shopping_cart_b2b_percent: '{percentage}'
+                      shopping_cart_international: '{percentage}'
+                      cp_credit_surcharge_rate: null
+                      cnp_credit_surcharge_rate: null
+                      cp_debit_trans_fee: null
+                      cnp_debit_trans_fee: null
+                      cp_debit_discount_rate: null
+                      cnp_debit_discount_rate: null
+                      field_permissions: null
+                      drivers_license_id: '{license_number}'
+                      drivers_license_state: '{state}'
+                      bank_institution_name: null
+                      external_company_id: null
+                      secondary_bank_institution_name: null
+                      registration_source: '{source}'
+                      created_by: '{user_id}'
+                      meta_json: '{json_string}'
+                      signature_request_id: null
+                      is_trust: null
+                      monthly_minimum_fee: null
+                      monthly_service_fee: null
+                      fees: null
+                      pci_compromise_type: null
+                      paypal_transaction_fee: null
+                      paypal_per_item_fee: null
+                      amex_direct_number: null
+                      amex_annual_volume: null
+                      surcharge_merchant_fee: null
+                      files: []
+                      brand: '{brand_name}'
+                      underwriting_substatus: null
+                      empty_required_fields: []
+                      latest_file_uploaded_at: null
+                      allow_conditional_approval: true
+                      merchant:
+                        id: '{merchant_id}'
+                        mid: '{processor_merchant_id}'
+                        status: ACTIVE
+                        subdomain: '{subdomain}'
+                        company_name: '{company_name}'
+                        display_name: '{display_name}'
+                        contact_name: '{contact_name}'
+                        contact_email: '{contact_email}'
+                        contact_phone: '{contact_phone}'
+                        address_1: '{address_line_1}'
+                        address_2: '{address_line_2}'
+                        address_city: '{city}'
+                        address_state: '{state}'
+                        address_zip: '{zip}'
+                        hosted_payments_token: '{webpayments_token}'
+                        plan:
+                          id: '{plan_id}'
+                          merchant_id: '{merchant_id}'
+                          user_id: '{user_id}'
+                          name: null
+                          created_at: '{timestamp}'
+                          updated_at: '{timestamp}'
+                        options:
+                          receipts_emails:
+                          - '{receipt_email}'
+                          merchant_copy_email_receipt_options:
+                            notify_options_all: true
+                          webpayment_button_color: '{hex_color}'
+                          webpayment_redirect_link: '{redirect_url}'
+                          advanced_customization:
+                            hosted_custom_fields:
+                            - placeholder: '{placeholder}'
+                              required: true
+                              visible: true
+                              id: '{field_id}'
+                              name: '{field_name}'
+                              type: text
+                        notes: '{notes}'
+                        currency:
+                        - USD
+                        gateway_type: '{gateway_type}'
+                        vendor_keys: null
+                        processor: '{processor_name}'
+                        partner: null
+                        product_type: '{product_type}'
+                        is_enterprise: false
+                        is_payfac: false
+                        is_sandbox: false
+                        is_test_mode: 0
+                        fm_billing_schedule_id: null
+                        fee_reconciliation_payment_method_id: null
+                        welcome_email_sent_at: null
+                        activated_at: null
+                        created_at: '{timestamp}'
+                        updated_at: '{timestamp}'
+                        deleted_at: null
+                        brand: '{brand_name}'
+                        risk_hold: false
+                        merchant_processor_application: iso
+                        reference: null
+                        branding: null
+                        allow_ach: true
+                        allow_paypal: true
+                        require_address: false
+                        is_portal: false
+                        is_flat_rate: false
+                        allow_credits: true
+                        allow_terminal: false
+                        gateways:
+                        - name: '{gateway_name}'
+                          type: '{gateway_type}'
+                          processor_mid: '{processor_mid}'
+                        is_surcharge_enabled: false
+                        cnp_credit_surcharge_rate: null
+                        is_trust: false
+                        underwriting_status: null
+                        underwriting_substatuses: null
+                        allow_cnp_digital_wallet: false
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                name:
+                  type: string
+                placeholder:
+                  type: string
+                required:
+                  type: boolean
+                visible:
+                  type: boolean
+                type:
+                  type: string
+                  enum:
+                  - select
+                  - text
+                option:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: nullable, max 100 characters
+                    value:
+                      type: string
+                      description: max 100 characters
+                  required:
+                  - value
+              required:
+              - option
+              - id
+              - name
+              - required
+              - visible
+              - type
+            examples: {}
+      tags:
+      - Team
+      summary: Post teamoptionadvanced customizations
+      x-summary-source: derived
+  /team/user:
+    post:
+      summary: Create a New Team Member
+      description: This creates a whole new user account in your merchant team.
+      operationId: create-a-new-team-member
+      parameters:
+      - name: email
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: password
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: password_confirmation
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: name
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: team_role
+        in: query
+        schema:
+          type: string
+          enum:
+          - admin
+          - staff
+          - full
+          - sales
+          - reporting
+      - name: team_enabled
+        in: query
+        schema:
+          type: boolean
+      - name: send_verification_email
+        in: query
+        schema:
+          type: boolean
+      - name: url
+        in: query
+        schema:
+          type: string
+          default: https://app.staxpayments.com/#/verify/
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"21a64e9e-3c13-4b85-9f85-67cb4fda808a\",\n  \"system_admin\": false,\n  \"name\": \"James\",\n  \"email\": \"fatttest737@gmail.com\",\n  \"email_verification_sent_at\": null,\n  \"email_verified_at\": null,\n  \"created_at\": \"2017-05-15 19:31:35\",\n  \"updated_at\": \"2017-05-15 19:31:35\",\n  \"deleted_at\": null,\n  \"gravatar\": \"//www.gravatar.com/avatar/52b3ef2ae70945ce0fca14086443dc1a\",\n  \"team_role\": \"full\",\n  \"team_admin\": false,\n  \"team_enabled\": true\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 21a64e9e-3c13-4b85-9f85-67cb4fda808a
+                  system_admin:
+                    type: boolean
+                    example: false
+                    default: true
+                  name:
+                    type: string
+                    example: James
+                  email:
+                    type: string
+                    example: fatttest737@gmail.com
+                  email_verification_sent_at: {}
+                  email_verified_at: {}
+                  created_at:
+                    type: string
+                    example: '2017-05-15 19:31:35'
+                  updated_at:
+                    type: string
+                    example: '2017-05-15 19:31:35'
+                  deleted_at: {}
+                  gravatar:
+                    type: string
+                    example: //www.gravatar.com/avatar/52b3ef2ae70945ce0fca14086443dc1a
+                  team_role:
+                    type: string
+                    example: full
+                  team_admin:
+                    type: boolean
+                    example: false
+                    default: true
+                  team_enabled:
+                    type: boolean
+                    example: true
+                    default: true
+        '401':
+          description: '401'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "[\n  \"not team admin\"\n]"
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: not team admin
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"name\": [\n    \"The name field is required.\"\n  ],\n  \"email\": [\n    \"The email field is required.\"\n  ],\n  \"password\": [\n    \"The password field is required.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: array
+                    items:
+                      type: string
+                      example: The name field is required.
+                  email:
+                    type: array
+                    items:
+                      type: string
+                      example: The email field is required.
+                  password:
+                    type: array
+                    items:
+                      type: string
+                      example: The password field is required.
+      deprecated: false
+      tags:
+      - Team
+    get:
+      summary: Find the Merchant Team's Users
+      description: Retrieves all the users on a merchants team
+      operationId: find-the-merchant-teams-users
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"total\": 2,\n  \"per_page\": 20,\n  \"current_page\": 1,\n  \"last_page\": 1,\n  \"next_page_url\": null,\n  \"prev_page_url\": null,\n  \"from\": 1,\n  \"to\": 2,\n  \"data\": [\n    {\n      \"id\": \"6b5e0337-817d-4025-8729-6370173295a9\",\n      \"system_admin\": false,\n      \"name\": \"Eric Andrews\",\n      \"email\": \"contact@example.com\",\n      \"email_verification_sent_at\": \"2016-09-08 19:05:55\",\n      \"email_verified_at\": \"2016-05-11 17:13:33\",\n      \"created_at\": \"2015-07-21 21:23:42\",\n      \"updated_at\": \"2016-09-08 19:05:55\",\n      \"deleted_at\": null,\n      \"gravatar\": \"//www.gravatar.com/avatar/45357c125af15b6df8864a71a653bea2\",\n      \"team_role\": \"admin\",\n      \"team_admin\": true,\n      \"team_enabled\": true,\n      \"mfa_enabled\": null\n    },\n    {\n      \"id\": \"372a0620-47cd-447e-9fcf-0f4671bdda26\",\n      \"system_admin\": false,\n      \"name\": \"Jacques Fu\",\n      \"email\": \"jacques.fu@gmail.com\",\n      \"email_verification_sent_at\": \"2016-05-11 17:13:33\",\n      \"email_verified_at\": \"2016-05-11 17:13:33\",\n      \"created_at\": \"2015-07-21 21:23:42\",\n      \"updated_at\": \"2015-10-29 16:40:39\",\n      \"deleted_at\": null,\n      \"gravatar\": \"//www.gravatar.com/avatar/30d6b71a1803013e64894ae60ec53e34\",\n      \"team_role\": \"admin\",\n      \"team_admin\": true,\n      \"team_enabled\": true,\n      \"mfa_enabled\": null\n    }\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 2
+                    default: 0
+                  per_page:
+                    type: integer
+                    example: 20
+                    default: 0
+                  current_page:
+                    type: integer
+                    example: 1
+                    default: 0
+                  last_page:
+                    type: integer
+                    example: 1
+                    default: 0
+                  next_page_url: {}
+                  prev_page_url: {}
+                  from:
+                    type: integer
+                    example: 1
+                    default: 0
+                  to:
+                    type: integer
+                    example: 2
+                    default: 0
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: 6b5e0337-817d-4025-8729-6370173295a9
+                        system_admin:
+                          type: boolean
+                          example: false
+                          default: true
+                        name:
+                          type: string
+                          example: Eric Andrews
+                        email:
+                          type: string
+                          example: contact@example.com
+                        email_verification_sent_at:
+                          type: string
+                          example: '2016-09-08 19:05:55'
+                        email_verified_at:
+                          type: string
+                          example: '2016-05-11 17:13:33'
+                        created_at:
+                          type: string
+                          example: '2015-07-21 21:23:42'
+                        updated_at:
+                          type: string
+                          example: '2016-09-08 19:05:55'
+                        deleted_at: {}
+                        gravatar:
+                          type: string
+                          example: //www.gravatar.com/avatar/45357c125af15b6df8864a71a653bea2
+                        team_role:
+                          type: string
+                          example: admin
+                        team_admin:
+                          type: boolean
+                          example: true
+                          default: true
+                        team_enabled:
+                          type: boolean
+                          example: true
+                          default: true
+                        mfa_enabled: {}
+      deprecated: false
+      tags:
+      - Team
+  /team:
+    post:
+      summary: Create a Team
+      description: This call makes a new merchant team.
+      operationId: create-a-team
+      parameters:
+      - name: company_name
+        in: query
+        required: true
+        schema:
+          type: string
+          default: Stax
+      - name: contact_email
+        in: query
+        required: true
+        schema:
+          type: string
+          default: contact@example.com
+      - name: contact_name
+        in: query
+        schema:
+          type: string
+          default: Stax
+      - name: contact_phone
+        in: query
+        schema:
+          type: string
+          default: '8555503288'
+      - name: address_1
+        in: query
+        schema:
+          type: string
+          default: 25 Wall Street
+      - name: address_2
+        in: query
+        schema:
+          type: string
+          default: Suite 1
+      - name: address_city
+        in: query
+        schema:
+          type: string
+          default: Orlando
+      - name: address_state
+        in: query
+        schema:
+          type: string
+          default: FL
+      - name: address_zip
+        in: query
+        schema:
+          type: string
+          default: '32801'
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "[\n  {\n    \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImFhNzc2NmIyLTI0MmYtNDNiOS05NDc2LTNjOTAxOGYwY2U1MiIsInN1YiI6ImI1OGQ3ZWVlLWU2OGQtNGQxMi1hMWY4LTYyZjVlNzEzODJhZSIsImlzcyI6Imh0dHA6XC9cL2ZtYXBpLmxvY2FsXC90ZWFtIiwiaWF0IjoxNDk0ODY3NzU3LCJleHAiOjE0OTQ5NTQxNTcsIm5iZiI6MTQ5NDg2Nzc1NywianRpIjoiNzA1MmNkZWQ3NDA2ZDgyNDAxN2MzNTE1YzVhZGU3ZWYifQ.B4bcNQIcHTimpHW2hlJtnPOodAgsm3C-khfkphphDzo\",\n    \"user\": {\n      \"id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n      \"system_admin\": false,\n      \"name\": \"demo\",\n      \"email\": \"contact@example.com\",\n      \"email_verification_sent_at\": \"2017-05-15 16:30:23\",\n      \"email_verified_at\": \"2017-03-29 15:27:21\",\n      \"created_at\": \"2017-01-11 21:44:02\",\n      \"updated_at\": \"2017-05-15 16:30:23\",\n      \"deleted_at\": null,\n      \"gravatar\": \"//www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650\",\n      \"team_role\": \"admin\",\n      \"team_admin\": true,\n      \"team_enabled\": true,\n      \"mfa_enabled\": null\n    },\n    \"merchant\": {\n      \"id\": \"aa7766b2-242f-43b9-9476-3c9018f0ce52\",\n      \"mid\": \"\",\n      \"status\": \"PENDING\",\n      \"subdomain\": \"\",\n      \"company_name\": \"Stax\",\n      \"contact_name\": \"Stax\",\n      \"contact_email\": \"contact@example.com\",\n      \"contact_phone\": \"8555503288\",\n      \"address_1\": \"25 Wall Street\",\n      \"address_2\": \"Suite 1\",\n      \"address_city\": \"Orlando\",\n      \"address_state\": \"FL\",\n      \"address_zip\": \"32801\",\n      \"hosted_payments_token\": null,\n      \"currency\": [\n        \"USD\"\n      ],\n      \"plan\": null,\n      \"options\": null,\n      \"gateway_type\": null,\n      \"processor\": \"\",\n      \"product_type\": \"\",\n      \"welcome_email_sent_at\": null,\n      \"created_at\": \"2017-05-15 17:02:37\",\n      \"updated_at\": \"2017-05-15 17:02:37\",\n      \"deleted_at\": null,\n      \"gateway_name\": null,\n      \"branding\": null,\n      \"allow_ach\": false\n    }\n  },\n  {\n    \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImRkMzZiOTM2LTFlYjctNGVjZS1iZWJjLWI1MTRjNmEzNmViZCIsInN1YiI6ImI1OGQ3ZWVlLWU2OGQtNGQxMi1hMWY4LTYyZjVlNzEzODJhZSIsImlzcyI6Imh0dHA6XC9cL2ZtYXBpLmxvY2FsXC90ZWFtIiwiaWF0IjoxNDk0ODY3NzU3LCJleHAiOjE0OTQ5NTQxNTcsIm5iZiI6MTQ5NDg2Nzc1NywianRpIjoiNzA1MmNkZWQ3NDA2ZDgyNDAxN2MzNTE1YzVhZGU3ZWYifQ._3rlhZzUyind1W138w4O7BjHYVlAOjUpgkmweSekKKE\",\n    \"user\": {\n      \"id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n      \"system_admin\": false,\n      \"name\": \"demo\",\n      \"email\": \"contact@example.com\",\n      \"email_verification_sent_at\": \"2017-05-15 16:30:23\",\n      \"email_verified_at\": \"2017-03-29 15:27:21\",\n      \"created_at\": \"2017-01-11 21:44:02\",\n      \"updated_at\": \"2017-05-15 16:30:23\",\n      \"deleted_at\": null,\n      \"gravatar\": \"//www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650\",\n      \"team_role\": \"admin\",\n      \"team_admin\": true,\n      \"team_enabled\": true\n    },\n    \"merchant\": {\n      \"id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n      \"mid\": \"520000294774\",\n      \"status\": \"ACTIVE\",\n      \"subdomain\": \"demo\",\n      \"company_name\": \"Here\",\n      \"contact_name\": \"Stax\",\n      \"contact_email\": \"contact@example.com\",\n      \"contact_phone\": \"8555503288\",\n      \"address_1\": \"25 Wall Street\",\n      \"address_2\": \"Suite 1\",\n      \"address_city\": \"Orlando\",\n      \"address_state\": \"FL\",\n      \"address_zip\": \"32801\",\n      \"hosted_payments_token\": \"okay\",\n      \"currency\": [\n        \"USD\"\n      ],\n      \"plan\": {\n        \"id\": \"d619a0cc-b7e1-11e6-a0aa-08002777c33d\",\n        \"merchant_id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n        \"user_id\": \"\",\n        \"name\": \"premium\",\n        \"created_at\": \"2016-12-01 16:18:46\",\n        \"updated_at\": \"2016-12-01 16:18:46\"\n      },\n      \"options\": {\n        \"default_dashboard\": \"Summary\",\n        \"social\": {\n          \"website_url\": \"http://google.com\",\n          \"facebook_url\": \"http://google.com\",\n          \"instagram_url\": \"http://google.com\",\n          \"twitter_url\": \"http://google.com\",\n          \"linkedin_url\": \"http://google.com\"\n        },\n        \"hosted_payments_url_long\": \"http://localhost:5432/#/pay/okay\",\n        \"hosted_payments_url_short\": \"\",\n        \"hosted_payments_success_note\": \"31\",\n        \"hosted_payments_note\": \"12\"\n      },\n      \"gateway_type\": \"test\",\n      \"processor\": \"Vantiv\",\n      \"product_type\": \"Terminal\",\n      \"welcome_email_sent_at\": null,\n      \"created_at\": \"2016-12-01 16:18:46\",\n      \"updated_at\": \"2017-04-21 20:15:12\",\n      \"deleted_at\": null,\n      \"gateway_name\": null,\n      \"branding\": {\n        \"id\": \"af82b215-6081-42b0-b494-fbda189ce8f9\",\n        \"merchant_id\": \"dd36b936-1eb7-4ece-bebc-b514c6a36ebd\",\n        \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n        \"name\": \"\",\n        \"public_url\": \"https://s3-us-west-2.amazonaws.com/fattpaydocuments/branding/af82b215-6081-42b0-b494-fbda189ce8f9.png\",\n        \"tag\": \"branding\",\n        \"meta\": {\n          \"filesize_bytes\": 3938556,\n          \"filesize\": \"3.94 MB\",\n          \"extension\": \"png\",\n          \"size\": {\n            \"width\": 3072,\n            \"height\": 1728\n          },\n          \"mime\": \"image/png\"\n        },\n        \"created_at\": \"2017-04-19 15:50:41\",\n        \"updated_at\": \"2017-04-19 15:50:52\",\n        \"deleted_at\": null\n      },\n      \"allow_ach\": true\n    }\n  }\n]"
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    token:
+                      type: string
+                      example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImFhNzc2NmIyLTI0MmYtNDNiOS05NDc2LTNjOTAxOGYwY2U1MiIsInN1YiI6ImI1OGQ3ZWVlLWU2OGQtNGQxMi1hMWY4LTYyZjVlNzEzODJhZSIsImlzcyI6Imh0dHA6XC9cL2ZtYXBpLmxvY2FsXC90ZWFtIiwiaWF0IjoxNDk0ODY3NzU3LCJleHAiOjE0OTQ5NTQxNTcsIm5iZiI6MTQ5NDg2Nzc1NywianRpIjoiNzA1MmNkZWQ3NDA2ZDgyNDAxN2MzNTE1YzVhZGU3ZWYifQ.B4bcNQIcHTimpHW2hlJtnPOodAgsm3C-khfkphphDzo
+                    user:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                        system_admin:
+                          type: boolean
+                          example: false
+                          default: true
+                        name:
+                          type: string
+                          example: demo
+                        email:
+                          type: string
+                          example: contact@example.com
+                        email_verification_sent_at:
+                          type: string
+                          example: '2017-05-15 16:30:23'
+                        email_verified_at:
+                          type: string
+                          example: '2017-03-29 15:27:21'
+                        created_at:
+                          type: string
+                          example: '2017-01-11 21:44:02'
+                        updated_at:
+                          type: string
+                          example: '2017-05-15 16:30:23'
+                        deleted_at: {}
+                        gravatar:
+                          type: string
+                          example: //www.gravatar.com/avatar/157965dea7cd2f44e349382d1d791650
+                        team_role:
+                          type: string
+                          example: admin
+                        team_admin:
+                          type: boolean
+                          example: true
+                          default: true
+                        team_enabled:
+                          type: boolean
+                          example: true
+                          default: true
+                        mfa_enabled: {}
+                    merchant:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: aa7766b2-242f-43b9-9476-3c9018f0ce52
+                        mid:
+                          type: string
+                          example: ''
+                        status:
+                          type: string
+                          example: PENDING
+                        subdomain:
+                          type: string
+                          example: ''
+                        company_name:
+                          type: string
+                          example: Stax
+                        contact_name:
+                          type: string
+                          example: Stax
+                        contact_email:
+                          type: string
+                          example: contact@example.com
+                        contact_phone:
+                          type: string
+                          example: '8555503288'
+                        address_1:
+                          type: string
+                          example: 25 Wall Street
+                        address_2:
+                          type: string
+                          example: Suite 1
+                        address_city:
+                          type: string
+                          example: Orlando
+                        address_state:
+                          type: string
+                          example: FL
+                        address_zip:
+                          type: string
+                          example: '32801'
+                        hosted_payments_token: {}
+                        currency:
+                          type: array
+                          items:
+                            type: string
+                            example: USD
+                        plan: {}
+                        options: {}
+                        gateway_type: {}
+                        processor:
+                          type: string
+                          example: ''
+                        product_type:
+                          type: string
+                          example: ''
+                        welcome_email_sent_at: {}
+                        created_at:
+                          type: string
+                          example: '2017-05-15 17:02:37'
+                        updated_at:
+                          type: string
+                          example: '2017-05-15 17:02:37'
+                        deleted_at: {}
+                        gateway_name: {}
+                        branding: {}
+                        allow_ach:
+                          type: boolean
+                          example: false
+                          default: true
+        '422':
+          description: '422'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"company_name\": [\n    \"The company name field is required.\"\n  ],\n  \"contact_email\": [\n    \"The contact email field is required.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  company_name:
+                    type: array
+                    items:
+                      type: string
+                      example: The company name field is required.
+                  contact_email:
+                    type: array
+                    items:
+                      type: string
+                      example: The contact email field is required.
+      deprecated: false
+      tags:
+      - Team
+    put:
+      summary: Edit Your Merchant Team's Info
+      description: This call makes a new merchant team.
+      operationId: edit-your-merchant-teams-info
+      parameters:
+      - name: company_name
+        in: query
+        schema:
+          type: string
+          default: Stax
+      - name: contact_email
+        in: query
+        schema:
+          type: string
+          default: contact@example.com
+      - name: contact_name
+        in: query
+        schema:
+          type: string
+          default: Stax
+      - name: contact_phone
+        in: query
+        schema:
+          type: string
+          default: '8555503288'
+      - name: address_1
+        in: query
+        schema:
+          type: string
+          default: 25 Wall Street
+      - name: address_2
+        in: query
+        schema:
+          type: string
+          default: Suite 1
+      - name: address_city
+        in: query
+        schema:
+          type: string
+          default: Orlando
+      - name: address_state
+        in: query
+        schema:
+          type: string
+          default: FL
+      - name: address_zip
+        in: query
+        schema:
+          type: string
+          default: '32801'
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"aa7766b2-242f-43b9-9476-3c9018f0ce52\",\n  \"mid\": \"\",\n  \"status\": \"PENDING\",\n  \"subdomain\": \"\",\n  \"company_name\": \"Stax\",\n  \"contact_name\": \"Stax\",\n  \"contact_email\": \"contact@example.com\",\n  \"contact_phone\": \"8555503288\",\n  \"address_1\": \"25 Wall Street\",\n  \"address_2\": \"Suite 1\",\n  \"address_city\": \"Orlando\",\n  \"address_state\": \"FL\",\n  \"address_zip\": \"32801\",\n  \"hosted_payments_token\": null,\n  \"currency\": [\n    \"USD\"\n  ],\n  \"plan\": {\n    \"id\": \"f92fee2b-fdae-4474-988c-c8f2df92772a\",\n    \"merchant_id\": \"aa7766b2-242f-43b9-9476-3c9018f0ce52\",\n    \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n    \"name\": null,\n    \"created_at\": \"2017-05-15 18:41:25\",\n    \"updated_at\": \"2017-05-15 18:41:25\"\n  },\n  \"options\": null,\n  \"gateway_type\": null,\n  \"processor\": \"\",\n  \"product_type\": \"\",\n  \"welcome_email_sent_at\": null,\n  \"created_at\": \"2017-05-15 17:02:37\",\n  \"updated_at\": \"2017-05-15 18:41:25\",\n  \"deleted_at\": null,\n  \"gateway_name\": null,\n  \"branding\": null,\n  \"allow_ach\": false\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: aa7766b2-242f-43b9-9476-3c9018f0ce52
+                  mid:
+                    type: string
+                    example: ''
+                  status:
+                    type: string
+                    example: PENDING
+                  subdomain:
+                    type: string
+                    example: ''
+                  company_name:
+                    type: string
+                    example: Stax
+                  contact_name:
+                    type: string
+                    example: Stax
+                  contact_email:
+                    type: string
+                    example: contact@example.com
+                  contact_phone:
+                    type: string
+                    example: '8555503288'
+                  address_1:
+                    type: string
+                    example: 25 Wall Street
+                  address_2:
+                    type: string
+                    example: Suite 1
+                  address_city:
+                    type: string
+                    example: Orlando
+                  address_state:
+                    type: string
+                    example: FL
+                  address_zip:
+                    type: string
+                    example: '32801'
+                  hosted_payments_token: {}
+                  currency:
+                    type: array
+                    items:
+                      type: string
+                      example: USD
+                  plan:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: f92fee2b-fdae-4474-988c-c8f2df92772a
+                      merchant_id:
+                        type: string
+                        example: aa7766b2-242f-43b9-9476-3c9018f0ce52
+                      user_id:
+                        type: string
+                        example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                      name: {}
+                      created_at:
+                        type: string
+                        example: '2017-05-15 18:41:25'
+                      updated_at:
+                        type: string
+                        example: '2017-05-15 18:41:25'
+                  options: {}
+                  gateway_type: {}
+                  processor:
+                    type: string
+                    example: ''
+                  product_type:
+                    type: string
+                    example: ''
+                  welcome_email_sent_at: {}
+                  created_at:
+                    type: string
+                    example: '2017-05-15 17:02:37'
+                  updated_at:
+                    type: string
+                    example: '2017-05-15 18:41:25'
+                  deleted_at: {}
+                  gateway_name: {}
+                  branding: {}
+                  allow_ach:
+                    type: boolean
+                    example: false
+                    default: true
+      deprecated: false
+      tags:
+      - Team
+  /team/user/{id}:
+    put:
+      summary: Update Team Member's Information
+      description: Allows team admins to change a team members information.
+      operationId: get-team-members-information-copy
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"21a64e9e-3c13-4b85-9f85-67cb4fda808a\",\n  \"system_admin\": false,\n  \"name\": \"James\",\n  \"email\": \"fatttest737@gmail.com\",\n  \"email_verification_sent_at\": null,\n  \"email_verified_at\": null,\n  \"created_at\": \"2017-05-15 19:31:35\",\n  \"updated_at\": \"2017-05-15 19:31:35\",\n  \"deleted_at\": null,\n  \"gravatar\": \"//www.gravatar.com/avatar/52b3ef2ae70945ce0fca14086443dc1a\",\n  \"team_role\": \"full\",\n  \"team_admin\": false,\n  \"team_enabled\": true\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 21a64e9e-3c13-4b85-9f85-67cb4fda808a
+                  system_admin:
+                    type: boolean
+                    example: false
+                    default: true
+                  name:
+                    type: string
+                    example: James
+                  email:
+                    type: string
+                    example: fatttest737@gmail.com
+                  email_verification_sent_at: {}
+                  email_verified_at: {}
+                  created_at:
+                    type: string
+                    example: '2017-05-15 19:31:35'
+                  updated_at:
+                    type: string
+                    example: '2017-05-15 19:31:35'
+                  deleted_at: {}
+                  gravatar:
+                    type: string
+                    example: //www.gravatar.com/avatar/52b3ef2ae70945ce0fca14086443dc1a
+                  team_role:
+                    type: string
+                    example: full
+                  team_admin:
+                    type: boolean
+                    example: false
+                    default: true
+                  team_enabled:
+                    type: boolean
+                    example: true
+                    default: true
+        '401':
+          description: '401'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "[\n  \"not team admin\"\n]"
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: not team admin
+        '404':
+          description: '404'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "[\n  \"user not found\"\n]"
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: user not found
+      deprecated: false
+      tags:
+      - Team
+    get:
+      summary: Get Team Member's Information
+      description: Retrieves the team member that matches the given id.
+      operationId: get-team-members-information
+      parameters:
+      - name: id
+        in: path
+        description: Team members id.
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"21a64e9e-3c13-4b85-9f85-67cb4fda808a\",\n  \"system_admin\": false,\n  \"name\": \"James\",\n  \"email\": \"fatttest737@gmail.com\",\n  \"email_verification_sent_at\": null,\n  \"email_verified_at\": null,\n  \"created_at\": \"2017-05-15 19:31:35\",\n  \"updated_at\": \"2017-05-15 19:31:35\",\n  \"deleted_at\": null,\n  \"gravatar\": \"//www.gravatar.com/avatar/52b3ef2ae70945ce0fca14086443dc1a\",\n  \"team_role\": \"full\",\n  \"team_admin\": false,\n  \"team_enabled\": true\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 21a64e9e-3c13-4b85-9f85-67cb4fda808a
+                  system_admin:
+                    type: boolean
+                    example: false
+                    default: true
+                  name:
+                    type: string
+                    example: James
+                  email:
+                    type: string
+                    example: fatttest737@gmail.com
+                  email_verification_sent_at: {}
+                  email_verified_at: {}
+                  created_at:
+                    type: string
+                    example: '2017-05-15 19:31:35'
+                  updated_at:
+                    type: string
+                    example: '2017-05-15 19:31:35'
+                  deleted_at: {}
+                  gravatar:
+                    type: string
+                    example: //www.gravatar.com/avatar/52b3ef2ae70945ce0fca14086443dc1a
+                  team_role:
+                    type: string
+                    example: full
+                  team_admin:
+                    type: boolean
+                    example: false
+                    default: true
+                  team_enabled:
+                    type: boolean
+                    example: true
+                    default: true
+        '404':
+          description: '404'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "[\n  \"user not found\"\n]"
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: user not found
+      deprecated: false
+      tags:
+      - Team
+  /team/registration:
+    get:
+      summary: Get Team Registration Data
+      description: Get a registration record for a merchant that is tied to your team.
+      operationId: get-team-registration-data
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"annual_volume\": \"\",\n  \"avg_trans_size\": \"\",\n  \"b2b_percent\": \"\",\n  \"bank_account_type\": \"\",\n  \"business_address_1\": \"\",\n  \"business_address_2\": \"\",\n  \"business_address_city\": \"\",\n  \"business_address_country\": \"\",\n  \"business_address_state\": \"\",\n  \"business_address_zip\": \"\",\n  \"business_dba\": \"\",\n  \"business_email\": \"\",\n  \"business_fax\": \"\",\n  \"business_legal_name\": \"\",\n  \"business_open_date\": \"\",\n  \"business_phone_number\": \"\",\n  \"business_tax_id\": \"\",\n  \"business_website\": \"\",\n  \"card_not_present_percent\": \"\",\n  \"card_present_percent\": \"\",\n  \"card_swiped_percent\": \"\",\n  \"chosen_plan\": \"\",\n  \"chosen_processing_method\": \"\",\n  \"company_type\": \"\",\n  \"email\": \"\",\n  \"first_name\": \"\",\n  \"highest_trans_amount\": \"\",\n  \"international\": \"\",\n  \"internet\": \"\",\n  \"job_title\": \"\",\n  \"last_name\": \"\",\n  \"location_type\": \"\",\n  \"meta\": {\n    \"ownership_percentage\": 60,\n    \"owner_citizenship\": \"ALA\",\n    \"representatives\": [\n      {\n        \"title\": \"\",\n        \"date_of_birth\": \"\",\n        \"ssn\": \"\",\n        \"first_name\": \"\",\n        \"last_name\": \"\",\n        \"type\": \"\",\n        \"ownership_percentage\": 40,\n        \"email\": \"\",\n        \"phone\": \"\",\n        \"address_1\": \"\",\n        \"address_2\": \"\",\n        \"address_city\": \"\",\n        \"address_state\": \"\",\n        \"address_zip\": \"\",\n        \"citizenship\": \"ALA\"\n      }\n    ]\n  },\n  \"moto_percent\": \"\",\n  \"network\": \"\",\n  \"owner_address_1\": \"\",\n  \"owner_address_2\": \"\",\n  \"owner_address_city\": \"\",\n  \"owner_address_country\": \"\",\n  \"owner_address_state\": \"\",\n  \"owner_address_zip\": \"\",\n  \"phone_number\": \"\",\n  \"plan\": \"\",\n  \"principal_owners_name\": \"\",\n  \"reason_for_applying\": \"\",\n  \"referred_by\": \"\",\n  \"refund_policy\": \"\",\n  \"seasonal_flag\": false,\n  \"seasonal_months\": \"\",\n  \"service_you_provide\": \"\",\n  \"title\": \"\",\n  \"user_dob\": \"\",\n  \"merchant_id\": \"791fc3fa-4534-4617-97b6-d41c9e1ce8da\",\n  \"user_id\": \"a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8\",\n  \"updated_at\": \"2019-06-19 21:22:03\",\n  \"created_at\": \"2019-06-19 21:22:03\",\n  \"files\": [],\n  \"electronic_signature\": {\n    \"html_content\": \"I agree to...\",\n    \"ip\": \"42.1.1.113\",\n    \"timestamp\": \"2019-06-19 21:22:03\",\n    \"user_id\": \"a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8\",\n    \"email\": \"john@doe.com\",\n    \"browser_agent\": \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36\"\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  annual_volume:
+                    type: string
+                    example: ''
+                  avg_trans_size:
+                    type: string
+                    example: ''
+                  b2b_percent:
+                    type: string
+                    example: ''
+                  bank_account_type:
+                    type: string
+                    example: ''
+                  business_address_1:
+                    type: string
+                    example: ''
+                  business_address_2:
+                    type: string
+                    example: ''
+                  business_address_city:
+                    type: string
+                    example: ''
+                  business_address_country:
+                    type: string
+                    example: ''
+                  business_address_state:
+                    type: string
+                    example: ''
+                  business_address_zip:
+                    type: string
+                    example: ''
+                  business_dba:
+                    type: string
+                    example: ''
+                  business_email:
+                    type: string
+                    example: ''
+                  business_fax:
+                    type: string
+                    example: ''
+                  business_legal_name:
+                    type: string
+                    example: ''
+                  business_open_date:
+                    type: string
+                    example: ''
+                  business_phone_number:
+                    type: string
+                    example: ''
+                  business_tax_id:
+                    type: string
+                    example: ''
+                  business_website:
+                    type: string
+                    example: ''
+                  card_not_present_percent:
+                    type: string
+                    example: ''
+                  card_present_percent:
+                    type: string
+                    example: ''
+                  card_swiped_percent:
+                    type: string
+                    example: ''
+                  chosen_plan:
+                    type: string
+                    example: ''
+                  chosen_processing_method:
+                    type: string
+                    example: ''
+                  company_type:
+                    type: string
+                    example: ''
+                  email:
+                    type: string
+                    example: ''
+                  first_name:
+                    type: string
+                    example: ''
+                  highest_trans_amount:
+                    type: string
+                    example: ''
+                  international:
+                    type: string
+                    example: ''
+                  internet:
+                    type: string
+                    example: ''
+                  job_title:
+                    type: string
+                    example: ''
+                  last_name:
+                    type: string
+                    example: ''
+                  location_type:
+                    type: string
+                    example: ''
+                  meta:
+                    type: object
+                    properties:
+                      ownership_percentage:
+                        type: integer
+                        example: 60
+                        default: 0
+                      owner_citizenship:
+                        type: string
+                        example: ALA
+                      representatives:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            title:
+                              type: string
+                              example: ''
+                            date_of_birth:
+                              type: string
+                              example: ''
+                            ssn:
+                              type: string
+                              example: ''
+                            first_name:
+                              type: string
+                              example: ''
+                            last_name:
+                              type: string
+                              example: ''
+                            type:
+                              type: string
+                              example: ''
+                            ownership_percentage:
+                              type: integer
+                              example: 40
+                              default: 0
+                            email:
+                              type: string
+                              example: ''
+                            phone:
+                              type: string
+                              example: ''
+                            address_1:
+                              type: string
+                              example: ''
+                            address_2:
+                              type: string
+                              example: ''
+                            address_city:
+                              type: string
+                              example: ''
+                            address_state:
+                              type: string
+                              example: ''
+                            address_zip:
+                              type: string
+                              example: ''
+                            citizenship:
+                              type: string
+                              example: ALA
+                  moto_percent:
+                    type: string
+                    example: ''
+                  network:
+                    type: string
+                    example: ''
+                  owner_address_1:
+                    type: string
+                    example: ''
+                  owner_address_2:
+                    type: string
+                    example: ''
+                  owner_address_city:
+                    type: string
+                    example: ''
+                  owner_address_country:
+                    type: string
+                    example: ''
+                  owner_address_state:
+                    type: string
+                    example: ''
+                  owner_address_zip:
+                    type: string
+                    example: ''
+                  phone_number:
+                    type: string
+                    example: ''
+                  plan:
+                    type: string
+                    example: ''
+                  principal_owners_name:
+                    type: string
+                    example: ''
+                  reason_for_applying:
+                    type: string
+                    example: ''
+                  referred_by:
+                    type: string
+                    example: ''
+                  refund_policy:
+                    type: string
+                    example: ''
+                  seasonal_flag:
+                    type: boolean
+                    example: false
+                    default: true
+                  seasonal_months:
+                    type: string
+                    example: ''
+                  service_you_provide:
+                    type: string
+                    example: ''
+                  title:
+                    type: string
+                    example: ''
+                  user_dob:
+                    type: string
+                    example: ''
+                  merchant_id:
+                    type: string
+                    example: 791fc3fa-4534-4617-97b6-d41c9e1ce8da
+                  user_id:
+                    type: string
+                    example: a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8
+                  updated_at:
+                    type: string
+                    example: '2019-06-19 21:22:03'
+                  created_at:
+                    type: string
+                    example: '2019-06-19 21:22:03'
+                  files:
+                    type: array
+                  electronic_signature:
+                    type: object
+                    properties:
+                      html_content:
+                        type: string
+                        example: I agree to...
+                      ip:
+                        type: string
+                        example: 42.1.1.113
+                      timestamp:
+                        type: string
+                        example: '2019-06-19 21:22:03'
+                      user_id:
+                        type: string
+                        example: a01a5f74-cbdb-4704-9e9b-56fd5a8ee7b8
+                      email:
+                        type: string
+                        example: john@doe.com
+                      browser_agent:
+                        type: string
+                        example: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      tags:
+      - Team
+    put:
+      summary: Update Team Registration Data
+      description: ''
+      operationId: update-team-registration-data
+      parameters:
+      - name: email
+        in: query
+        description: 'Merchant Email address. Max: 100'
+        schema:
+          type: string
+      - name: first_name
+        in: query
+        description: 'Merchant owner/signer first name. Max: 100'
+        schema:
+          type: string
+      - name: last_name
+        in: query
+        description: 'Merchant owner/signer last name. Max: 100'
+        schema:
+          type: string
+      - name: refund_policy
+        in: query
+        description: Merchant business refund policy.
+        schema:
+          type: string
+          enum:
+          - N
+          - E
+          - T
+          - O
+      - name: business_fax
+        in: query
+        description: 'Merchant fax number only digits. Max: 100'
+        schema:
+          type: integer
+          format: int32
+      - name: business_legal_name
+        in: query
+        description: 'Merchant legal business name. Max: 100'
+        schema:
+          type: string
+      - name: business_dba
+        in: query
+        description: 'Merchant business ''Doing Business As''. Max: 100'
+        schema:
+          type: string
+      - name: business_website
+        in: query
+        description: 'Merchants business website. Max: 100'
+        schema:
+          type: string
+      - name: business_phone_number
+        in: query
+        description: 'Merchants business phone number, format: (999) 999-9999'
+        schema:
+          type: string
+      - name: business_address_1
+        in: query
+        schema:
+          type: string
+      - name: business_address_2
+        in: query
+        schema:
+          type: string
+      - name: business_address_city
+        in: query
+        schema:
+          type: string
+      - name: business_address_state
+        in: query
+        schema:
+          type: string
+      - name: business_address_zip
+        in: query
+        schema:
+          type: string
+      - name: business_address_country
+        in: query
+        schema:
+          type: string
+      - name: business_location_address_1
+        in: query
+        schema:
+          type: string
+      - name: business_location_address_2
+        in: query
+        schema:
+          type: string
+      - name: business_location_address_city
+        in: query
+        schema:
+          type: string
+      - name: business_location_address_state
+        in: query
+        schema:
+          type: string
+      - name: business_location_address_zip
+        in: query
+        schema:
+          type: string
+      - name: business_location_address_country
+        in: query
+        schema:
+          type: string
+      - name: business_location_phone_number
+        in: query
+        schema:
+          type: string
+      - name: business_open_date
+        in: query
+        description: Merchants business open date format MM/DD/YYYY
+        schema:
+          type: string
+      - name: company_type
+        in: query
+        schema:
+          type: string
+          enum:
+          - A
+          - G
+          - S
+          - F
+          - L
+          - E
+          - P
+          - V
+          - B
+          - R
+      - name: business_tax_id
+        in: query
+        description: 'Merchant business tax id. Format: 99-9999999'
+        schema:
+          type: string
+      - name: annual_volume
+        in: query
+        description: Merchant volume annual annual_volume (Credit Card and ACH combined)
+        schema:
+          type: string
+      - name: avg_trans_size
+        in: query
+        schema:
+          type: string
+      - name: highest_trans_amount
+        in: query
+        schema:
+          type: string
+      - name: card_present_percent
+        in: query
+        schema:
+          type: string
+      - name: card_swiped_percent
+        in: query
+        schema:
+          type: string
+      - name: card_not_present_percent
+        in: query
+        schema:
+          type: string
+      - name: moto_percent
+        in: query
+        schema:
+          type: string
+      - name: internet
+        in: query
+        schema:
+          type: string
+      - name: b2b_percent
+        in: query
+        description: Merchant business to business volume percentage.
+        schema:
+          type: string
+      - name: international
+        in: query
+        description: Merchant international volume percentage.
+        schema:
+          type: string
+      - name: bank_routing_number
+        in: query
+        description: Billing bank routing number.
+        schema:
+          type: string
+      - name: bank_account_number
+        in: query
+        schema:
+          type: string
+      - name: bank_account_owner_name
+        in: query
+        schema:
+          type: string
+      - name: pricing_plan
+        in: query
+        description: Partners only. Please reach out to your account manager or POC.
+        schema:
+          type: string
+      - name: proc_change
+        in: query
+        description: Merchant processed before or they are not currently processing.
+        schema:
+          type: string
+          enum:
+          - PROC_CHANGE
+          - NOT_NOW_PROC
+      - name: mcc
+        in: query
+        description: Partners only. Please reach out to your account manager or POC.
+        schema:
+          type: string
+      - name: service_you_provide
+        in: query
+        description: Merchant business what is sold description.
+        schema:
+          type: string
+      - name: bus_type
+        in: query
+        description: '1: Retail 11: Restaurant 12: Moto 18: Internet'
+        schema:
+          type: string
+          enum:
+          - '1'
+          - '11'
+          - '12'
+          - '18'
+      - name: sub_bus_type
+        in: query
+        description: '19: Retail.key entered 45: Moto 13: Dial pay capture 36: Interchange plus'
+        schema:
+          type: string
+          enum:
+          - '13'
+          - '19'
+          - '36'
+          - '45'
+      - name: principal_owners_name
+        in: query
+        schema:
+          type: string
+      - name: job_title
+        in: query
+        description: Owner Title
+        schema:
+          type: string
+      - name: user_dob
+        in: query
+        description: Owner Date of Birth
+        schema:
+          type: string
+      - name: phone_number
+        in: query
+        description: Owner / Signer phone number
+        schema:
+          type: string
+      - name: owner_address_1
+        in: query
+        schema:
+          type: string
+      - name: owner_address_2
+        in: query
+        schema:
+          type: string
+      - name: owner_address_city
+        in: query
+        schema:
+          type: string
+      - name: owner_address_state
+        in: query
+        schema:
+          type: string
+      - name: owner_address_country
+        in: query
+        schema:
+          type: string
+      - name: owner_address_zip
+        in: query
+        schema:
+          type: string
+      - name: user_ssn
+        in: query
+        description: Owner/Signer Social Service Number
+        schema:
+          type: string
+      - name: note
+        in: query
+        schema:
+          type: string
+      - name: electronic_signature
+        in: query
+        schema:
+          properties:
+            html_content:
+              type: string
+            ip:
+              type: string
+            user_id:
+              type: string
+            email:
+              type: string
+            browser_agent:
+              type: string
+          type: object
+      - name: meta
+        in: query
+        schema:
+          properties:
+            title:
+              type: string
+            date_of_birth:
+              type: string
+              description: 'Owner DOB format: MM/DD/YYYY'
+            ssn:
+              type: string
+            first_name:
+              type: string
+            last_name:
+              type: string
+            type:
+              type: string
+            ownership_percentage:
+              type: string
+            citizenship:
+              type: string
+            email:
+              type: string
+            phone:
+              type: string
+            address_1:
+              type: string
+            address_2:
+              type: string
+            address_city:
+              type: string
+            address_state:
+              type: string
+            address_zip:
+              type: string
+          type: object
+      - name: files
+        in: query
+        schema:
+          items:
+            properties:
+              html_content:
+                type: string
+              ip:
+                type: string
+              user_id:
+                type: string
+              email:
+                type: string
+              browser_agent:
+                type: string
+            type: object
+          type: array
+        style: deepObject
+        explode: true
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: ''
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      tags:
+      - Team
+  /team/apikey:
+    get:
+      summary: List API Keys
+      description: List out all team member user records which are api keys.
+      operationId: list-api-keys
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"id\": \"ebf007e4-90c9-4764-b8be-4b2a21a7deda\",\n                \"name\": \"api-key-1\",\n                \"email\": null,\n                \"email_verification_sent_at\": null,\n                \"email_verified_at\": null,\n                \"created_at\": \"2019-06-19 20:32:15\",\n                \"updated_at\": \"2019-06-19 20:32:15\",\n                \"deleted_at\": null,\n                \"gravatar\": \"//www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e\",\n                \"team_role\": \"full\",\n                \"team_admin\": false,\n                \"team_enabled\": true,\n                \"api_key\": \"THIS_VALUE_WILL_CONTAIN_JWT_STRING\"\n            },\n            {\n                \"id\": \"71626cac-ba4e-4c71-a8d3-315a279b8ef1\",\n                \"name\": \"api-key-2\",\n                \"email\": null,\n                \"email_verification_sent_at\": null,\n                \"email_verified_at\": null,\n                \"created_at\": \"2019-06-19 20:32:11\",\n                \"updated_at\": \"2019-06-19 20:32:11\",\n                \"deleted_at\": null,\n                \"gravatar\": \"//www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e\",\n                \"team_role\": \"full\",\n                \"team_admin\": false,\n                \"team_enabled\": true,\n                \"api_key\": \"THIS_VALUE_WILL_CONTAIN_JWT_STRING\"\n            },\n        ],\n        \"from\": 1,\n        \"last_page\": 1,\n        \"per_page\": 20,\n        \"prev_page_url\": null,\n        \"to\": 2,\n        \"total\": 2\n    }"
+      deprecated: false
+      tags:
+      - Team
+  /team/option/branding:
+    post:
+      summary: Team Branding
+      description: ''
+      operationId: team-branding
+      parameters:
+      - name: name
+        in: query
+        description: An optional nickname for the uploaded photo.
+        schema:
+          type: string
+      - name: image
+        in: query
+        description: PNG or JPEG image file
+        schema:
+          type: string
+          format: binary
+          default: logo.png
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"id\": \"aa7766b2-242f-43b9-9476-3c9018f0ce52\",\n  \"mid\": \"\",\n  \"status\": \"PENDING\",\n  \"subdomain\": \"\",\n  \"company_name\": \"Stax\",\n  \"contact_name\": \"Stax\",\n  \"contact_email\": \"contact@example.com\",\n  \"contact_phone\": \"8555503288\",\n  \"address_1\": \"25 Wall Street\",\n  \"address_2\": \"Suite 1\",\n  \"address_city\": \"Orlando\",\n  \"address_state\": \"FL\",\n  \"address_zip\": \"32801\",\n  \"hosted_payments_token\": null,\n  \"currency\": [\n    \"USD\"\n  ],\n  \"plan\": {\n    \"id\": \"f92fee2b-fdae-4474-988c-c8f2df92772a\",\n    \"merchant_id\": \"aa7766b2-242f-43b9-9476-3c9018f0ce52\",\n    \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n    \"name\": null,\n    \"created_at\": \"2017-05-15 18:41:25\",\n    \"updated_at\": \"2017-05-15 18:41:25\"\n  },\n  \"options\": null,\n  \"gateway_type\": null,\n  \"processor\": \"\",\n  \"product_type\": \"\",\n  \"welcome_email_sent_at\": null,\n  \"created_at\": \"2017-05-15 17:02:37\",\n  \"updated_at\": \"2017-05-15 18:41:25\",\n  \"deleted_at\": null,\n  \"gateway_name\": null,\n  \"branding\": {\n    \"id\": \"81218dbb-74ad-480e-958e-839ced6e6962\",\n    \"merchant_id\": \"aa7766b2-242f-43b9-9476-3c9018f0ce52\",\n    \"user_id\": \"b58d7eee-e68d-4d12-a1f8-62f5e71382ae\",\n    \"name\": \"Bugu the Catu\",\n    \"public_url\": \"https://s3-us-west-2.amazonaws.com/fattpaydocuments/branding/81218dbb-74ad-480e-958e-839ced6e6962.png\",\n    \"tag\": \"branding\",\n    \"meta\": {\n      \"filesize_bytes\": 109524,\n      \"filesize\": \"1.1 kB\",\n      \"extension\": \"png\",\n      \"size\": {\n        \"width\": 537,\n        \"height\": 512\n      },\n      \"mime\": \"image/png\"\n    },\n    \"created_at\": \"2017-05-15 19:15:53\",\n    \"updated_at\": \"2017-05-15 19:15:56\",\n    \"deleted_at\": null\n  },\n  \"allow_ach\": false\n}"
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: aa7766b2-242f-43b9-9476-3c9018f0ce52
+                  mid:
+                    type: string
+                    example: ''
+                  status:
+                    type: string
+                    example: PENDING
+                  subdomain:
+                    type: string
+                    example: ''
+                  company_name:
+                    type: string
+                    example: Stax
+                  contact_name:
+                    type: string
+                    example: Stax
+                  contact_email:
+                    type: string
+                    example: contact@example.com
+                  contact_phone:
+                    type: string
+                    example: '8555503288'
+                  address_1:
+                    type: string
+                    example: 25 Wall Street
+                  address_2:
+                    type: string
+                    example: Suite 1
+                  address_city:
+                    type: string
+                    example: Orlando
+                  address_state:
+                    type: string
+                    example: FL
+                  address_zip:
+                    type: string
+                    example: '32801'
+                  hosted_payments_token: {}
+                  currency:
+                    type: array
+                    items:
+                      type: string
+                      example: USD
+                  plan:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: f92fee2b-fdae-4474-988c-c8f2df92772a
+                      merchant_id:
+                        type: string
+                        example: aa7766b2-242f-43b9-9476-3c9018f0ce52
+                      user_id:
+                        type: string
+                        example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                      name: {}
+                      created_at:
+                        type: string
+                        example: '2017-05-15 18:41:25'
+                      updated_at:
+                        type: string
+                        example: '2017-05-15 18:41:25'
+                  options: {}
+                  gateway_type: {}
+                  processor:
+                    type: string
+                    example: ''
+                  product_type:
+                    type: string
+                    example: ''
+                  welcome_email_sent_at: {}
+                  created_at:
+                    type: string
+                    example: '2017-05-15 17:02:37'
+                  updated_at:
+                    type: string
+                    example: '2017-05-15 18:41:25'
+                  deleted_at: {}
+                  gateway_name: {}
+                  branding:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 81218dbb-74ad-480e-958e-839ced6e6962
+                      merchant_id:
+                        type: string
+                        example: aa7766b2-242f-43b9-9476-3c9018f0ce52
+                      user_id:
+                        type: string
+                        example: b58d7eee-e68d-4d12-a1f8-62f5e71382ae
+                      name:
+                        type: string
+                        example: Bugu the Catu
+                      public_url:
+                        type: string
+                        example: https://s3-us-west-2.amazonaws.com/fattpaydocuments/branding/81218dbb-74ad-480e-958e-839ced6e6962.png
+                      tag:
+                        type: string
+                        example: branding
+                      meta:
+                        type: object
+                        properties:
+                          filesize_bytes:
+                            type: integer
+                            example: 109524
+                            default: 0
+                          filesize:
+                            type: string
+                            example: 1.1 kB
+                          extension:
+                            type: string
+                            example: png
+                          size:
+                            type: object
+                            properties:
+                              width:
+                                type: integer
+                                example: 537
+                                default: 0
+                              height:
+                                type: integer
+                                example: 512
+                                default: 0
+                          mime:
+                            type: string
+                            example: image/png
+                      created_at:
+                        type: string
+                        example: '2017-05-15 19:15:53'
+                      updated_at:
+                        type: string
+                        example: '2017-05-15 19:15:56'
+                      deleted_at: {}
+                  allow_ach:
+                    type: boolean
+                    example: false
+                    default: true
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"image\": [\n    \"The image field is required.\"\n  ]\n}"
+              schema:
+                type: object
+                properties:
+                  image:
+                    type: array
+                    items:
+                      type: string
+                      example: The image field is required.
+      deprecated: false
+      tags:
+      - Team
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: API key for merchant-level operations. Provides access to merchant-specific endpoints including transactions, payments, customer management, and merchant account settings. This key is scoped to a single merchant account and cannot access partner-level functionality.
+    PartnerApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Partner-level API key with elevated privileges. Grants access to all partner operations including merchant management, portfolio oversight, reporting across multiple merchant accounts, and partner-specific administrative functions. Also provides access to all merchant-level operations for accounts under the partner's management.
+    EphemeralAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Temporary authentication token with limited lifespan. Used for short-term access to specific operations, typically generated for secure one-time actions or time-bounded sessions. Automatically expires after a predefined period for enhanced security.
