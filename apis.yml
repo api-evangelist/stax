@@ -46,7 +46,7 @@ tags:
 - Surcharging
 - Point-of-Sale
 - Tokenization
-- Financial-Services
+- Financial Services
 - Fintech
 - Card Present
 - Merchant Onboarding
@@ -65,6 +65,7 @@ tags_raw:
 - Fintech
 - Card Present
 - Merchant Onboarding
+- Financial-Services
 apis:
 - aid: stax:stax-admin-api
   name: Stax Admin API
