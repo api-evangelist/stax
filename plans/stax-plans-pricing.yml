@@ -62,3 +62,37 @@ add_ons:
   note: Terminals priced separately
 api_access: API key integration capability is listed as included in the subscription at no extra cost — the API is not a separately-priced
   product.
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - hybrid
+  units: []
+  plans:
+  - name: Stax Pay — up to $150,000/year processed
+    access: other
+    model: hybrid
+    model_how: derived
+    units: []
+    periods:
+    - month
+  - name: Stax Pay — $150,000–$250,000/year processed
+    access: other
+    model: hybrid
+    model_how: derived
+    units: []
+    periods:
+    - month
+  - name: Stax Pay — $250,000+/year processed
+    access: other
+    model: hybrid
+    model_how: derived
+    units: []
+    periods:
+    - month
+  - name: SaaS Platforms (Stax Connect)
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
