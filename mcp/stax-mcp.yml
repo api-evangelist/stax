@@ -30,55 +30,71 @@ clients_documented:
 - Cursor
 - Windsurf
 - Claude Desktop
-tool_count: 6
+tool_count: 10
 tools:
 - name: list-endpoints
-  title: List API Endpoints
   description: Lists all API paths and their HTTP methods with summaries, organized by path. Results can
     be passed directly into 'get-endpoint'.
+  title: List API Endpoints
   read_only: true
   destructive: false
   input_schema_properties: []
 - name: get-endpoint
-  title: Get Endpoint Details
   description: Gets detailed information about a specific API endpoint, including security schemes and
     servers
+  title: Get Endpoint Details
   read_only: true
   destructive: false
   input_schema_properties:
   - method
   - path
 - name: search-endpoints
-  title: Search API Endpoints
   description: Performs a deep search through paths, operations, and parameters to discover relevant API
     endpoints. Use this tool to find specific API capabilities, required parameters, or data models based
     on search keywords. Results can be passed directly into 'get-endpoint'.
+  title: Search API Endpoints
   read_only: true
   destructive: false
   input_schema_properties:
   - pattern
 - name: execute-request
-  title: Execute API Request
   description: Executes an API request with a given HAR request object.
+  title: Execute API Request
   read_only: false
   destructive: true
   input_schema_properties:
   - harRequest
 - name: search
-  title: Search Documentation
   description: Searches through documentation with the given search query, returning a list of results
     with ID, title, and URL.
+  title: Search Documentation
   read_only: true
   destructive: false
   input_schema_properties:
   - query
 - name: fetch
-  title: Fetch Documentation Page
   description: Gets detailed content for documentation by ID returned from the `search` tool.
+  title: Fetch Documentation Page
   read_only: true
   destructive: false
   input_schema_properties:
   - id
+- name: Integrating-cnp-payment
+  description: Use this when a user first integrates and wants to accept card-not-present (CNP) transactions
+    — Credit Card or ACH. Provide setup details, key concepts, and links to recipes/docs for tokenization,
+    customer creation, recurring payments, and stored-credential charges.
+- name: get_application_status
+  description: Check a Stax merchant's underwriting and application progress, including why an application
+    is pended and what the merchant needs to submit. Use for "why is this application pended", "what's
+    blocking underwriting", or "what docs do they still owe us".
+- name: Terminal-void-or-refund-routing
+  description: Use this when a user asks how to void or refund a card-present (terminal) transaction —
+    including terminal-tokenized cards and digital wallet (Apple Pay/Google Pay tap) transactions. Walks
+    through picking the correct endpoint based on the transaction and payment method flags.
+- name: Integrating-terminal-payment
+  description: Use this when a user is integrating card-present (terminal) transactions — associating
+    a terminal charge to a customer, CP tokenization, and polling for the transaction result. Covers POST
+    /terminal/charge/queue and status polling.
 raw_tools_list: mcp/stax-mcp-tools.json
 x-evidence:
   fetched: '2026-08-29'
@@ -111,3 +127,4 @@ tool_quality:
   scored: false
   note: Facts from the saved tools/list capture (mcp_tool_quality.py); recorded, not scored. Checks learned
     from Glimind's agent-readiness audit.
+tools_count: 10
