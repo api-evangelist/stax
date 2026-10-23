@@ -5,7 +5,7 @@
       "source": "https://staxpayments.com/blog/",
       "feed_url": "https://staxpayments.com/blog/feed/",
       "title": "",
-      "saved": 7,
+      "saved": 0,
       "method": "discovered"
     },
     {
@@ -16,12 +16,13 @@
       "method": "feed"
     },
     {
-      "source": "https://support.fattmerchant.com/",
-      "feed_url": "",
+      "source": "https://staxpayments.com/blog/feed/",
+      "feed_url": "https://staxpayments.com/blog/feed/",
+      "title": "",
       "saved": 0,
-      "skipped": "community-shaped; a vendor feed already saved this run (roadmap#239)"
+      "method": "feed"
     }
   ],
-  "post_count": 7,
-  "fetched": "2026-10-10T13:15:00Z"
+  "post_count": 17,
+  "fetched": "2026-10-17T14:53:57Z"
 }
